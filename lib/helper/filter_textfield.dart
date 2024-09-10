@@ -57,9 +57,9 @@ class FilterTextfield extends StatelessWidget {
             keyboardType: textInputType,
             style: const TextStyle(
                 fontWeight: FontWeight.w400,
-                fontSize: 12,
+                fontSize: 13.5,
                 color: AppColor.blackColor,
-                fontFamily: FontFamily.interRegular),
+                fontFamily: FontFamily.interMedium),
             decoration: InputDecoration(
                 suffixIcon: icon,
                 hintText: hintText,

@@ -1,4 +1,4 @@
-package com.example.kodago
+package com.kodago.app
 
 import io.flutter.embedding.android.FlutterActivity
 

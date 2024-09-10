@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:kodago/config/app_routes.dart';
+import 'package:flutter/services.dart';
 import 'package:kodago/helper/app_color.dart';
 import 'package:kodago/helper/custom_btn.dart';
 import 'package:kodago/helper/custom_text.dart';
 import 'package:kodago/helper/custom_textfield.dart';
 import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
-import 'package:kodago/screens/auth/otp_verification_screen.dart';
-import 'package:kodago/screens/auth/reset_password_screen.dart';
+import 'package:kodago/provider/auth_provider/forgot_password_provider.dart';
+import 'package:kodago/uitls/utils.dart';
 import 'package:kodago/widget/appbar.dart';
+import 'package:provider/provider.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
@@ -18,61 +19,94 @@ class ForgotPasswordScreen extends StatefulWidget {
 }
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
+  final formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    callInitFunction();
+    super.initState();
+  }
+
+  callInitFunction() {
+    final provider =
+        Provider.of<ForgotPasswordProvider>(context, listen: false);
+    provider.emailPhoneController.clear();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBar(title: ''),
-      body: Padding(
-        padding: const EdgeInsets.only(left: 20, bottom: 20, right: 20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            customText(
-              title: 'Forgot Password?',
-              fontFamily: FontFamily.interBold,
-              color: AppColor.blackDarkColor,
-              fontSize: 32,
-              fontWeight: FontWeight.w700,
+    return Consumer<ForgotPasswordProvider>(
+        builder: (context, myProvider, child) {
+      return Scaffold(
+        appBar: appBar(title: ''),
+        body: Padding(
+          padding: const EdgeInsets.only(left: 20, right: 20),
+          child: Form(
+            key: formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                customText(
+                  title: 'Forgot Password?',
+                  fontFamily: FontFamily.interBold,
+                  color: AppColor.blackDarkColor,
+                  fontSize: 32,
+                  fontWeight: FontWeight.w700,
+                ),
+                customText(
+                  title: 'Recover you password if you have forgot the password',
+                  fontSize: 15,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: FontFamily.interRegular,
+                  color: AppColor.lightTextColor,
+                ),
+                ScreenSize.height(60),
+                customText(
+                  title: 'Email/Phone number',
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: FontFamily.interMedium,
+                  color: AppColor.blackDarkColor,
+                ),
+                ScreenSize.height(8),
+                CustomTextField(
+                  hintText: 'Email/Phone number',
+                  isReadOnly: myProvider.isLoading,
+                  controller: myProvider.emailPhoneController,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.deny(
+                        RegExp(Utils.regexToRemoveEmoji)),
+                  ],
+                  prefixWidget: Container(
+                      height: 20,
+                      width: 20,
+                      alignment: Alignment.center,
+                      child: const Icon(
+                        Icons.email_outlined,
+                        color: AppColor.appColor,
+                      )),
+                  validator: (val) {
+                    if (val.isEmpty) {
+                      return 'Enter your email or phone';
+                    }
+                  },
+                ),
+                ScreenSize.height(34),
+                CustomBtn(
+                    title: 'Password Reset',
+                    borderRadius: 50,
+                    isLoading: myProvider.isLoading,
+                    onTap: () {
+                      if (formKey.currentState!.validate()) {
+                        myProvider.callForgotPasswordApiFunction();
+                      }
+                    })
+              ],
             ),
-            customText(
-              title: 'Recover you password if you have forgot the password',
-              fontSize: 15,
-              fontWeight: FontWeight.w400,
-              fontFamily: FontFamily.interRegular,
-              color: AppColor.lightTextColor,
-            ),
-            ScreenSize.height(60),
-            customText(
-              title: 'Email/Phone number',
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              fontFamily: FontFamily.interMedium,
-              color: AppColor.blackDarkColor,
-            ),
-            ScreenSize.height(8),
-            CustomTextField(
-              hintText: 'Email/Phone number',
-              prefixWidget: Container(
-                  height: 20,
-                  width: 20,
-                  alignment: Alignment.center,
-                  child: const Icon(
-                    Icons.email_outlined,
-                    color: AppColor.appColor,
-                  )),
-            ),
-            ScreenSize.height(34),
-            CustomBtn(
-                title: 'Password Reset',
-                borderRadius: 50,
-                onTap: () {
-                  AppRoutes.pushCupertinoNavigation(
-                      const OtpVerificationScreen());
-                })
-          ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 }

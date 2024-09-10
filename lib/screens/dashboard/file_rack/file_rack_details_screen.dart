@@ -9,6 +9,7 @@ import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/screens/dashboard/file_rack/file_rack_comment_screen.dart';
 import 'package:kodago/screens/dashboard/file_rack/filter_screen.dart';
+import 'package:kodago/screens/dashboard/home/view_post_screen.dart';
 import 'package:kodago/uitls/delete_file_rack_dialogbox.dart';
 import 'package:kodago/widget/appbar.dart';
 import 'package:kodago/widget/popmenuButton.dart';
@@ -171,12 +172,17 @@ class _FileRackDetailsScreenState extends State<FileRackDetailsScreen> {
                     fontFamily: FontFamily.interRegular,
                   ),
                 ),
-                customText(
-                  title: 'Show more',
-                  fontSize: 12.5,
-                  fontWeight: FontWeight.w400,
-                  color: AppColor.appColor,
-                  fontFamily: FontFamily.interMedium,
+                GestureDetector(
+                  onTap: () {
+                    AppRoutes.pushCupertinoNavigation(const ViewPostScreen());
+                  },
+                  child: customText(
+                    title: 'Show more',
+                    fontSize: 12.5,
+                    fontWeight: FontWeight.w400,
+                    color: AppColor.appColor,
+                    fontFamily: FontFamily.interMedium,
+                  ),
                 ),
               ],
             ),

@@ -22,6 +22,7 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Container(
+          padding: const EdgeInsets.only(top: 15),
           decoration: BoxDecoration(
               color: AppColor.whiteColor,
               borderRadius: BorderRadius.circular(20),

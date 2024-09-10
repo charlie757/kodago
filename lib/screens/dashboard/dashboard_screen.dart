@@ -13,6 +13,17 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   @override
+  void initState() {
+    callInitFunction();
+    super.initState();
+  }
+
+  callInitFunction() {
+    final provider = Provider.of<DashboardProvider>(context, listen: false);
+    provider.currentIndex = 0;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Consumer<DashboardProvider>(builder: (context, myProvider, child) {
       return Scaffold(

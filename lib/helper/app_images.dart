@@ -1,9 +1,11 @@
 class AppImages {
-  static String appLogo = 'assets/icons/kodago-logo.png';
+  static String appLogo = 'assets/icons/app_icon.png';
   static String splashImg = 'assets/images/splash_img.png';
   static String onboardingImg1 = 'assets/images/onboarding1.png';
   static String onboardingImg2 = 'assets/images/onboarding2.png';
   static String onboardingImg3 = 'assets/images/onboarding3.png';
+  static String visibilityIcon = 'assets/icons/visibility.png';
+  static String visibilityOffIcon = 'assets/icons/visibility_off.png';
   static String homeIcon = 'assets/icons/home.png';
   static String profileIcon = 'assets/icons/profile.png';
   static String notificationIcon = 'assets/icons/notification.png';
@@ -12,6 +14,8 @@ class AppImages {
   static String commentIcon = 'assets/icons/comment.png';
   static String shareIcon = 'assets/icons/share.png';
   static String likeIcon = 'assets/icons/like.png';
+  static String thumbIcon = 'assets/icons/thumb_icon.png';
+  static String visitRecordIcon = 'assets/icons/visit_record_icon.png';
   static String arrowForeWordIcon = 'assets/icons/arrow_foreword_icon.png';
   static String pdfIcon = 'assets/icons/pdf.png';
   static String msWordIcon = 'assets/icons/msword.png';

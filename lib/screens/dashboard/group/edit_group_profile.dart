@@ -71,11 +71,7 @@ class _EditGroupProfileState extends State<EditGroupProfile> {
             ScreenSize.height(12),
             CustomTextField(hintText: 'Kodago Attendance'),
             ScreenSize.height(22),
-            CustomBtn(
-                title: 'Save',
-                onTap: () {
-                  AppRoutes.pushCupertinoNavigation(const AddDataScreen());
-                })
+            CustomBtn(title: 'Save', onTap: () {})
           ],
         ),
       ),

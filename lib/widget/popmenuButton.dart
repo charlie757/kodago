@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kodago/helper/app_color.dart';
+import 'package:kodago/helper/app_images.dart';
 import 'package:kodago/helper/custom_text.dart';
 import 'package:kodago/helper/font_family.dart';
 
@@ -17,7 +18,15 @@ PopupMenuButton customPopupMenuButton(
       onSelected: onSelected,
       itemBuilder: (BuildContext bc) {
         return list;
-      });
+      },
+      child: Container(
+          height: 36,
+          padding: const EdgeInsets.only(right: 12, left: 5),
+          alignment: Alignment.centerRight,
+          child: Image.asset(
+            AppImages.moreVerticalIcon,
+            height: 22,
+          )));
 }
 
 PopupMenuItem customPopMenuItem({required int value, required String title}) {

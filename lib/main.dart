@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kodago/helper/app_color.dart';
+import 'package:kodago/provider/auth_provider/forgot_password_provider.dart';
+import 'package:kodago/provider/auth_provider/login_provider.dart';
+import 'package:kodago/provider/auth_provider/otp_provider.dart';
+import 'package:kodago/provider/auth_provider/signup_provider.dart';
 import 'package:kodago/provider/dashboard_provider.dart';
 import 'package:kodago/provider/group/chat_provider.dart';
 import 'package:kodago/provider/group/new_group_provider.dart';
@@ -8,11 +12,13 @@ import 'package:kodago/provider/onboarding_provider.dart';
 import 'package:kodago/provider/profile_provider.dart';
 import 'package:kodago/provider/splash_provider.dart';
 import 'package:kodago/screens/splash_screen.dart';
+import 'package:kodago/uitls/session_manager.dart';
 import 'package:kodago/uitls/utils.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await SessionManager().init();
 
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -31,6 +37,10 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(
           value: SplashProvider(),
         ),
+        ChangeNotifierProvider(create: (_) => LoginProvider()),
+        ChangeNotifierProvider(create: (_) => SignupProvider()),
+        ChangeNotifierProvider(create: (_) => OtpProvider()),
+        ChangeNotifierProvider(create: (_) => ForgotPasswordProvider()),
         ChangeNotifierProvider.value(
           value: OnboardingProvider(),
         ),
@@ -41,20 +51,25 @@ class MyApp extends StatelessWidget {
           value: NewGroupProvider(),
         ),
       ],
-      child: MaterialApp(
-        navigatorKey: navigatorKey,
-        debugShowCheckedModeBanner: false,
-        title: 'Kodago',
-        theme: ThemeData(
-          appBarTheme: const AppBarTheme(
-            backgroundColor: AppColor.whiteColor,
-            scrolledUnderElevation: 0.0,
+      child: GestureDetector(
+        onTap: () {
+          Utils.hideTextField();
+        },
+        child: MaterialApp(
+          navigatorKey: navigatorKey,
+          debugShowCheckedModeBanner: false,
+          title: 'Kodago',
+          theme: ThemeData(
+            appBarTheme: const AppBarTheme(
+              backgroundColor: AppColor.whiteColor,
+              scrolledUnderElevation: 0.0,
+            ),
+            scaffoldBackgroundColor: AppColor.whiteColor,
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+            useMaterial3: true,
           ),
-          scaffoldBackgroundColor: AppColor.whiteColor,
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
+          home: SplashScreen(),
         ),
-        home: SplashScreen(),
       ),
     );
   }

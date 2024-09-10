@@ -64,9 +64,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
       autofocus: false,
       style: const TextStyle(
           fontWeight: FontWeight.w400,
-          fontSize: 12,
+          fontSize: 13.5,
           color: AppColor.blackColor,
-          fontFamily: FontFamily.interRegular),
+          fontFamily: FontFamily.interMedium),
       cursorColor: AppColor.blackColor,
       decoration: InputDecoration(
         suffixIcon: widget.suffixWidget,
@@ -90,7 +90,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         ),
         hintStyle: const TextStyle(
             fontWeight: FontWeight.w400,
-            fontSize: 13,
+            fontSize: 13.5,
             color: AppColor.hintTextColor,
             fontFamily: FontFamily.interRegular),
       ),

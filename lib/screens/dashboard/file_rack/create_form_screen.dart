@@ -23,6 +23,22 @@ class CreateFormScreen extends StatefulWidget {
 class _CreateFormScreenState extends State<CreateFormScreen> {
   bool switchStatus = false;
   int selectedIndex = 0;
+  List list = [
+    'Location',
+    'Text',
+    'Images',
+    'Date',
+    "Document",
+    'Video',
+    'Signature',
+    'Dropdown',
+    'Number',
+    'Data from other file rack',
+    'Auto Id',
+    'Time',
+    'User list'
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -104,6 +120,9 @@ class _CreateFormScreenState extends State<CreateFormScreen> {
                 height: 15,
               ),
             ),
+            onTap: () {
+              dataTypesBottomSheet();
+            },
           ),
           ScreenSize.height(13),
           Row(
@@ -168,6 +187,121 @@ class _CreateFormScreenState extends State<CreateFormScreen> {
           fontFamily: FontFamily.interMedium,
         )
       ],
+    );
+  }
+
+  dataTypesBottomSheet() {
+    showModalBottomSheet(
+        isScrollControlled: true,
+        backgroundColor: AppColor.whiteColor,
+        shape: const OutlineInputBorder(
+            borderSide: BorderSide(color: AppColor.whiteColor),
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(15), topRight: Radius.circular(15))),
+        context: context,
+        builder: (context) {
+          return Container(
+            height: MediaQuery.of(context).size.height * .9,
+            padding:
+                const EdgeInsets.only(top: 23, left: 20, right: 20, bottom: 15),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Align(
+                  alignment: Alignment.center,
+                  child: Container(
+                    height: 4,
+                    width: 80,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: const Color(0xffE1E1E1)),
+                  ),
+                ),
+                ScreenSize.height(21),
+                Align(
+                  alignment: Alignment.center,
+                  child: customText(
+                    title: 'Add Template Fields',
+                    fontSize: 17,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: FontFamily.interMedium,
+                  ),
+                ),
+                ScreenSize.height(24),
+                CustomTextField(hintText: 'Enter data label'),
+                ScreenSize.height(22),
+                customText(
+                  title: 'Data type',
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                  fontFamily: FontFamily.interMedium,
+                ),
+                ScreenSize.height(20),
+                Expanded(
+                  child: ListView.separated(
+                      separatorBuilder: (context, sp) {
+                        return ScreenSize.height(21);
+                      },
+                      itemCount: list.length,
+                      padding: const EdgeInsets.only(bottom: 20),
+                      shrinkWrap: true,
+                      physics: const ScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        return Row(
+                          children: [
+                            Container(
+                              height: 44,
+                              width: 44,
+                              alignment: Alignment.center,
+                              decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: const Color(0xffD6F3E0)),
+                              child: Image.asset(
+                                AppImages.locationIcon,
+                                height: 24,
+                              ),
+                            ),
+                            ScreenSize.width(14),
+                            Expanded(
+                              child: customText(
+                                title: list[index],
+                                fontSize: 15,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: FontFamily.interSemiBold,
+                              ),
+                            ),
+                            ScreenSize.width(5),
+                            customRadio(
+                                index: index, selectedIndex: selectedIndex)
+                          ],
+                        );
+                      }),
+                ),
+                // ScreenSize.height(10),
+                CustomBtn(title: 'Add Template', onTap: () {})
+              ],
+            ),
+          );
+        });
+  }
+
+  customRadio({required int index, required int selectedIndex}) {
+    return Container(
+      height: 20,
+      width: 20,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: selectedIndex == index
+              ? AppColor.appColor
+              : AppColor.greyD8Color),
+      child: selectedIndex == index
+          ? const Icon(
+              Icons.check,
+              color: AppColor.whiteColor,
+              size: 14,
+            )
+          : Container(),
     );
   }
 }

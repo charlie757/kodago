@@ -28,6 +28,16 @@ class _GroupScreenState extends State<GroupScreen> {
             padding: EdgeInsets.only(left: 20, right: 20),
             child: CustomSearchbar(),
           ),
+          ScreenSize.height(14),
+          Row(
+            children: [
+              msgListTypesWidget('All'),
+              ScreenSize.width(10),
+              msgListTypesWidget('Unread'),
+              ScreenSize.width(10),
+              msgListTypesWidget('Groups'),
+            ],
+          ),
           Expanded(
             child: ListView.separated(
                 separatorBuilder: (context, index) {
@@ -68,6 +78,37 @@ class _GroupScreenState extends State<GroupScreen> {
     );
   }
 
+  msgListTypesWidget(
+    String title,
+  ) {
+    return Container(
+      padding: EdgeInsets.symmetric(
+          vertical: 10, horizontal: title.toLowerCase() == 'all' ? 20 : 14),
+      decoration: BoxDecoration(
+          color: title.toLowerCase() == 'all'
+              ? const Color(0xffE6EBF5)
+              : const Color(0xffF9F9F9),
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: title.toLowerCase() == 'all'
+              ? []
+              : [
+                  BoxShadow(
+                      offset: const Offset(0, 2),
+                      blurRadius: 4,
+                      color: AppColor.blackColor.withOpacity(.2))
+                ]),
+      child: customText(
+        title: title,
+        fontSize: 13,
+        fontWeight: FontWeight.w400,
+        color: title.toLowerCase() == 'all'
+            ? AppColor.darkAppColor
+            : AppColor.grey6AColor,
+        fontFamily: FontFamily.interMedium,
+      ),
+    );
+  }
+
   groupWidget() {
     return GestureDetector(
       onTap: () {
@@ -91,7 +132,7 @@ class _GroupScreenState extends State<GroupScreen> {
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
                   color: AppColor.blackColor,
-                  fontFamily: FontFamily.interSemiBold,
+                  fontFamily: FontFamily.interMedium,
                 ),
                 ScreenSize.height(4),
                 customText(

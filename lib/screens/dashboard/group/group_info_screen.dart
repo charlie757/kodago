@@ -6,6 +6,7 @@ import 'package:kodago/helper/custom_text.dart';
 import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/provider/group/new_group_provider.dart';
+import 'package:kodago/screens/dashboard/file_rack/create_form_screen.dart';
 import 'package:kodago/screens/dashboard/group/add_member_screen.dart';
 import 'package:kodago/screens/dashboard/group/edit_group_profile.dart';
 import 'package:kodago/screens/dashboard/group/hightlight_screen.dart';
@@ -37,7 +38,9 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  customContainer(AppImages.fileIcon, 'Form', () {}),
+                  customContainer(AppImages.fileIcon, 'Form', () {
+                    AppRoutes.pushCupertinoNavigation(const CreateFormScreen());
+                  }),
                   ScreenSize.width(10),
                   customContainer(AppImages.hightlightIcon, 'Highlight', () {
                     AppRoutes.pushCupertinoNavigation(const HightlightScreen());

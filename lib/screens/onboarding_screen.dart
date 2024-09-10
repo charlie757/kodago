@@ -7,6 +7,7 @@ import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/provider/onboarding_provider.dart';
 import 'package:kodago/screens/auth/login_screen.dart';
 import 'package:kodago/screens/dashboard/dashboard_screen.dart';
+import 'package:kodago/uitls/session_manager.dart';
 import 'package:provider/provider.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -79,9 +80,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       if (myProvider.currentIndex < 2) {
                         myProvider.updateIndex(myProvider.currentIndex + 1);
                       } else {
-                        AppRoutes.pushCupertinoNavigation(LoginScreen());
-                        // AppRoutes.pushReplacementNavigation(
-                        //     const DashboardScreen());
+                        SessionManager.setFirstTimeOpenApp = true;
+                        AppRoutes.pushCupertinoNavigation(const LoginScreen());
                       }
                     },
                     child: Container(

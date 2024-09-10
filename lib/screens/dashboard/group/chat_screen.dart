@@ -173,8 +173,8 @@ class _ChatScreenState extends State<ChatScreen> {
                 ),
               ),
               suffixIcon: Container(
-                width: 60,
-                padding: const EdgeInsets.only(right: 5),
+                width: 70,
+                padding: const EdgeInsets.only(right: 14),
                 child: Row(
                   children: [
                     GestureDetector(
@@ -279,8 +279,7 @@ class _ChatScreenState extends State<ChatScreen> {
             AppRoutes.pushCupertinoNavigation(const HightlightScreen());
           },
           child: Container(
-            height: 30,
-            width: 82,
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 5),
             decoration: BoxDecoration(
                 color: AppColor.appColor,
                 borderRadius: BorderRadius.circular(5)),
