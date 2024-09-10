@@ -37,13 +37,13 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(
           value: SplashProvider(),
         ),
+        ChangeNotifierProvider.value(
+          value: OnboardingProvider(),
+        ),
         ChangeNotifierProvider(create: (_) => LoginProvider()),
         ChangeNotifierProvider(create: (_) => SignupProvider()),
         ChangeNotifierProvider(create: (_) => OtpProvider()),
         ChangeNotifierProvider(create: (_) => ForgotPasswordProvider()),
-        ChangeNotifierProvider.value(
-          value: OnboardingProvider(),
-        ),
         ChangeNotifierProvider(create: (_) => DashboardProvider()),
         ChangeNotifierProvider(create: (_) => ChatProvider()),
         ChangeNotifierProvider(create: (_) => ProfileProvider()),

@@ -8,4 +8,5 @@ class ApiUrl {
   static String verifyOtpUrl = '${baseUrl}authentication/otpverify';
   static String forgotPasswordUrl = '${baseUrl}authentication/forgot_password';
   static String forgotResetApiUrl = '${baseUrl}authentication/forgot_reset';
+  static String getProfileUrl = '${baseUrl}authentication/get_profile';
 }
