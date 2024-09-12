@@ -107,7 +107,7 @@ class HomePostsWidget extends StatelessWidget {
             },
             child: customText(
               title: 'Show more',
-              color: AppColor.appColor,
+              color: AppColor.darkAppColor,
               fontFamily: FontFamily.interMedium,
               fontWeight: FontWeight.w400,
               fontSize: 12,

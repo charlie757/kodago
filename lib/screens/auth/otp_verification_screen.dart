@@ -46,11 +46,10 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
         appBar: appBar(title: ''),
         body: Form(
           key: myProvider.formKey,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 59),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 customText(
                   title: 'OTP Verification',
@@ -65,7 +64,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                   fontSize: 15,
                   fontWeight: FontWeight.w400,
                   fontFamily: FontFamily.interRegular,
-                  color: AppColor.lightTextColor,
+                  color: AppColor.b45Color,
                 ),
                 ScreenSize.height(60),
                 otpField(myProvider),
@@ -87,17 +86,28 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                         : null;
                   },
                   child: Container(
-                    height: 30,
-                    alignment: Alignment.center,
-                    child: customText(
-                      title: myProvider.counter == 0
-                          ? "Resend OTP"
-                          : 'Resend OTP in ${myProvider.counter}s',
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      fontFamily: FontFamily.interMedium,
-                    ),
-                  ),
+                      height: 30,
+                      alignment: Alignment.center,
+                      child: Text.rich(TextSpan(
+                          text: 'Don’t receive the OTP? ',
+                          style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              fontFamily: FontFamily.interMedium,
+                              color: AppColor.blackDarkColor),
+                          children: [
+                            TextSpan(
+                                text: myProvider.counter == 0
+                                    ? "Resend OTP"
+                                    : "00:${myProvider.counter}",
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: FontFamily.interMedium,
+                                    color: myProvider.counter == 0
+                                        ? AppColor.appColor
+                                        : AppColor.blackDarkColor))
+                          ]))),
                 ),
                 ScreenSize.height(10),
               ],
@@ -118,7 +128,6 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
       length: 6,
       controller: provider.otpController,
       validator: (val) {
-        print(val);
         if (val!.isEmpty) {
           return 'Enter otp';
         } else if (val.length < 6) {

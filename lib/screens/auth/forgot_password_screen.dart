@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kodago/helper/app_color.dart';
+import 'package:kodago/helper/app_images.dart';
 import 'package:kodago/helper/custom_btn.dart';
 import 'package:kodago/helper/custom_text.dart';
 import 'package:kodago/helper/custom_textfield.dart';
@@ -39,12 +40,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         builder: (context, myProvider, child) {
       return Scaffold(
         appBar: appBar(title: ''),
-        body: Padding(
-          padding: const EdgeInsets.only(left: 20, right: 20),
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.only(left: 20, right: 20, top: 59),
           child: Form(
             key: formKey,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 customText(
@@ -59,7 +59,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   fontSize: 15,
                   fontWeight: FontWeight.w400,
                   fontFamily: FontFamily.interRegular,
-                  color: AppColor.lightTextColor,
+                  color: AppColor.b45Color,
                 ),
                 ScreenSize.height(60),
                 customText(
@@ -71,7 +71,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 ),
                 ScreenSize.height(8),
                 CustomTextField(
-                  hintText: 'Email/Phone number',
+                  hintText: 'Enter email or phone number',
                   isReadOnly: myProvider.isLoading,
                   controller: myProvider.emailPhoneController,
                   inputFormatters: [
@@ -82,9 +82,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       height: 20,
                       width: 20,
                       alignment: Alignment.center,
-                      child: const Icon(
-                        Icons.email_outlined,
-                        color: AppColor.appColor,
+                      child: Image.asset(
+                        AppImages.phoneIcon,
+                        height: 20,
                       )),
                   validator: (val) {
                     if (val.isEmpty) {

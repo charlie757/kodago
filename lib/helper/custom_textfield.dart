@@ -85,8 +85,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
             borderSide: BorderSide(color: widget.borderColor, width: 1),
             borderRadius: BorderRadius.circular(10)),
         hintText: widget.hintText,
-        errorStyle: TextStyle(
-          color: AppColor.redColor.withOpacity(.7),
+        errorStyle: const TextStyle(
+          color: AppColor.redColor,
         ),
         hintStyle: const TextStyle(
             fontWeight: FontWeight.w400,

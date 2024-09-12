@@ -86,7 +86,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             height: 26,
             width: 26,
             color: context.watch<DashboardProvider>().currentIndex == index
-                ? AppColor.appColor
+                ? AppColor.darkAppColor
                 : AppColor.blackColor,
           ),
         ),

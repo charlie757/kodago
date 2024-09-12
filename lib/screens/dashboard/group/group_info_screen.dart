@@ -10,6 +10,7 @@ import 'package:kodago/screens/dashboard/file_rack/create_form_screen.dart';
 import 'package:kodago/screens/dashboard/group/add_member_screen.dart';
 import 'package:kodago/screens/dashboard/group/edit_group_profile.dart';
 import 'package:kodago/screens/dashboard/group/hightlight_screen.dart';
+import 'package:kodago/screens/dashboard/group/view_all_group_media_screen.dart';
 import 'package:kodago/widget/appbar.dart';
 import 'package:kodago/widget/popmenuButton.dart';
 import 'package:provider/provider.dart';
@@ -248,12 +249,18 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
                 fontWeight: FontWeight.w400,
                 fontFamily: FontFamily.interMedium,
               ),
-              customText(
-                title: 'View all',
-                fontSize: 13,
-                color: AppColor.darkAppColor,
-                fontWeight: FontWeight.w400,
-                fontFamily: FontFamily.interMedium,
+              GestureDetector(
+                onTap: () {
+                  AppRoutes.pushCupertinoNavigation(
+                      const ViewAllGroupMediaScreen());
+                },
+                child: customText(
+                  title: 'View all',
+                  fontSize: 13,
+                  color: AppColor.darkAppColor,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: FontFamily.interMedium,
+                ),
               ),
             ],
           ),
@@ -323,46 +330,100 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
               itemCount: context.watch<NewGroupProvider>().groupList.length,
               itemBuilder: (context, index) {
                 var model = context.watch<NewGroupProvider>().groupList[index];
-                return Row(
-                  children: [
-                    Image.asset(
-                      model['img'],
-                      height: 33,
-                      width: 33,
+                return GestureDetector(
+                  onTap: () {
+                    showDialogBox();
+                  },
+                  child: Container(
+                    color: AppColor.whiteColor,
+                    child: Row(
+                      children: [
+                        Image.asset(
+                          model['img'],
+                          height: 33,
+                          width: 33,
+                        ),
+                        ScreenSize.width(15),
+                        Expanded(
+                          child: customText(
+                            title: model['name'],
+                            fontSize: 14,
+                            color: AppColor.blackColor,
+                            fontWeight: FontWeight.w500,
+                            fontFamily: FontFamily.interSemiBold,
+                          ),
+                        ),
+                        index == 0
+                            ? Container(
+                                height: 26,
+                                width: 89,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(6),
+                                    color: const Color(0xffDAEFFD)),
+                                alignment: Alignment.center,
+                                child: customText(
+                                  title: "Group Admin",
+                                  fontSize: 12,
+                                  color: AppColor.appColor,
+                                  fontWeight: FontWeight.w500,
+                                  fontFamily: FontFamily.interMedium,
+                                ),
+                              )
+                            : Container()
+                      ],
                     ),
-                    ScreenSize.width(15),
-                    Expanded(
-                      child: customText(
-                        title: model['name'],
-                        fontSize: 14,
-                        color: AppColor.blackColor,
-                        fontWeight: FontWeight.w500,
-                        fontFamily: FontFamily.interSemiBold,
-                      ),
-                    ),
-                    index == 0
-                        ? Container(
-                            height: 26,
-                            width: 89,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(6),
-                                color: const Color(0xffDAEFFD)),
-                            alignment: Alignment.center,
-                            child: customText(
-                              title: "Group Admin",
-                              fontSize: 12,
-                              color: AppColor.appColor,
-                              fontWeight: FontWeight.w500,
-                              fontFamily: FontFamily.interMedium,
-                            ),
-                          )
-                        : Container()
-                  ],
+                  ),
                 );
               })
         ],
       ),
     );
+  }
+
+  showDialogBox() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+            content: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 15),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  customText(
+                    title: 'Make group admin',
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    fontFamily: FontFamily.interMedium,
+                  ),
+                  ScreenSize.height(20),
+                  customText(
+                    title: "Assign a filerack's",
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    fontFamily: FontFamily.interMedium,
+                  ),
+                  ScreenSize.height(20),
+                  customText(
+                    title: 'Message Manish',
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    fontFamily: FontFamily.interMedium,
+                  ),
+                  ScreenSize.height(20),
+                  customText(
+                    title: 'Remove from group',
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    fontFamily: FontFamily.interMedium,
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
   }
 
   customContainer(String img, String title, Function() onTap) {

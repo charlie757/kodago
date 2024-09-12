@@ -142,7 +142,7 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
                         title: '10 comments',
                         fontSize: 11,
                         fontWeight: FontWeight.w400,
-                        fontFamily: FontFamily.interBold,
+                        fontFamily: FontFamily.interMedium,
                         color: AppColor.blackColor,
                       )
                     ],

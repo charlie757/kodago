@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:kodago/config/app_routes.dart';
 import 'package:kodago/helper/app_color.dart';
 import 'package:kodago/helper/app_images.dart';
 import 'package:kodago/helper/custom_text.dart';
 import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/provider/group/new_group_provider.dart';
+import 'package:kodago/screens/dashboard/group/create_topic_screen.dart';
 import 'package:kodago/widget/appbar.dart';
 import 'package:provider/provider.dart';
 
@@ -27,7 +29,9 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
           children: [headerWidget(), membersWidget()],
         ),
         floatingActionButton: GestureDetector(
-          onTap: () {},
+          onTap: () {
+            AppRoutes.pushCupertinoNavigation(const CreateTopicScreen());
+          },
           child: Container(
             height: 45,
             width: 45,

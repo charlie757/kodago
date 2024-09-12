@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:kodago/config/app_routes.dart';
 import 'package:kodago/helper/app_color.dart';
 import 'package:kodago/helper/app_images.dart';
@@ -7,48 +8,119 @@ import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/provider/group/new_group_provider.dart';
 import 'package:kodago/screens/dashboard/group/create_group_screen.dart';
+import 'package:kodago/screens/dashboard/group/new_group_screen.dart';
 import 'package:provider/provider.dart';
 
-class NewGroupScreen extends StatefulWidget {
-  const NewGroupScreen({super.key});
+class ContactScreen extends StatefulWidget {
+  const ContactScreen({super.key});
 
   @override
-  State<NewGroupScreen> createState() => _NewGroupScreenState();
+  State<ContactScreen> createState() => _ContactScreenState();
 }
 
-class _NewGroupScreenState extends State<NewGroupScreen> {
+class _ContactScreenState extends State<ContactScreen> {
+  @override
+  void initState() {
+    Provider.of<NewGroupProvider>(context, listen: false).isShow = false;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: appBar(),
-        body: Column(
+      appBar: appBar(),
+      body: SingleChildScrollView(
+        padding:
+            const EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 20),
+        child: Column(
           children: [
-            selectedGroupWidget(),
+            headerWidget(),
             groupListWidget(),
+            ScreenSize.height(17),
+            shareInviteWidgt()
           ],
         ),
-        floatingActionButton: GestureDetector(
+      ),
+      floatingActionButton: context.watch<NewGroupProvider>().isShow
+          ? GestureDetector(
+              onTap: () {
+                AppRoutes.pushCupertinoNavigation(const CreateGroupScreen());
+              },
+              child: Container(
+                height: 45,
+                width: 45,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: AppColor.appColor,
+                    boxShadow: [
+                      BoxShadow(
+                          offset: const Offset(0, -2),
+                          blurRadius: 6,
+                          color: AppColor.blackColor.withOpacity(.2))
+                    ]),
+                child: const Icon(
+                  Icons.arrow_forward,
+                  color: AppColor.whiteColor,
+                ),
+              ),
+            )
+          : Container(),
+    );
+  }
+
+  headerWidget() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        GestureDetector(
           onTap: () {
-            AppRoutes.pushCupertinoNavigation(const CreateGroupScreen());
+            AppRoutes.pushCupertinoNavigation(NewGroupScreen());
           },
-          child: Container(
-            height: 45,
-            width: 45,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: AppColor.appColor,
-                boxShadow: [
-                  BoxShadow(
-                      offset: const Offset(0, -2),
-                      blurRadius: 6,
-                      color: AppColor.blackColor.withOpacity(.2))
-                ]),
-            child: const Icon(
-              Icons.arrow_forward,
-              color: AppColor.whiteColor,
-            ),
+          child: Row(
+            children: [
+              Image.asset(
+                AppImages.newGroupIcon,
+                height: 40,
+                width: 40,
+              ),
+              ScreenSize.width(11),
+              customText(
+                title: 'New group',
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                fontFamily: FontFamily.interMedium,
+              )
+            ],
           ),
-        ));
+        ),
+        ScreenSize.height(18),
+        Row(
+          children: [
+            Image.asset(
+              AppImages.newContactIcon,
+              height: 40,
+              width: 40,
+            ),
+            ScreenSize.width(11),
+            customText(
+              title: 'New contact',
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              fontFamily: FontFamily.interMedium,
+            )
+          ],
+        ),
+        ScreenSize.height(25),
+        customText(
+          title: 'Your contacts on kodago',
+          fontFamily: FontFamily.interMedium,
+          fontSize: 13,
+          fontWeight: FontWeight.w500,
+          color: const Color(0xff585757),
+        ),
+        ScreenSize.height(21),
+      ],
+    );
   }
 
   groupListWidget() {
@@ -56,7 +128,6 @@ class _NewGroupScreenState extends State<NewGroupScreen> {
         separatorBuilder: (context, sp) {
           return ScreenSize.height(17);
         },
-        padding: const EdgeInsets.only(left: 20, right: 20, top: 15),
         itemCount: context.watch<NewGroupProvider>().groupList.length,
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
@@ -114,6 +185,13 @@ class _NewGroupScreenState extends State<NewGroupScreen> {
                       fontFamily: FontFamily.interSemiBold,
                     ),
                   ),
+                  customText(
+                    title: index == 4 ? 'Invite' : '',
+                    color: AppColor.appColor,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: FontFamily.interMedium,
+                  )
                 ],
               ),
             ),
@@ -209,6 +287,25 @@ class _NewGroupScreenState extends State<NewGroupScreen> {
     );
   }
 
+  shareInviteWidgt() {
+    return Row(
+      children: [
+        Image.asset(
+          AppImages.shareInviteIcon,
+          height: 33,
+          width: 33,
+        ),
+        ScreenSize.width(16),
+        customText(
+          title: 'Share invite link',
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
+          fontFamily: FontFamily.interSemiBold,
+        )
+      ],
+    );
+  }
+
   AppBar appBar() {
     return AppBar(
       automaticallyImplyLeading: false,
@@ -233,7 +330,7 @@ class _NewGroupScreenState extends State<NewGroupScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 customText(
-                  title: 'New group',
+                  title: 'Select contact',
                   fontSize: 18,
                   fontWeight: FontWeight.w500,
                   color: AppColor.blackColor,
@@ -241,7 +338,7 @@ class _NewGroupScreenState extends State<NewGroupScreen> {
                 ),
                 ScreenSize.height(4),
                 customText(
-                  title: 'Add members',
+                  title: '250 contacts',
                   fontSize: 12,
                   fontWeight: FontWeight.w400,
                   color: AppColor.blackColor,

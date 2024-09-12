@@ -5,6 +5,7 @@ import 'package:kodago/helper/custom_text.dart';
 import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/provider/group/chat_provider.dart';
+import 'package:kodago/screens/dashboard/group/add_edit_topic_screen.dart';
 import 'package:kodago/screens/dashboard/group/group_info_screen.dart';
 import 'package:kodago/screens/dashboard/group/hightlight_screen.dart';
 import 'package:kodago/widget/popmenuButton.dart';
@@ -307,12 +308,15 @@ class _ChatScreenState extends State<ChatScreen> {
             list: [
               customPopMenuItem(value: 0, title: 'Group info'),
               customPopMenuItem(value: 1, title: 'Exit group'),
-              customPopMenuItem(value: 2, title: 'Video call'),
-              customPopMenuItem(value: 3, title: 'Audio call'),
+              customPopMenuItem(value: 2, title: 'Add & Edit Topic'),
+              customPopMenuItem(value: 3, title: 'Video call'),
+              customPopMenuItem(value: 4, title: 'Audio call'),
             ],
             onSelected: (value) {
               if (value == 0) {
                 AppRoutes.pushCupertinoNavigation(const GroupInfoScreen());
+              } else if (value == 2) {
+                AppRoutes.pushCupertinoNavigation(const AddEditTopicScreen());
               }
             })
       ],

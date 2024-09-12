@@ -6,7 +6,7 @@ import 'package:kodago/helper/custom_text.dart';
 import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/screens/dashboard/group/chat_screen.dart';
-import 'package:kodago/screens/dashboard/group/new_group_screen.dart';
+import 'package:kodago/screens/dashboard/group/contact_screen.dart';
 import 'package:kodago/widget/popmenuButton.dart';
 
 class GroupScreen extends StatefulWidget {
@@ -55,7 +55,7 @@ class _GroupScreenState extends State<GroupScreen> {
       ),
       floatingActionButton: GestureDetector(
         onTap: () {
-          AppRoutes.pushCupertinoNavigation(const NewGroupScreen());
+          AppRoutes.pushCupertinoNavigation(const ContactScreen());
         },
         child: Container(
           height: 45,
@@ -93,8 +93,8 @@ class _GroupScreenState extends State<GroupScreen> {
               ? []
               : [
                   BoxShadow(
-                      offset: const Offset(0, 2),
-                      blurRadius: 4,
+                      offset: const Offset(0, 1),
+                      blurRadius: 3,
                       color: AppColor.blackColor.withOpacity(.2))
                 ]),
       child: customText(

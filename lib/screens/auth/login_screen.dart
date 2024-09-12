@@ -57,7 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       fontSize: 15,
                       fontWeight: FontWeight.w400,
                       fontFamily: FontFamily.interRegular,
-                      color: AppColor.lightTextColor,
+                      color: AppColor.b45Color,
                     ),
                     ScreenSize.height(80),
                     customText(
@@ -69,7 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     ScreenSize.height(8),
                     CustomTextField(
-                      hintText: 'Email/Phone number',
+                      hintText: 'Enter email or phone number',
                       isReadOnly: myProvider.isLoading,
                       controller: myProvider.emailController,
                       textInputAction: TextInputAction.next,
@@ -82,9 +82,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           height: 20,
                           width: 20,
                           alignment: Alignment.center,
-                          child: const Icon(
-                            Icons.email_outlined,
-                            color: AppColor.appColor,
+                          child: Image.asset(
+                            AppImages.phoneIcon,
+                            height: 20,
                           )),
                       validator: (val) {
                         if (val.isEmpty) {

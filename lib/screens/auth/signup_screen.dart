@@ -58,7 +58,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   fontSize: 15,
                   fontWeight: FontWeight.w400,
                   fontFamily: FontFamily.interRegular,
-                  color: AppColor.lightTextColor,
+                  color: AppColor.b45Color,
                 ),
                 ScreenSize.height(62),
                 customText(
@@ -83,9 +83,9 @@ class _SignupScreenState extends State<SignupScreen> {
                       height: 20,
                       width: 20,
                       alignment: Alignment.center,
-                      child: const Icon(
-                        Icons.email_outlined,
-                        color: AppColor.appColor,
+                      child: Image.asset(
+                        AppImages.userIcon,
+                        height: 20,
                       )),
                   validator: (val) {
                     if (val.isEmpty) {
@@ -152,9 +152,9 @@ class _SignupScreenState extends State<SignupScreen> {
                       height: 20,
                       width: 20,
                       alignment: Alignment.center,
-                      child: const Icon(
-                        Icons.email_outlined,
-                        color: AppColor.appColor,
+                      child: Image.asset(
+                        AppImages.phoneIcon,
+                        height: 20,
                       )),
                   validator: (val) {
                     if (val.isEmpty) {
@@ -271,7 +271,7 @@ class _SignupScreenState extends State<SignupScreen> {
                               ..onTap = () {
                                 Navigator.pop(context);
                               },
-                            text: 'Login',
+                            text: 'Login here',
                             style: const TextStyle(
                                 fontSize: 12,
                                 fontFamily: FontFamily.interMedium,
