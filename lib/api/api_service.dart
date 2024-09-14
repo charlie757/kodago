@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:kodago/uitls/constants.dart';
 import 'package:kodago/uitls/session_manager.dart';
 import 'package:kodago/uitls/utils.dart';
 
@@ -70,14 +71,17 @@ class ApiService {
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
         try {
           Map<String, String> headers = {
-            "Authorization": "Bearer ${SessionManager.token}"
+            "Authorization": "Bearer ${SessionManager.token}",
+            "Authkey": Constants.authkey
           };
+          print(headers);
           var request = http.MultipartRequest('POST', Uri.parse(url));
           request.fields.addAll(body);
-          request.headers.addAll(headers);
+          // request.headers.addAll(headers);
 
           var streamedResponse = await request.send();
           var response = await http.Response.fromStream(streamedResponse);
+          print(response.statusCode);
           print(request.url);
           log(response.body);
           return _handleResponse(response, isErrorMessageShow);

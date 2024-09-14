@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:kodago/config/app_routes.dart';
 import 'package:kodago/helper/app_color.dart';
 import 'package:kodago/helper/custom_btn.dart';
 import 'package:kodago/helper/custom_text.dart';
 import 'package:kodago/helper/custom_textfield.dart';
 import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
-import 'package:kodago/screens/dashboard/file_rack/no_file_racks_screen.dart';
 import 'package:kodago/widget/appbar.dart';
 
 class AddDataScreen extends StatefulWidget {
@@ -65,8 +63,8 @@ class _AddDataScreenState extends State<AddDataScreen> {
                   CustomBtn(
                       title: 'Save',
                       onTap: () {
-                        AppRoutes.pushCupertinoNavigation(
-                            const NoFileRacksScreen());
+                        // AppRoutes.pushCupertinoNavigation(
+                        //     const NoFileRacksScreen());
                       })
                 ],
               ),

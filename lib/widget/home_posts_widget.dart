@@ -37,8 +37,8 @@ class HomePostsWidget extends StatelessWidget {
           ClipOval(
             child: Image.asset(
               'assets/dummay/profile.png',
-              height: 32,
-              width: 32,
+              height: 42,
+              width: 42,
             ),
           ),
           ScreenSize.width(10),
@@ -58,7 +58,7 @@ class HomePostsWidget extends StatelessWidget {
                 fontSize: 11,
                 fontWeight: FontWeight.w400,
                 color: AppColor.grey7DColor,
-                fontFamily: FontFamily.interRegular,
+                fontFamily: FontFamily.interMedium,
               ),
             ],
           ),
@@ -66,7 +66,7 @@ class HomePostsWidget extends StatelessWidget {
           Image.asset(
             AppImages.moreHorizontalIcon,
             width: 14,
-            height: 3,
+            height: 5,
           )
         ],
       ),
@@ -79,7 +79,7 @@ class HomePostsWidget extends StatelessWidget {
       child: Row(
         children: [
           Image.asset(
-            AppImages.likeIcon,
+            AppImages.thumb1Icon,
             height: 16,
             width: 18,
           ),
@@ -143,7 +143,7 @@ class HomePostsWidget extends StatelessWidget {
                         fontSize: 13,
                         fontWeight: FontWeight.w500,
                         color: AppColor.blackColor,
-                        fontFamily: FontFamily.interMedium),
+                        fontFamily: FontFamily.interSemiBold),
                     children: [
                       TextSpan(
                           text: 'and ',
@@ -159,7 +159,7 @@ class HomePostsWidget extends StatelessWidget {
                                     fontSize: 13,
                                     fontWeight: FontWeight.w500,
                                     color: AppColor.blackColor,
-                                    fontFamily: FontFamily.interMedium))
+                                    fontFamily: FontFamily.interSemiBold))
                           ])
                     ])
               ]))

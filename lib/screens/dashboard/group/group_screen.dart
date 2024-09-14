@@ -29,14 +29,17 @@ class _GroupScreenState extends State<GroupScreen> {
             child: CustomSearchbar(),
           ),
           ScreenSize.height(14),
-          Row(
-            children: [
-              msgListTypesWidget('All'),
-              ScreenSize.width(10),
-              msgListTypesWidget('Unread'),
-              ScreenSize.width(10),
-              msgListTypesWidget('Groups'),
-            ],
+          Padding(
+            padding: const EdgeInsets.only(left: 20),
+            child: Row(
+              children: [
+                msgListTypesWidget('All'),
+                ScreenSize.width(10),
+                msgListTypesWidget('Unread'),
+                ScreenSize.width(10),
+                msgListTypesWidget('Groups'),
+              ],
+            ),
           ),
           Expanded(
             child: ListView.separated(
@@ -46,7 +49,7 @@ class _GroupScreenState extends State<GroupScreen> {
                 itemCount: 15,
                 shrinkWrap: true,
                 padding: const EdgeInsets.only(
-                    left: 20, right: 20, top: 17, bottom: 30),
+                    left: 20, right: 20, top: 20, bottom: 30),
                 itemBuilder: (context, index) {
                   return groupWidget();
                 }),
@@ -83,7 +86,7 @@ class _GroupScreenState extends State<GroupScreen> {
   ) {
     return Container(
       padding: EdgeInsets.symmetric(
-          vertical: 10, horizontal: title.toLowerCase() == 'all' ? 20 : 14),
+          vertical: 7, horizontal: title.toLowerCase() == 'all' ? 20 : 14),
       decoration: BoxDecoration(
           color: title.toLowerCase() == 'all'
               ? const Color(0xffE6EBF5)
@@ -93,9 +96,9 @@ class _GroupScreenState extends State<GroupScreen> {
               ? []
               : [
                   BoxShadow(
-                      offset: const Offset(0, 1),
-                      blurRadius: 3,
-                      color: AppColor.blackColor.withOpacity(.2))
+                      offset: const Offset(0, 0),
+                      blurRadius: 2,
+                      color: AppColor.blackColor.withOpacity(.1))
                 ]),
       child: customText(
         title: title,
@@ -132,12 +135,12 @@ class _GroupScreenState extends State<GroupScreen> {
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
                   color: AppColor.blackColor,
-                  fontFamily: FontFamily.interMedium,
+                  fontFamily: FontFamily.interSemiBold,
                 ),
                 ScreenSize.height(4),
                 customText(
                   title: 'Empolyee Attendance Group',
-                  fontSize: 11.5,
+                  fontSize: 11,
                   fontWeight: FontWeight.w400,
                   color: AppColor.grey7DColor,
                   fontFamily: FontFamily.interRegular,
@@ -165,7 +168,7 @@ class _GroupScreenState extends State<GroupScreen> {
   AppBar appBar() {
     return AppBar(
       title: customText(
-        title: 'Group',
+        title: 'Kodago',
         fontSize: 20,
         color: AppColor.darkAppColor,
         fontWeight: FontWeight.w600,

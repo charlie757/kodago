@@ -7,15 +7,18 @@ import 'package:kodago/helper/font_family.dart';
 class CustomSearchbar extends StatelessWidget {
   final TextEditingController? controller;
   final ValueChanged<String>? onChanged;
+  final Color backgroundColor;
 
-  const CustomSearchbar({this.controller, this.onChanged});
+  const CustomSearchbar(
+      {this.controller,
+      this.onChanged,
+      this.backgroundColor = const Color(0xffECECEC)});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          color: const Color(0xffECECEC),
-          borderRadius: BorderRadius.circular(50)),
+          color: backgroundColor, borderRadius: BorderRadius.circular(50)),
       child: TextFormField(
         cursorHeight: 20,
         textAlignVertical: TextAlignVertical.center,

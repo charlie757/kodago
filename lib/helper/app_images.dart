@@ -15,6 +15,7 @@ class AppImages {
   static String shareIcon = 'assets/icons/share.png';
   static String likeIcon = 'assets/icons/like.png';
   static String thumbIcon = 'assets/icons/thumb_icon.png';
+  static String thumb1Icon = 'assets/icons/thumb1.png';
   static String visitRecordIcon = 'assets/icons/visit_record_icon.png';
   static String arrowForeWordIcon = 'assets/icons/arrow_foreword_icon.png';
   static String pdfIcon = 'assets/icons/pdf.png';

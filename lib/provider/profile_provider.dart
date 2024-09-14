@@ -13,7 +13,9 @@ class ProfileProvider extends ChangeNotifier {
       "userid": SessionManager.userId,
       "Token": SessionManager.token
     };
+    print(body);
     final response = await ApiService.multiPartApiMethod(
         url: ApiUrl.getProfileUrl, body: body);
+    if (response != null) {}
   }
 }

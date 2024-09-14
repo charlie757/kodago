@@ -6,7 +6,7 @@ import 'package:kodago/helper/custom_text.dart';
 import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/provider/group/new_group_provider.dart';
-import 'package:kodago/screens/dashboard/file_rack/create_form_screen.dart';
+import 'package:kodago/screens/dashboard/file_rack/no_file_racks_screen.dart';
 import 'package:kodago/screens/dashboard/group/add_member_screen.dart';
 import 'package:kodago/screens/dashboard/group/edit_group_profile.dart';
 import 'package:kodago/screens/dashboard/group/hightlight_screen.dart';
@@ -40,7 +40,8 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   customContainer(AppImages.fileIcon, 'Form', () {
-                    AppRoutes.pushCupertinoNavigation(const CreateFormScreen());
+                    AppRoutes.pushCupertinoNavigation(
+                        const NoFileRacksScreen());
                   }),
                   ScreenSize.width(10),
                   customContainer(AppImages.hightlightIcon, 'Highlight', () {
@@ -138,13 +139,13 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
   groupDescriptionWidget() {
     return Container(
       width: double.infinity,
-      decoration: BoxDecoration(color: AppColor.whiteColor, boxShadow: [
-        BoxShadow(
-            offset: const Offset(0, 0),
-            color: AppColor.blackColor.withOpacity(.1),
-            blurRadius: 5,
-            spreadRadius: 2)
-      ]),
+      decoration: BoxDecoration(
+          color: AppColor.whiteColor,
+          border: Border(
+              top: BorderSide(
+                  width: 1, color: AppColor.lightGreyD9Color.withOpacity(.4)),
+              bottom: BorderSide(
+                  width: 1, color: AppColor.lightGreyD9Color.withOpacity(.4)))),
       padding: const EdgeInsets.only(top: 16, left: 19, bottom: 15, right: 18),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -172,13 +173,13 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
   invateLinkWidget() {
     return Container(
       width: double.infinity,
-      decoration: BoxDecoration(color: AppColor.whiteColor, boxShadow: [
-        BoxShadow(
-            offset: const Offset(0, 0),
-            color: AppColor.blackColor.withOpacity(.1),
-            blurRadius: 5,
-            spreadRadius: 2)
-      ]),
+      decoration: BoxDecoration(
+          color: AppColor.whiteColor,
+          border: Border(
+              bottom: BorderSide(
+                  width: 1, color: AppColor.lightGreyD9Color.withOpacity(.4)),
+              top: BorderSide(
+                  width: 1, color: AppColor.lightGreyD9Color.withOpacity(.4)))),
       padding: const EdgeInsets.only(top: 16, left: 19, bottom: 15, right: 18),
       child: Row(
         children: [
@@ -293,13 +294,13 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
   membersWidget() {
     return Container(
       width: double.infinity,
-      decoration: BoxDecoration(color: AppColor.whiteColor, boxShadow: [
-        BoxShadow(
-            offset: const Offset(0, 0),
-            color: AppColor.blackColor.withOpacity(.1),
-            blurRadius: 5,
-            spreadRadius: 1)
-      ]),
+      decoration: BoxDecoration(
+          color: AppColor.whiteColor,
+          border: Border(
+              top: BorderSide(
+                  width: 1, color: AppColor.lightGreyD9Color.withOpacity(.4)),
+              bottom: BorderSide(
+                  width: 1, color: AppColor.lightGreyD9Color.withOpacity(.4)))),
       padding: const EdgeInsets.only(left: 19, top: 16, right: 18, bottom: 15),
       child: Column(
         children: [
@@ -369,7 +370,10 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
                                   fontFamily: FontFamily.interMedium,
                                 ),
                               )
-                            : Container()
+                            : Image.asset(
+                                AppImages.keyboardDownIcon,
+                                height: 19,
+                              )
                       ],
                     ),
                   ),
@@ -385,9 +389,12 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
         context: context,
         builder: (context) {
           return AlertDialog(
+            insetPadding: EdgeInsets.zero,
+            contentPadding: EdgeInsets.zero,
             shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-            content: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 15),
+            content: Container(
+              width: MediaQuery.of(context).size.width - 40,
+              padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 17),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,

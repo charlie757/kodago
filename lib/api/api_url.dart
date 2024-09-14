@@ -1,6 +1,7 @@
 class ApiUrl {
   static String baseUrl = 'https://staging.kodago.com/api_v2/';
   // static String baseUrl = 'https://www.kodago.com/api_v2/';
+  /// auth api url
   static String loginUrl = '${baseUrl}authentication/login';
   static String registerUrl = '${baseUrl}authentication/register';
   static String resendOtpUrl = '${baseUrl}authentication/resendotp';
@@ -8,5 +9,10 @@ class ApiUrl {
   static String verifyOtpUrl = '${baseUrl}authentication/otpverify';
   static String forgotPasswordUrl = '${baseUrl}authentication/forgot_password';
   static String forgotResetApiUrl = '${baseUrl}authentication/forgot_reset';
+
+  /// profile
   static String getProfileUrl = '${baseUrl}authentication/get_profile';
+
+  /// feeds
+  static String feedsUrl = '${baseUrl}groups/feeds';
 }

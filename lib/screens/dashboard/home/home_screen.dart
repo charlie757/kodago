@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:kodago/config/app_routes.dart';
 import 'package:kodago/helper/app_color.dart';
+import 'package:kodago/helper/app_images.dart';
 import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
+import 'package:kodago/provider/home/home_provider.dart';
 import 'package:kodago/screens/dashboard/home/view_story_screen.dart';
 import 'package:kodago/widget/home_posts_widget.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,24 +18,39 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   @override
+  void initState() {
+    callInitFunction();
+    super.initState();
+  }
+
+  callInitFunction() {
+    // final provider = Provider.of<HomeProvider>(context, listen: false);
+    // provider.feedsApiFunction();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
           child: SingleChildScrollView(
         padding: const EdgeInsets.only(top: 10, bottom: 30),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            storyWidget(),
-            ScreenSize.height(14),
-            Container(
-              height: 1,
-              margin: const EdgeInsets.symmetric(horizontal: 8),
-              color: AppColor.blackColor.withOpacity(.2),
+            Padding(
+              padding: const EdgeInsets.only(left: 16),
+              child: Image.asset(
+                AppImages.appLogo,
+                height: 25,
+                width: 94,
+              ),
             ),
-            ScreenSize.height(11),
+            ScreenSize.height(10),
+            storyWidget(),
+            ScreenSize.height(15),
             ListView.separated(
                 separatorBuilder: (context, sp) {
-                  return ScreenSize.height(15);
+                  return ScreenSize.height(29);
                 },
                 itemCount: 4,
                 physics: const ScrollPhysics(),
@@ -47,30 +65,25 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   storyWidget() {
-    return SizedBox(
-      height: 90,
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.only(left: 16),
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: [
-            yourStoryDataWidget(),
-            ListView.separated(
-                separatorBuilder: (context, sp) {
-                  return ScreenSize.width(25);
-                },
-                scrollDirection: Axis.horizontal,
-                shrinkWrap: true,
-                padding: const EdgeInsets.only(left: 16, right: 15),
-                itemCount: 10,
-                itemBuilder: (context, index) {
-                  return storyDataWidget(
-                    'Manish Solanki',
-                    'assets/dummay/profile.png',
-                  );
-                }),
-          ],
-        ),
+    return SingleChildScrollView(
+      padding: const EdgeInsets.only(left: 16),
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: [
+          yourStoryDataWidget(),
+          ScreenSize.width(15),
+          Row(
+            children: List.generate(10, (val) {
+              return Padding(
+                padding: const EdgeInsets.only(right: 15),
+                child: storyDataWidget(
+                  'Manish Solanki',
+                  'assets/dummay/profile.png',
+                ),
+              );
+            }),
+          ),
+        ],
       ),
     );
   }
@@ -81,31 +94,31 @@ class _HomeScreenState extends State<HomeScreen> {
   ) {
     return GestureDetector(
       onTap: () {
-        AppRoutes.pushCupertinoNavigation(const ViewStoryScreen());
+        callInitFunction();
+        // AppRoutes.pushCupertinoNavigation(const ViewStoryScreen());
       },
       child: SizedBox(
-        width: 60,
+        width: 70,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              height: 58,
-              width: 58,
+              height: 70,
+              width: 70,
               decoration: const BoxDecoration(
                   shape: BoxShape.circle,
                   gradient: LinearGradient(
                       colors: [
-                        AppColor.storyGradientColor1,
                         AppColor.storyGradientColor2,
-                        AppColor.storyGradientColor3,
+                        AppColor.storyGradientColor1,
                       ],
-                      begin: Alignment.bottomLeft,
-                      end: Alignment.topRight,
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
                       tileMode: TileMode.mirror)),
               alignment: Alignment.center,
               child: Container(
-                height: 55,
-                width: 55,
+                height: 66,
+                width: 66,
                 decoration: const BoxDecoration(
                   color: AppColor.whiteColor,
                   shape: BoxShape.circle,
@@ -114,12 +127,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: ClipOval(
                     child: Image.asset(
                   img,
-                  height: 50,
-                  width: 50,
+                  height: 70,
+                  width: 70,
                 )),
               ),
             ),
-            ScreenSize.height(8),
+            ScreenSize.height(2),
             Padding(
               padding: const EdgeInsets.only(left: 3),
               child: Text(
@@ -147,25 +160,15 @@ class _HomeScreenState extends State<HomeScreen> {
       child: SizedBox(
         width: 70,
         child: Column(
-          // crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              height: 58,
-              width: 58,
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-              ),
-              alignment: Alignment.center,
-              child: ClipOval(
-                  child: Image.asset(
-                'assets/dummay/Oval (4).png',
-                height: 50,
-                width: 50,
-              )),
-            ),
-            ScreenSize.height(8),
+            ClipOval(
+                child: Image.asset(
+              'assets/dummay/Profile Image.png',
+              height: 70,
+              width: 70,
+            )),
             const Padding(
-              padding: EdgeInsets.only(left: 3),
+              padding: EdgeInsets.only(left: 3, top: 2),
               child: Text(
                 'Your story',
                 maxLines: 1,

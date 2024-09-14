@@ -6,7 +6,7 @@ import 'package:kodago/helper/custom_btn.dart';
 import 'package:kodago/helper/custom_text.dart';
 import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
-import 'package:kodago/screens/dashboard/file_rack/create_form_screen.dart';
+import 'package:kodago/screens/dashboard/file_rack/file_rack_list_screen.dart';
 import 'package:kodago/widget/appbar.dart';
 
 class NoFileRacksScreen extends StatefulWidget {
@@ -49,7 +49,7 @@ class _NoFileRacksScreenState extends State<NoFileRacksScreen> {
             CustomBtn(
                 title: 'Create form',
                 onTap: () {
-                  AppRoutes.pushCupertinoNavigation(const CreateFormScreen());
+                  AppRoutes.pushCupertinoNavigation(const FileRackListScreen());
                 }),
             ScreenSize.height(45),
             Column(

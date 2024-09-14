@@ -7,6 +7,7 @@ import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/screens/dashboard/file_rack/add_data_screen.dart';
 import 'package:kodago/screens/dashboard/file_rack/assign_members_screen.dart';
+import 'package:kodago/screens/dashboard/file_rack/create_form_screen.dart';
 import 'package:kodago/screens/dashboard/file_rack/file_rack_details_screen.dart';
 import 'package:kodago/uitls/delete_file_rack_dialogbox.dart';
 import 'package:kodago/widget/appbar.dart';
@@ -23,7 +24,27 @@ class _FileRackListScreenState extends State<FileRackListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar(title: 'Test'),
+      appBar: appBar(title: 'Test', actions: [
+        GestureDetector(
+          onTap: () {
+            AppRoutes.pushCupertinoNavigation(const CreateFormScreen());
+          },
+          child: Container(
+            margin: const EdgeInsets.only(right: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 6),
+            decoration: BoxDecoration(
+                color: AppColor.appColor,
+                borderRadius: BorderRadius.circular(50)),
+            child: customText(
+              title: 'Add file racks',
+              color: AppColor.whiteColor,
+              fontSize: 13,
+              fontWeight: FontWeight.w400,
+              fontFamily: FontFamily.interRegular,
+            ),
+          ),
+        )
+      ]),
       body: ListView.separated(
           separatorBuilder: (context, sp) {
             return ScreenSize.height(20);
@@ -91,7 +112,7 @@ class _FileRackListScreenState extends State<FileRackListScreen> {
         list: [
           customPopMenuItem(value: 0, title: 'Edit'),
           customPopMenuItem(value: 1, title: 'Assign Members'),
-          customPopMenuItem(value: 2, title: 'Assign Category'),
+          customPopMenuItem(value: 2, title: 'Assign Topic'),
           customPopMenuItem(value: 3, title: 'Delete'),
         ],
         onSelected: (value) {

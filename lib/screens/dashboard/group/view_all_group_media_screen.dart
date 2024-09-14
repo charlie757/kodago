@@ -66,7 +66,7 @@ class _ViewAllGroupMediaScreenState extends State<ViewAllGroupMediaScreen> {
               children: [
                 Image.asset(
                   'assets/dummay/apk.png',
-                  height: 15,
+                  height: 30,
                 ),
                 ScreenSize.width(11),
                 Expanded(

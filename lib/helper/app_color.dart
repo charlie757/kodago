@@ -13,7 +13,7 @@ class AppColor {
   static const hintTextColor = Color(0xff928FA6);
   static const textfieldBorderColor = Color(0xffD0D5DD);
   static const whiteColor = Color(0xffFFFFFF);
-  static const storyGradientColor1 = Color(0xff0063D1);
+  static const storyGradientColor1 = Color(0xff149BEC);
   static const storyGradientColor2 = Color(0xff34A853);
   static const storyGradientColor3 = Color(0xffE43137);
   static const redColor = Color(0xffE43137);

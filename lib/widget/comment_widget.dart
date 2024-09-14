@@ -64,7 +64,7 @@ userCommentWidget(String img) {
                 title: '2w',
                 fontSize: 11,
                 color: AppColor.grey7DColor,
-                fontFamily: FontFamily.interRegular,
+                fontFamily: FontFamily.interMedium,
                 fontWeight: FontWeight.w500,
               ),
             ],
@@ -74,7 +74,7 @@ userCommentWidget(String img) {
             title: 'Good Work for site',
             fontSize: 11.5,
             color: AppColor.grey7DColor,
-            fontFamily: FontFamily.interRegular,
+            fontFamily: FontFamily.interMedium,
             fontWeight: FontWeight.w500,
           ),
           ScreenSize.height(4),
@@ -82,7 +82,7 @@ userCommentWidget(String img) {
             title: 'Reply',
             fontSize: 11,
             fontWeight: FontWeight.w500,
-            fontFamily: FontFamily.interMedium,
+            fontFamily: FontFamily.interSemiBold,
             color: const Color(0xff6F6F6F),
           )
         ],
@@ -94,7 +94,8 @@ userCommentWidget(String img) {
 replyCommentWidget() {
   return Column(
     children: [
-      customHorizontalDivider(color: const Color(0xffE7E7E7).withOpacity(.6)),
+      customHorizontalDivider(
+          height: 2, color: const Color(0xffE7E7E7).withOpacity(.6)),
       ScreenSize.height(15),
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),

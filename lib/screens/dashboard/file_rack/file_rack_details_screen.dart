@@ -7,7 +7,9 @@ import 'package:kodago/helper/custom_horizontal_line.dart';
 import 'package:kodago/helper/custom_text.dart';
 import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
+import 'package:kodago/screens/dashboard/file_rack/add_data_screen.dart';
 import 'package:kodago/screens/dashboard/file_rack/file_rack_comment_screen.dart';
+import 'package:kodago/screens/dashboard/file_rack/file_rack_history.dart';
 import 'package:kodago/screens/dashboard/file_rack/filter_screen.dart';
 import 'package:kodago/screens/dashboard/home/view_post_screen.dart';
 import 'package:kodago/uitls/delete_file_rack_dialogbox.dart';
@@ -26,6 +28,25 @@ class _FileRackDetailsScreenState extends State<FileRackDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar(title: 'Test', actions: [
+        GestureDetector(
+          onTap: () {
+            AppRoutes.pushCupertinoNavigation(const AddDataScreen());
+          },
+          child: Container(
+            margin: const EdgeInsets.only(right: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 6),
+            decoration: BoxDecoration(
+                color: AppColor.appColor,
+                borderRadius: BorderRadius.circular(50)),
+            child: customText(
+              title: 'Add Record',
+              color: AppColor.whiteColor,
+              fontSize: 13,
+              fontWeight: FontWeight.w400,
+              fontFamily: FontFamily.interRegular,
+            ),
+          ),
+        ),
         InkWell(
           onTap: () {
             AppRoutes.pushCupertinoNavigation(const FilterScreen());
@@ -35,7 +56,7 @@ class _FileRackDetailsScreenState extends State<FileRackDetailsScreen> {
             height: 33,
             width: 75,
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
+                borderRadius: BorderRadius.circular(50),
                 color: const Color(0xffEDEDED)),
             alignment: Alignment.center,
             child: Row(
@@ -240,7 +261,7 @@ class _FileRackDetailsScreenState extends State<FileRackDetailsScreen> {
           if (value == 0) {
             // AppRoutes.pushCupertinoNavigation(const AddMemberScreen());
           } else if (value == 1) {
-            // AppRoutes.pushCupertinoNavigation(const EditGroupProfile());
+            AppRoutes.pushCupertinoNavigation(const FileRackHistory());
           } else if (value == 2) {
             assignMembersBottomSheet();
           } else if (value == 3) {

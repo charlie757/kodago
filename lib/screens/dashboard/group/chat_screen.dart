@@ -53,28 +53,40 @@ class _ChatScreenState extends State<ChatScreen> {
 
   chatTypesWidget(ChatProvider chatProvider) {
     return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 15),
       scrollDirection: Axis.horizontal,
       child: Row(
         children: chatProvider.chatTypesList.map((e) {
-          return Container(
-            margin: const EdgeInsets.symmetric(horizontal: 5),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: const Color(0xffF9F9F9),
-                boxShadow: [
-                  BoxShadow(
-                      offset: const Offset(0, -1),
-                      color: AppColor.blackColor.withOpacity(.2),
-                      blurRadius: 5)
-                ]),
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-            alignment: Alignment.center,
-            child: customText(
-              title: e,
-              fontSize: 13,
-              fontWeight: FontWeight.w400,
-              fontFamily: FontFamily.interMedium,
-              color: const Color(0xff6F6F6F),
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4),
+            child: Container(
+              // margin: const EdgeInsets.symmetric(horizontal: 5),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: e.toString().toLowerCase() == 'all'
+                      ? const Color(0xffE6EBF5)
+                      : const Color(0xffF9F9F9),
+                  boxShadow: e.toString().toLowerCase() == 'all'
+                      ? []
+                      : [
+                          BoxShadow(
+                              offset: const Offset(0, 0),
+                              color: AppColor.blackColor.withOpacity(.1),
+                              blurRadius: 1)
+                        ]),
+              padding: EdgeInsets.symmetric(
+                  horizontal: e.toString().toLowerCase() == 'all' ? 20 : 12,
+                  vertical: 6),
+              alignment: Alignment.center,
+              child: customText(
+                title: e,
+                fontSize: 13,
+                fontWeight: FontWeight.w400,
+                fontFamily: FontFamily.interMedium,
+                color: e.toString().toLowerCase() == 'all'
+                    ? AppColor.darkAppColor
+                    : const Color(0xff6F6F6F),
+              ),
             ),
           );
         }).toList(),

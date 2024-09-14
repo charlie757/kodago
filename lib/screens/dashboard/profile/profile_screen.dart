@@ -6,9 +6,10 @@ import 'package:kodago/helper/custom_btn.dart';
 import 'package:kodago/helper/custom_text.dart';
 import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
+import 'package:kodago/provider/profile_provider.dart';
 import 'package:kodago/screens/dashboard/profile/change_password_screen.dart';
-import 'package:kodago/screens/dashboard/profile/edit_profile_screen.dart';
 import 'package:kodago/uitls/utils.dart';
+import 'package:provider/provider.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -18,6 +19,19 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  @override
+  void initState() {
+    callInitFunction();
+    super.initState();
+  }
+
+  callInitFunction() async {
+    final provider = Provider.of<ProfileProvider>(context, listen: false);
+    Future.delayed(Duration.zero, () {
+      provider.getProfileApiFunction();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -149,7 +163,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return GestureDetector(
       onTap: () {
         if (index == 0) {
-          AppRoutes.pushCupertinoNavigation(const EditProfileScreen());
+          callInitFunction();
+          // AppRoutes.pushCupertinoNavigation(const EditProfileScreen());
         } else if (index == 1) {
           AppRoutes.pushCupertinoNavigation(const ChangePasswordScreen());
         } else {
