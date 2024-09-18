@@ -9,6 +9,8 @@ import 'package:kodago/provider/group/new_group_provider.dart';
 import 'package:kodago/screens/dashboard/group/create_group_screen.dart';
 import 'package:provider/provider.dart';
 
+import '../../../uitls/mixins.dart';
+
 class NewGroupScreen extends StatefulWidget {
   const NewGroupScreen({super.key});
 
@@ -16,39 +18,42 @@ class NewGroupScreen extends StatefulWidget {
   State<NewGroupScreen> createState() => _NewGroupScreenState();
 }
 
-class _NewGroupScreenState extends State<NewGroupScreen> {
+class _NewGroupScreenState extends State<NewGroupScreen> with MediaQueryScaleFactor{
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: appBar(),
-        body: Column(
-          children: [
-            selectedGroupWidget(),
-            groupListWidget(),
-          ],
-        ),
-        floatingActionButton: GestureDetector(
-          onTap: () {
-            AppRoutes.pushCupertinoNavigation(const CreateGroupScreen());
-          },
-          child: Container(
-            height: 45,
-            width: 45,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: AppColor.appColor,
-                boxShadow: [
-                  BoxShadow(
-                      offset: const Offset(0, -2),
-                      blurRadius: 6,
-                      color: AppColor.blackColor.withOpacity(.2))
-                ]),
-            child: const Icon(
-              Icons.arrow_forward,
-              color: AppColor.whiteColor,
-            ),
+    return MediaQuery(
+      data: mediaQuery,
+      child: Scaffold(
+          appBar: appBar(),
+          body: Column(
+            children: [
+              selectedGroupWidget(),
+              groupListWidget(),
+            ],
           ),
-        ));
+          floatingActionButton: GestureDetector(
+            onTap: () {
+              AppRoutes.pushCupertinoNavigation(const CreateGroupScreen());
+            },
+            child: Container(
+              height: 45,
+              width: 45,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: AppColor.appColor,
+                  boxShadow: [
+                    BoxShadow(
+                        offset: const Offset(0, -2),
+                        blurRadius: 6,
+                        color: AppColor.blackColor.withOpacity(.2))
+                  ]),
+              child: const Icon(
+                Icons.arrow_forward,
+                color: AppColor.whiteColor,
+              ),
+            ),
+          )),
+    );
   }
 
   groupListWidget() {

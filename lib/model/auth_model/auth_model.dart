@@ -10,7 +10,7 @@ class AuthModel {
     status = json['status'];
     message = json['message'];
     verifyOtp = json['verify_otp'];
-    data = json['data'] != null ? Data.fromJson(json['data']) : null;
+    data = json['data'] != null||json['data']!=[] ? Data.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {

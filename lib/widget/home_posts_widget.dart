@@ -122,6 +122,7 @@ class HomePostsWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 20, right: 20),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Image.asset(
             'assets/dummay/profile.png',
@@ -129,40 +130,42 @@ class HomePostsWidget extends StatelessWidget {
             width: 17,
           ),
           ScreenSize.width(6.5),
-          const Text.rich(TextSpan(
-              text: 'Liked by ',
-              style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w400,
-                  color: AppColor.blackColor,
-                  fontFamily: FontFamily.interRegular),
-              children: [
-                TextSpan(
-                    text: 'caring_love ',
-                    style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w500,
-                        color: AppColor.blackColor,
-                        fontFamily: FontFamily.interSemiBold),
-                    children: [
-                      TextSpan(
-                          text: 'and ',
-                          style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w400,
-                              color: AppColor.blackColor,
-                              fontFamily: FontFamily.interRegular),
-                          children: [
-                            TextSpan(
-                                text: '44,686 others',
-                                style: TextStyle(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w500,
-                                    color: AppColor.blackColor,
-                                    fontFamily: FontFamily.interSemiBold))
-                          ])
-                    ])
-              ]))
+         const Expanded(
+            child:  Text.rich(TextSpan(
+                text: 'Liked by ',
+                style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w400,
+                    color: AppColor.blackColor,
+                    fontFamily: FontFamily.interRegular),
+                children: [
+                  TextSpan(
+                      text: 'caring_love ',
+                      style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
+                          color: AppColor.blackColor,
+                          fontFamily: FontFamily.interSemiBold),
+                      children: [
+                        TextSpan(
+                            text: 'and ',
+                            style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w400,
+                                color: AppColor.blackColor,
+                                fontFamily: FontFamily.interRegular),
+                            children: [
+                              TextSpan(
+                                  text: '44,686 others',
+                                  style: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w500,
+                                      color: AppColor.blackColor,
+                                      fontFamily: FontFamily.interSemiBold))
+                            ])
+                      ])
+                ])),
+          )
         ],
       ),
     );

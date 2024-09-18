@@ -6,6 +6,8 @@ import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/widget/home_posts_widget.dart';
 
+import '../../../uitls/mixins.dart';
+
 class HightlightScreen extends StatefulWidget {
   const HightlightScreen({super.key});
 
@@ -13,22 +15,25 @@ class HightlightScreen extends StatefulWidget {
   State<HightlightScreen> createState() => _HightlightScreenState();
 }
 
-class _HightlightScreenState extends State<HightlightScreen> {
+class _HightlightScreenState extends State<HightlightScreen>with MediaQueryScaleFactor {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBar(),
-      body: ListView.separated(
-          separatorBuilder: (context, sp) {
-            return ScreenSize.height(15);
-          },
-          padding: const EdgeInsets.only(top: 15, bottom: 30),
-          itemCount: 4,
-          physics: const ScrollPhysics(),
-          shrinkWrap: true,
-          itemBuilder: (context, index) {
-            return const HomePostsWidget();
-          }),
+    return MediaQuery(
+      data: mediaQuery,
+      child: Scaffold(
+        appBar: appBar(),
+        body: ListView.separated(
+            separatorBuilder: (context, sp) {
+              return ScreenSize.height(15);
+            },
+            padding: const EdgeInsets.only(top: 15, bottom: 30),
+            itemCount: 4,
+            physics: const ScrollPhysics(),
+            shrinkWrap: true,
+            itemBuilder: (context, index) {
+              return const HomePostsWidget();
+            }),
+      ),
     );
   }
 

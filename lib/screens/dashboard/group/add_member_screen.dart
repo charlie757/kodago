@@ -8,6 +8,8 @@ import 'package:kodago/provider/group/new_group_provider.dart';
 import 'package:kodago/widget/appbar.dart';
 import 'package:provider/provider.dart';
 
+import '../../../uitls/mixins.dart';
+
 class AddMemberScreen extends StatefulWidget {
   const AddMemberScreen({super.key});
 
@@ -15,40 +17,43 @@ class AddMemberScreen extends StatefulWidget {
   State<AddMemberScreen> createState() => _AddMemberScreenState();
 }
 
-class _AddMemberScreenState extends State<AddMemberScreen> {
+class _AddMemberScreenState extends State<AddMemberScreen>with MediaQueryScaleFactor {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBar(title: 'Add members', actions: [
-        Padding(
-          padding: const EdgeInsets.only(right: 15),
-          child: Image.asset(
-            AppImages.searchIcon,
-            height: 17,
-            width: 17,
-          ),
-        )
-      ]),
-      body: Column(
-        children: [selectedGroupWidget(), Expanded(child: groupListWidget())],
-      ),
-      floatingActionButton: GestureDetector(
-        onTap: () {},
-        child: Container(
-          height: 45,
-          width: 45,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: AppColor.appColor,
-              boxShadow: [
-                BoxShadow(
-                    offset: const Offset(0, -2),
-                    blurRadius: 6,
-                    color: AppColor.blackColor.withOpacity(.2))
-              ]),
-          child: const Icon(
-            Icons.check,
-            color: AppColor.whiteColor,
+    return MediaQuery(
+      data: mediaQuery,
+      child: Scaffold(
+        appBar: appBar(title: 'Add members', actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 15),
+            child: Image.asset(
+              AppImages.searchIcon,
+              height: 17,
+              width: 17,
+            ),
+          )
+        ]),
+        body: Column(
+          children: [selectedGroupWidget(), Expanded(child: groupListWidget())],
+        ),
+        floatingActionButton: GestureDetector(
+          onTap: () {},
+          child: Container(
+            height: 45,
+            width: 45,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: AppColor.appColor,
+                boxShadow: [
+                  BoxShadow(
+                      offset: const Offset(0, -2),
+                      blurRadius: 6,
+                      color: AppColor.blackColor.withOpacity(.2))
+                ]),
+            child: const Icon(
+              Icons.check,
+              color: AppColor.whiteColor,
+            ),
           ),
         ),
       ),
@@ -128,7 +133,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
       child: Column(
         children: [
           SizedBox(
-            height: 60,
+            height: 68,
             child: ListView.separated(
                 separatorBuilder: (context, sp) {
                   return ScreenSize.width(10);
@@ -152,8 +157,8 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                               children: [
                                 Image.asset(
                                   model['img'],
-                                  height: 42,
-                                  width: 42,
+                                  height: 48,
+                                  width: 48,
                                 ),
                                 Positioned(
                                   bottom: 0,

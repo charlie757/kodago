@@ -7,6 +7,7 @@ import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/widget/appbar.dart';
 
 import '../../../helper/custom_btn.dart';
+import '../../../uitls/mixins.dart';
 
 class CreateTopicScreen extends StatefulWidget {
   const CreateTopicScreen({super.key});
@@ -15,47 +16,50 @@ class CreateTopicScreen extends StatefulWidget {
   State<CreateTopicScreen> createState() => _CreateTopicScreenState();
 }
 
-class _CreateTopicScreenState extends State<CreateTopicScreen> {
+class _CreateTopicScreenState extends State<CreateTopicScreen>with MediaQueryScaleFactor {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBar(title: "Create Topic"),
-      body: Padding(
-        padding: const EdgeInsets.only(left: 20, right: 20, top: 15),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            customText(
-              title: 'If you are add chat filter by topic please add',
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              fontFamily: FontFamily.interSemiBold,
-            ),
-            ScreenSize.height(24),
-            customContainer('Happy Birthday', AppImages.topicMenuIcon),
-            ScreenSize.height(15),
-            customContainer('+ Add', AppImages.topicMenuIcon),
-            ScreenSize.height(15),
-            customContainer('+ Add', AppImages.topicMenuIcon),
-          ],
+    return MediaQuery(
+      data: mediaQuery,
+      child: Scaffold(
+        appBar: appBar(title: "Create Topic"),
+        body: Padding(
+          padding: const EdgeInsets.only(left: 20, right: 20, top: 15),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              customText(
+                title: 'If you are add chat filter by topic please add',
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                fontFamily: FontFamily.interSemiBold,
+              ),
+              ScreenSize.height(24),
+              customContainer('Happy Birthday', AppImages.topicMenuIcon),
+              ScreenSize.height(15),
+              customContainer('+ Add', AppImages.topicMenuIcon),
+              ScreenSize.height(15),
+              customContainer('+ Add', AppImages.topicMenuIcon),
+            ],
+          ),
         ),
-      ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            CustomBtn(
-                title: "Save", borderRadius: 50, height: 40, onTap: () {}),
-            ScreenSize.height(8),
-            customText(
-              title: "Skip",
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: AppColor.appColor,
-              fontFamily: FontFamily.interMedium,
-            )
-          ],
+        bottomNavigationBar: Padding(
+          padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CustomBtn(
+                  title: "Save", borderRadius: 50, height: 40, onTap: () {}),
+              ScreenSize.height(8),
+              customText(
+                title: "Skip",
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: AppColor.appColor,
+                fontFamily: FontFamily.interMedium,
+              )
+            ],
+          ),
         ),
       ),
     );

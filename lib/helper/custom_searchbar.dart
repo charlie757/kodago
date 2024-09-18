@@ -17,11 +17,11 @@ class CustomSearchbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 45,
       decoration: BoxDecoration(
           color: backgroundColor, borderRadius: BorderRadius.circular(50)),
       child: TextFormField(
         cursorHeight: 20,
-        textAlignVertical: TextAlignVertical.center,
         decoration: InputDecoration(
             border: InputBorder.none,
             prefixIcon: Container(

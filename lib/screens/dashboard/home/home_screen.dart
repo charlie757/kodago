@@ -9,6 +9,8 @@ import 'package:kodago/screens/dashboard/home/view_story_screen.dart';
 import 'package:kodago/widget/home_posts_widget.dart';
 import 'package:provider/provider.dart';
 
+import '../../../uitls/mixins.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -16,51 +18,54 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with MediaQueryScaleFactor {
   @override
   void initState() {
-    callInitFunction();
+    // callInitFunction();
     super.initState();
   }
 
   callInitFunction() {
-    // final provider = Provider.of<HomeProvider>(context, listen: false);
-    // provider.feedsApiFunction();
+    final provider = Provider.of<HomeProvider>(context, listen: false);
+    provider.feedsApiFunction();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-          child: SingleChildScrollView(
-        padding: const EdgeInsets.only(top: 10, bottom: 30),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 16),
-              child: Image.asset(
-                AppImages.appLogo,
-                height: 25,
-                width: 94,
+    return MediaQuery(
+      data: mediaQuery,
+      child: Scaffold(
+        body: SafeArea(
+            child: SingleChildScrollView(
+          padding: const EdgeInsets.only(top: 10, bottom: 30),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 16),
+                child: Image.asset(
+                  AppImages.appLogo,
+                  height: 25,
+                  width: 94,
+                ),
               ),
-            ),
-            ScreenSize.height(10),
-            storyWidget(),
-            ScreenSize.height(15),
-            ListView.separated(
-                separatorBuilder: (context, sp) {
-                  return ScreenSize.height(29);
-                },
-                itemCount: 4,
-                physics: const ScrollPhysics(),
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  return const HomePostsWidget();
-                })
-          ],
-        ),
-      )),
+              ScreenSize.height(10),
+              storyWidget(),
+              ScreenSize.height(15),
+              ListView.separated(
+                  separatorBuilder: (context, sp) {
+                    return ScreenSize.height(29);
+                  },
+                  itemCount: 4,
+                  physics: const ScrollPhysics(),
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return const HomePostsWidget();
+                  })
+            ],
+          ),
+        )),
+      ),
     );
   }
 
@@ -94,8 +99,8 @@ class _HomeScreenState extends State<HomeScreen> {
   ) {
     return GestureDetector(
       onTap: () {
-        callInitFunction();
-        // AppRoutes.pushCupertinoNavigation(const ViewStoryScreen());
+        // callInitFunction();
+        AppRoutes.pushCupertinoNavigation(const ViewStoryScreen());
       },
       child: SizedBox(
         width: 70,
@@ -140,7 +145,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
-                    fontSize: 12,
+                    fontSize: 11,
                     fontWeight: FontWeight.w400,
                     fontFamily: FontFamily.interMedium,
                     color: Color(0xff262626)),
@@ -168,13 +173,13 @@ class _HomeScreenState extends State<HomeScreen> {
               width: 70,
             )),
             const Padding(
-              padding: EdgeInsets.only(left: 3, top: 2),
+              padding: EdgeInsets.only(left: 0, top: 2),
               child: Text(
                 'Your story',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                    fontSize: 12,
+                    fontSize: 11,
                     fontWeight: FontWeight.w400,
                     fontFamily: FontFamily.interMedium,
                     color: Color(0xff262626)),

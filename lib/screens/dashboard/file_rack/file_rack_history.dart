@@ -5,6 +5,8 @@ import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/widget/appbar.dart';
 
+import '../../../uitls/mixins.dart';
+
 class FileRackHistory extends StatefulWidget {
   const FileRackHistory({super.key});
 
@@ -12,21 +14,24 @@ class FileRackHistory extends StatefulWidget {
   State<FileRackHistory> createState() => _FileRackHistoryState();
 }
 
-class _FileRackHistoryState extends State<FileRackHistory> {
+class _FileRackHistoryState extends State<FileRackHistory>with MediaQueryScaleFactor {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBar(title: 'Test'),
-      body: ListView.separated(
-          separatorBuilder: (context, sp) {
-            return ScreenSize.height(20);
-          },
-          itemCount: 3,
-          padding:
-              const EdgeInsets.only(left: 20, right: 21, top: 15, bottom: 25),
-          itemBuilder: (context, index) {
-            return viewHistoryWidget();
-          }),
+    return MediaQuery(
+      data: mediaQuery,
+      child: Scaffold(
+        appBar: appBar(title: 'Test'),
+        body: ListView.separated(
+            separatorBuilder: (context, sp) {
+              return ScreenSize.height(20);
+            },
+            itemCount: 3,
+            padding:
+                const EdgeInsets.only(left: 20, right: 21, top: 15, bottom: 25),
+            itemBuilder: (context, index) {
+              return viewHistoryWidget();
+            }),
+      ),
     );
   }
 

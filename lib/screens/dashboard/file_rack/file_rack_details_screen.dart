@@ -16,6 +16,8 @@ import 'package:kodago/uitls/delete_file_rack_dialogbox.dart';
 import 'package:kodago/widget/appbar.dart';
 import 'package:kodago/widget/popmenuButton.dart';
 
+import '../../../uitls/mixins.dart';
+
 class FileRackDetailsScreen extends StatefulWidget {
   const FileRackDetailsScreen({super.key});
 
@@ -23,73 +25,76 @@ class FileRackDetailsScreen extends StatefulWidget {
   State<FileRackDetailsScreen> createState() => _FileRackDetailsScreenState();
 }
 
-class _FileRackDetailsScreenState extends State<FileRackDetailsScreen> {
+class _FileRackDetailsScreenState extends State<FileRackDetailsScreen>with MediaQueryScaleFactor {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBar(title: 'Test', actions: [
-        GestureDetector(
-          onTap: () {
-            AppRoutes.pushCupertinoNavigation(const AddDataScreen());
-          },
-          child: Container(
-            margin: const EdgeInsets.only(right: 10),
-            padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 6),
-            decoration: BoxDecoration(
-                color: AppColor.appColor,
-                borderRadius: BorderRadius.circular(50)),
-            child: customText(
-              title: 'Add Record',
-              color: AppColor.whiteColor,
-              fontSize: 13,
-              fontWeight: FontWeight.w400,
-              fontFamily: FontFamily.interRegular,
+    return MediaQuery(
+      data: mediaQuery,
+      child: Scaffold(
+        appBar: appBar(title: 'Test', actions: [
+          GestureDetector(
+            onTap: () {
+              AppRoutes.pushCupertinoNavigation(const AddDataScreen());
+            },
+            child: Container(
+              margin: const EdgeInsets.only(right: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 6),
+              decoration: BoxDecoration(
+                  color: AppColor.appColor,
+                  borderRadius: BorderRadius.circular(50)),
+              child: customText(
+                title: 'Add Record',
+                color: AppColor.whiteColor,
+                fontSize: 13,
+                fontWeight: FontWeight.w400,
+                fontFamily: FontFamily.interRegular,
+              ),
             ),
           ),
-        ),
-        InkWell(
-          onTap: () {
-            AppRoutes.pushCupertinoNavigation(const FilterScreen());
-          },
-          child: Container(
-            margin: const EdgeInsets.only(right: 20),
-            height: 33,
-            width: 75,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(50),
-                color: const Color(0xffEDEDED)),
-            alignment: Alignment.center,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(
-                  AppImages.filterIcon,
-                  height: 17,
-                ),
-                ScreenSize.width(6),
-                customText(
-                  title: 'Filter',
-                  fontSize: 13,
-                  fontWeight: FontWeight.w400,
-                  color: const Color(0xff455154),
-                  fontFamily: FontFamily.interMedium,
-                )
-              ],
+          InkWell(
+            onTap: () {
+              AppRoutes.pushCupertinoNavigation(const FilterScreen());
+            },
+            child: Container(
+              margin: const EdgeInsets.only(right: 20),
+              height: 33,
+              width: 75,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(50),
+                  color: const Color(0xffEDEDED)),
+              alignment: Alignment.center,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    AppImages.filterIcon,
+                    height: 17,
+                  ),
+                  ScreenSize.width(6),
+                  customText(
+                    title: 'Filter',
+                    fontSize: 13,
+                    fontWeight: FontWeight.w400,
+                    color: const Color(0xff455154),
+                    fontFamily: FontFamily.interMedium,
+                  )
+                ],
+              ),
             ),
           ),
-        ),
-      ]),
-      body: ListView.separated(
-          separatorBuilder: (context, sp) {
-            return ScreenSize.height(20);
-          },
-          itemCount: 6,
-          padding:
-              const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 20),
-          shrinkWrap: true,
-          itemBuilder: (context, index) {
-            return detailsViewWidget();
-          }),
+        ]),
+        body: ListView.separated(
+            separatorBuilder: (context, sp) {
+              return ScreenSize.height(20);
+            },
+            itemCount: 6,
+            padding:
+                const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 20),
+            shrinkWrap: true,
+            itemBuilder: (context, index) {
+              return detailsViewWidget();
+            }),
+      ),
     );
   }
 

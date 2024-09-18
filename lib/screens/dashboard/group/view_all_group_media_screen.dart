@@ -5,6 +5,8 @@ import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/widget/appbar.dart';
 
+import '../../../uitls/mixins.dart';
+
 class ViewAllGroupMediaScreen extends StatefulWidget {
   const ViewAllGroupMediaScreen({super.key});
 
@@ -13,23 +15,26 @@ class ViewAllGroupMediaScreen extends StatefulWidget {
       _ViewAllGroupMediaScreenState();
 }
 
-class _ViewAllGroupMediaScreenState extends State<ViewAllGroupMediaScreen> {
+class _ViewAllGroupMediaScreenState extends State<ViewAllGroupMediaScreen>with MediaQueryScaleFactor {
   int tabBarIndex = 0;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBar(title: 'SMEC'),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          tabBar(),
-          Expanded(
-              child: tabBarIndex == 0
-                  ? mediaWidget()
-                  : tabBarIndex == 1
-                      ? docsWidget()
-                      : linksWidget())
-        ],
+    return MediaQuery(
+      data: mediaQuery,
+      child: Scaffold(
+        appBar: appBar(title: 'SMEC'),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            tabBar(),
+            Expanded(
+                child: tabBarIndex == 0
+                    ? mediaWidget()
+                    : tabBarIndex == 1
+                        ? docsWidget()
+                        : linksWidget())
+          ],
+        ),
       ),
     );
   }
@@ -166,7 +171,7 @@ class _ViewAllGroupMediaScreenState extends State<ViewAllGroupMediaScreen> {
 
   tabBar() {
     return Container(
-      height: 50,
+      height: 40,
       width: double.infinity,
       decoration: BoxDecoration(
           border: Border(
@@ -206,7 +211,7 @@ class _ViewAllGroupMediaScreenState extends State<ViewAllGroupMediaScreen> {
                 : const Border()),
         child: customText(
           title: title,
-          fontSize: 17,
+          fontSize: 13,
           fontWeight: tabBarIndex == index ? FontWeight.w500 : FontWeight.w400,
           color:
               tabBarIndex == index ? AppColor.b45Color : AppColor.grey7DColor,

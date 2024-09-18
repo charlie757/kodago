@@ -8,6 +8,8 @@ import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/widget/appbar.dart';
 
+import '../../../uitls/mixins.dart';
+
 class EditGroupProfile extends StatefulWidget {
   const EditGroupProfile({super.key});
 
@@ -15,62 +17,65 @@ class EditGroupProfile extends StatefulWidget {
   State<EditGroupProfile> createState() => _EditGroupProfileState();
 }
 
-class _EditGroupProfileState extends State<EditGroupProfile> {
+class _EditGroupProfileState extends State<EditGroupProfile>with MediaQueryScaleFactor {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBar(title: 'Edit profile'),
-      body: Padding(
-        padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Align(
-              alignment: Alignment.center,
-              child: Stack(
-                children: [
-                  ClipOval(
-                    child: Image.asset(
-                      'assets/dummay/Oval.png',
-                      height: 85,
-                      width: 85,
-                    ),
-                  ),
-                  Positioned(
-                    right: 0,
-                    bottom: 0,
-                    child: GestureDetector(
-                      onTap: () {
-                        // openBottmSheet();
-                      },
-                      child: Container(
-                        height: 26,
-                        width: 26,
-                        alignment: Alignment.center,
-                        decoration: const BoxDecoration(
-                            shape: BoxShape.circle, color: Color(0xffDAEFFD)),
-                        child: Image.asset(
-                          AppImages.cameraIcon,
-                          height: 13,
-                        ),
+    return MediaQuery(
+      data: mediaQuery,
+      child: Scaffold(
+        appBar: appBar(title: 'Edit profile'),
+        body: Padding(
+          padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Align(
+                alignment: Alignment.center,
+                child: Stack(
+                  children: [
+                    ClipOval(
+                      child: Image.asset(
+                        'assets/dummay/Oval.png',
+                        height: 85,
+                        width: 85,
                       ),
                     ),
-                  )
-                ],
+                    Positioned(
+                      right: 0,
+                      bottom: 0,
+                      child: GestureDetector(
+                        onTap: () {
+                          // openBottmSheet();
+                        },
+                        child: Container(
+                          height: 26,
+                          width: 26,
+                          alignment: Alignment.center,
+                          decoration: const BoxDecoration(
+                              shape: BoxShape.circle, color: Color(0xffDAEFFD)),
+                          child: Image.asset(
+                            AppImages.cameraIcon,
+                            height: 13,
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ),
-            ),
-            ScreenSize.height(43),
-            customText(
-              title: 'Enter group name',
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
-              fontFamily: FontFamily.interMedium,
-            ),
-            ScreenSize.height(12),
-            CustomTextField(hintText: 'Kodago Attendance'),
-            ScreenSize.height(22),
-            CustomBtn(title: 'Save', onTap: () {})
-          ],
+              ScreenSize.height(43),
+              customText(
+                title: 'Enter group name',
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+                fontFamily: FontFamily.interMedium,
+              ),
+              ScreenSize.height(12),
+              CustomTextField(hintText: 'Kodago Attendance'),
+              ScreenSize.height(22),
+              CustomBtn(title: 'Save', onTap: () {})
+            ],
+          ),
         ),
       ),
     );

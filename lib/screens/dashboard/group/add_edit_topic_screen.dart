@@ -6,6 +6,8 @@ import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/widget/appbar.dart';
 
+import '../../../uitls/mixins.dart';
+
 class AddEditTopicScreen extends StatefulWidget {
   const AddEditTopicScreen({super.key});
 
@@ -13,37 +15,40 @@ class AddEditTopicScreen extends StatefulWidget {
   State<AddEditTopicScreen> createState() => _AddEditTopicScreenState();
 }
 
-class _AddEditTopicScreenState extends State<AddEditTopicScreen> {
+class _AddEditTopicScreenState extends State<AddEditTopicScreen>with MediaQueryScaleFactor {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBar(title: "Add & Edit Topic"),
-      body: Padding(
-        padding: const EdgeInsets.only(left: 20, right: 20, top: 15),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            customText(
-              title: 'If you are add and Edit chat filter by topic please add',
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              fontFamily: FontFamily.interSemiBold,
-            ),
-            ScreenSize.height(24),
-            customContainer('Geo tagging', AppImages.topicMenuIcon),
-            ScreenSize.height(15),
-            customContainer('TPI', AppImages.topicMenuIcon),
-            ScreenSize.height(15),
-            customContainer('Skill Development', AppImages.topicMenuIcon),
-            ScreenSize.height(15),
-            customContainer('+ Add', AppImages.topicMenuIcon),
-          ],
+    return MediaQuery(
+      data: mediaQuery,
+      child: Scaffold(
+        appBar: appBar(title: "Add & Edit Topic"),
+        body: Padding(
+          padding: const EdgeInsets.only(left: 20, right: 20, top: 15),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              customText(
+                title: 'If you are add and Edit chat filter by topic please add',
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                fontFamily: FontFamily.interSemiBold,
+              ),
+              ScreenSize.height(24),
+              customContainer('Geo tagging', AppImages.topicMenuIcon),
+              ScreenSize.height(15),
+              customContainer('TPI', AppImages.topicMenuIcon),
+              ScreenSize.height(15),
+              customContainer('Skill Development', AppImages.topicMenuIcon),
+              ScreenSize.height(15),
+              customContainer('+ Add', AppImages.topicMenuIcon),
+            ],
+          ),
         ),
-      ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
-        child: CustomBtn(
-            title: "Save", borderRadius: 50, height: 40, onTap: () {}),
+        bottomNavigationBar: Padding(
+          padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
+          child: CustomBtn(
+              title: "Save", borderRadius: 50, height: 40, onTap: () {}),
+        ),
       ),
     );
   }

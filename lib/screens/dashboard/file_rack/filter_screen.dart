@@ -9,6 +9,8 @@ import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/widget/appbar.dart';
 
+import '../../../uitls/mixins.dart';
+
 class FilterScreen extends StatefulWidget {
   const FilterScreen({super.key});
 
@@ -16,264 +18,267 @@ class FilterScreen extends StatefulWidget {
   State<FilterScreen> createState() => _FilterScreenState();
 }
 
-class _FilterScreenState extends State<FilterScreen> {
+class _FilterScreenState extends State<FilterScreen>with MediaQueryScaleFactor {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColor.whiteColor,
-      appBar: appBar(title: 'Filter'),
-      body: SingleChildScrollView(
-        padding:
-            const EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 25),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            customText(
-              title: 'Added By',
-              fontSize: 13,
-              fontWeight: FontWeight.w400,
-              fontFamily: FontFamily.interMedium,
-            ),
-            ScreenSize.height(10),
-            FilterTextfield(
-              icon: Container(
-                height: 18,
-                width: 18,
-                alignment: Alignment.center,
-                child: Image.asset(
-                  AppImages.keyboardDownIcon,
-                  height: 18,
-                  color: AppColor.blackColor,
-                ),
-              ),
-            ),
-            ScreenSize.height(12),
-            customText(
-              title: 'Created Date',
-              fontSize: 13,
-              fontWeight: FontWeight.w400,
-              fontFamily: FontFamily.interMedium,
-            ),
-            ScreenSize.height(10),
-            mergeTextField(hint1: 'From', hint2: 'To'),
-            ScreenSize.height(12),
-            customText(
-              title: 'Text',
-              fontSize: 13,
-              fontWeight: FontWeight.w400,
-              fontFamily: FontFamily.interMedium,
-            ),
-            ScreenSize.height(10),
-            FilterTextfield(
-              hintText: 'Text',
-              icon: Container(
-                height: 18,
-                width: 18,
-                alignment: Alignment.center,
-                child: Image.asset(
-                  AppImages.keyboardDownIcon,
-                  height: 18,
-                  color: AppColor.blackColor,
-                ),
-              ),
-            ),
-            ScreenSize.height(12),
-            customText(
-              title: 'Date',
-              fontSize: 13,
-              fontWeight: FontWeight.w400,
-              fontFamily: FontFamily.interMedium,
-            ),
-            ScreenSize.height(10),
-            FilterTextfield(
-              hintText: 'Date',
-              icon: Container(
-                height: 18,
-                width: 18,
-                alignment: Alignment.center,
-                child: Image.asset(
-                  AppImages.dateIcon,
-                  height: 18,
-                  color: AppColor.blackColor,
-                ),
-              ),
-            ),
-            ScreenSize.height(12),
-            customText(
-              title: 'Dropdown',
-              fontSize: 13,
-              fontWeight: FontWeight.w400,
-              fontFamily: FontFamily.interMedium,
-            ),
-            ScreenSize.height(10),
-            FilterTextfield(
-              hintText: 'Dropdown',
-              icon: Container(
-                height: 18,
-                width: 18,
-                alignment: Alignment.center,
-                child: Image.asset(
-                  AppImages.keyboardDownIcon,
-                  height: 18,
-                  color: AppColor.blackColor,
-                ),
-              ),
-            ),
-            ScreenSize.height(12),
-            customText(
-              title: 'Number',
-              fontSize: 13,
-              fontWeight: FontWeight.w400,
-              fontFamily: FontFamily.interMedium,
-            ),
-            ScreenSize.height(10),
-            FilterTextfield(
-              hintText: 'Number',
-            ),
-            ScreenSize.height(12),
-            customText(
-              title: 'Auto ID',
-              fontSize: 13,
-              fontWeight: FontWeight.w400,
-              fontFamily: FontFamily.interMedium,
-            ),
-            ScreenSize.height(10),
-            FilterTextfield(
-              hintText: 'Auto ID',
-            ),
-            ScreenSize.height(12),
-            customText(
-              title: 'Drop Multi',
-              fontSize: 13,
-              fontWeight: FontWeight.w400,
-              fontFamily: FontFamily.interMedium,
-            ),
-            ScreenSize.height(10),
-            FilterTextfield(
-              hintText: 'All',
-              icon: Container(
-                height: 18,
-                width: 18,
-                alignment: Alignment.center,
-                child: Image.asset(
-                  AppImages.keyboardDownIcon,
-                  height: 18,
-                  color: AppColor.blackColor,
-                ),
-              ),
-            ),
-            ScreenSize.height(12),
-            customText(
-              title: 'State',
-              fontSize: 13,
-              fontWeight: FontWeight.w400,
-              fontFamily: FontFamily.interMedium,
-            ),
-            ScreenSize.height(10),
-            FilterTextfield(
-              hintText: 'State',
-            ),
-            ScreenSize.height(36),
-            mergeTextField(hint1: 'Future', hint2: 'Past'),
-            ScreenSize.height(12),
-            customText(
-              title: 'State Scholarship no',
-              fontSize: 13,
-              fontWeight: FontWeight.w400,
-              fontFamily: FontFamily.interMedium,
-            ),
-            ScreenSize.height(10),
-            FilterTextfield(
-              hintText: 'State Scholarship no',
-            ),
-            ScreenSize.height(12),
-            customText(
-              title: 'State Toll free number',
-              fontSize: 13,
-              fontWeight: FontWeight.w400,
-              fontFamily: FontFamily.interMedium,
-            ),
-            ScreenSize.height(10),
-            FilterTextfield(
-              hintText: 'State Toll free number',
-            ),
-            ScreenSize.height(12),
-            customText(
-              title: 'City',
-              fontSize: 13,
-              fontWeight: FontWeight.w400,
-              fontFamily: FontFamily.interMedium,
-            ),
-            ScreenSize.height(10),
-            FilterTextfield(
-              hintText: 'Ctiy',
-            ),
-            ScreenSize.height(12),
-            customText(
-              title: 'City Toll free number',
-              fontSize: 13,
-              fontWeight: FontWeight.w400,
-              fontFamily: FontFamily.interMedium,
-            ),
-            ScreenSize.height(10),
-            FilterTextfield(
-              hintText: 'City Toll free number',
-            ),
-            ScreenSize.height(12),
-            customText(
-              title: 'District',
-              fontSize: 13,
-              fontWeight: FontWeight.w400,
-              fontFamily: FontFamily.interMedium,
-            ),
-            ScreenSize.height(10),
-            FilterTextfield(
-              hintText: 'District',
-            ),
-            ScreenSize.height(12),
-            customText(
-              title: 'Text non edit',
-              fontSize: 13,
-              fontWeight: FontWeight.w400,
-              fontFamily: FontFamily.interMedium,
-            ),
-            ScreenSize.height(10),
-            FilterTextfield(
-              hintText: 'Text non edit',
-            ),
-            ScreenSize.height(12),
-            customText(
-              title: 'Number Lock',
-              fontSize: 13,
-              fontWeight: FontWeight.w400,
-              fontFamily: FontFamily.interMedium,
-            ),
-            ScreenSize.height(10),
-            FilterTextfield(
-              hintText: 'Number Lock',
-            ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.only(left: 20, right: 20, bottom: 10),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            CustomBtn(title: 'Apply Filter', onTap: () {}),
-            ScreenSize.height(10),
-            Container(
-              height: 30,
-              alignment: Alignment.center,
-              child: customText(
-                title: 'Reset Filter',
-                color: AppColor.appColor,
+    return MediaQuery(
+      data: mediaQuery,
+      child: Scaffold(
+        backgroundColor: AppColor.whiteColor,
+        appBar: appBar(title: 'Filter'),
+        body: SingleChildScrollView(
+          padding:
+              const EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 25),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              customText(
+                title: 'Added By',
                 fontSize: 13,
                 fontWeight: FontWeight.w400,
                 fontFamily: FontFamily.interMedium,
               ),
-            )
-          ],
+              ScreenSize.height(10),
+              FilterTextfield(
+                icon: Container(
+                  height: 18,
+                  width: 18,
+                  alignment: Alignment.center,
+                  child: Image.asset(
+                    AppImages.keyboardDownIcon,
+                    height: 18,
+                    color: AppColor.blackColor,
+                  ),
+                ),
+              ),
+              ScreenSize.height(12),
+              customText(
+                title: 'Created Date',
+                fontSize: 13,
+                fontWeight: FontWeight.w400,
+                fontFamily: FontFamily.interMedium,
+              ),
+              ScreenSize.height(10),
+              mergeTextField(hint1: 'From', hint2: 'To'),
+              ScreenSize.height(12),
+              customText(
+                title: 'Text',
+                fontSize: 13,
+                fontWeight: FontWeight.w400,
+                fontFamily: FontFamily.interMedium,
+              ),
+              ScreenSize.height(10),
+              FilterTextfield(
+                hintText: 'Text',
+                icon: Container(
+                  height: 18,
+                  width: 18,
+                  alignment: Alignment.center,
+                  child: Image.asset(
+                    AppImages.keyboardDownIcon,
+                    height: 18,
+                    color: AppColor.blackColor,
+                  ),
+                ),
+              ),
+              ScreenSize.height(12),
+              customText(
+                title: 'Date',
+                fontSize: 13,
+                fontWeight: FontWeight.w400,
+                fontFamily: FontFamily.interMedium,
+              ),
+              ScreenSize.height(10),
+              FilterTextfield(
+                hintText: 'Date',
+                icon: Container(
+                  height: 18,
+                  width: 18,
+                  alignment: Alignment.center,
+                  child: Image.asset(
+                    AppImages.dateIcon,
+                    height: 18,
+                    color: AppColor.blackColor,
+                  ),
+                ),
+              ),
+              ScreenSize.height(12),
+              customText(
+                title: 'Dropdown',
+                fontSize: 13,
+                fontWeight: FontWeight.w400,
+                fontFamily: FontFamily.interMedium,
+              ),
+              ScreenSize.height(10),
+              FilterTextfield(
+                hintText: 'Dropdown',
+                icon: Container(
+                  height: 18,
+                  width: 18,
+                  alignment: Alignment.center,
+                  child: Image.asset(
+                    AppImages.keyboardDownIcon,
+                    height: 18,
+                    color: AppColor.blackColor,
+                  ),
+                ),
+              ),
+              ScreenSize.height(12),
+              customText(
+                title: 'Number',
+                fontSize: 13,
+                fontWeight: FontWeight.w400,
+                fontFamily: FontFamily.interMedium,
+              ),
+              ScreenSize.height(10),
+              FilterTextfield(
+                hintText: 'Number',
+              ),
+              ScreenSize.height(12),
+              customText(
+                title: 'Auto ID',
+                fontSize: 13,
+                fontWeight: FontWeight.w400,
+                fontFamily: FontFamily.interMedium,
+              ),
+              ScreenSize.height(10),
+              FilterTextfield(
+                hintText: 'Auto ID',
+              ),
+              ScreenSize.height(12),
+              customText(
+                title: 'Drop Multi',
+                fontSize: 13,
+                fontWeight: FontWeight.w400,
+                fontFamily: FontFamily.interMedium,
+              ),
+              ScreenSize.height(10),
+              FilterTextfield(
+                hintText: 'All',
+                icon: Container(
+                  height: 18,
+                  width: 18,
+                  alignment: Alignment.center,
+                  child: Image.asset(
+                    AppImages.keyboardDownIcon,
+                    height: 18,
+                    color: AppColor.blackColor,
+                  ),
+                ),
+              ),
+              ScreenSize.height(12),
+              customText(
+                title: 'State',
+                fontSize: 13,
+                fontWeight: FontWeight.w400,
+                fontFamily: FontFamily.interMedium,
+              ),
+              ScreenSize.height(10),
+              FilterTextfield(
+                hintText: 'State',
+              ),
+              ScreenSize.height(36),
+              mergeTextField(hint1: 'Future', hint2: 'Past'),
+              ScreenSize.height(12),
+              customText(
+                title: 'State Scholarship no',
+                fontSize: 13,
+                fontWeight: FontWeight.w400,
+                fontFamily: FontFamily.interMedium,
+              ),
+              ScreenSize.height(10),
+              FilterTextfield(
+                hintText: 'State Scholarship no',
+              ),
+              ScreenSize.height(12),
+              customText(
+                title: 'State Toll free number',
+                fontSize: 13,
+                fontWeight: FontWeight.w400,
+                fontFamily: FontFamily.interMedium,
+              ),
+              ScreenSize.height(10),
+              FilterTextfield(
+                hintText: 'State Toll free number',
+              ),
+              ScreenSize.height(12),
+              customText(
+                title: 'City',
+                fontSize: 13,
+                fontWeight: FontWeight.w400,
+                fontFamily: FontFamily.interMedium,
+              ),
+              ScreenSize.height(10),
+              FilterTextfield(
+                hintText: 'Ctiy',
+              ),
+              ScreenSize.height(12),
+              customText(
+                title: 'City Toll free number',
+                fontSize: 13,
+                fontWeight: FontWeight.w400,
+                fontFamily: FontFamily.interMedium,
+              ),
+              ScreenSize.height(10),
+              FilterTextfield(
+                hintText: 'City Toll free number',
+              ),
+              ScreenSize.height(12),
+              customText(
+                title: 'District',
+                fontSize: 13,
+                fontWeight: FontWeight.w400,
+                fontFamily: FontFamily.interMedium,
+              ),
+              ScreenSize.height(10),
+              FilterTextfield(
+                hintText: 'District',
+              ),
+              ScreenSize.height(12),
+              customText(
+                title: 'Text non edit',
+                fontSize: 13,
+                fontWeight: FontWeight.w400,
+                fontFamily: FontFamily.interMedium,
+              ),
+              ScreenSize.height(10),
+              FilterTextfield(
+                hintText: 'Text non edit',
+              ),
+              ScreenSize.height(12),
+              customText(
+                title: 'Number Lock',
+                fontSize: 13,
+                fontWeight: FontWeight.w400,
+                fontFamily: FontFamily.interMedium,
+              ),
+              ScreenSize.height(10),
+              FilterTextfield(
+                hintText: 'Number Lock',
+              ),
+            ],
+          ),
+        ),
+        bottomNavigationBar: Padding(
+          padding: const EdgeInsets.only(left: 20, right: 20, bottom: 10),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CustomBtn(title: 'Apply Filter', onTap: () {}),
+              ScreenSize.height(10),
+              Container(
+                height: 30,
+                alignment: Alignment.center,
+                child: customText(
+                  title: 'Reset Filter',
+                  color: AppColor.appColor,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: FontFamily.interMedium,
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

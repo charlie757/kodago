@@ -71,13 +71,13 @@ class ApiService {
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
         try {
           Map<String, String> headers = {
-            "Authorization": "Bearer ${SessionManager.token}",
+            // "Authorization": "Bearer ${SessionManager.token}",
             "Authkey": Constants.authkey
           };
           print(headers);
           var request = http.MultipartRequest('POST', Uri.parse(url));
           request.fields.addAll(body);
-          // request.headers.addAll(headers);
+          request.headers.addAll(headers);
 
           var streamedResponse = await request.send();
           var response = await http.Response.fromStream(streamedResponse);

@@ -7,6 +7,8 @@ import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/widget/appbar.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
+import '../../../uitls/mixins.dart';
+
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
 
@@ -14,25 +16,28 @@ class NotificationScreen extends StatefulWidget {
   State<NotificationScreen> createState() => _NotificationScreenState();
 }
 
-class _NotificationScreenState extends State<NotificationScreen> {
+class _NotificationScreenState extends State<NotificationScreen> with MediaQueryScaleFactor{
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBar(
-          title: 'Notification',
-          isLeading: false,
-          titleColor: AppColor.appColor),
-      body: SlidableAutoCloseBehavior(
-        child: ListView.separated(
-            separatorBuilder: (context, sp) {
-              return ScreenSize.height(25);
-            },
-            itemCount: 10,
-            padding: const EdgeInsets.only(left: 0, right: 0, bottom: 40),
-            shrinkWrap: true,
-            itemBuilder: (context, index) {
-              return notificationWidget();
-            }),
+    return MediaQuery(
+      data: mediaQuery,
+      child: Scaffold(
+        appBar: appBar(
+            title: 'Notification',
+            isLeading: false,
+            titleColor: AppColor.appColor),
+        body: SlidableAutoCloseBehavior(
+          child: ListView.separated(
+              separatorBuilder: (context, sp) {
+                return ScreenSize.height(25);
+              },
+              itemCount: 10,
+              padding: const EdgeInsets.only(left: 0, right: 0, bottom: 40),
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                return notificationWidget();
+              }),
+        ),
       ),
     );
   }

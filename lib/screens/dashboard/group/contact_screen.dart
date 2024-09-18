@@ -11,6 +11,8 @@ import 'package:kodago/screens/dashboard/group/create_group_screen.dart';
 import 'package:kodago/screens/dashboard/group/new_group_screen.dart';
 import 'package:provider/provider.dart';
 
+import '../../../uitls/mixins.dart';
+
 class ContactScreen extends StatefulWidget {
   const ContactScreen({super.key});
 
@@ -18,7 +20,7 @@ class ContactScreen extends StatefulWidget {
   State<ContactScreen> createState() => _ContactScreenState();
 }
 
-class _ContactScreenState extends State<ContactScreen> {
+class _ContactScreenState extends State<ContactScreen>with MediaQueryScaleFactor {
   @override
   void initState() {
     Provider.of<NewGroupProvider>(context, listen: false).isShow = false;
@@ -27,44 +29,47 @@ class _ContactScreenState extends State<ContactScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBar(),
-      body: SingleChildScrollView(
-        padding:
-            const EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 20),
-        child: Column(
-          children: [
-            headerWidget(),
-            groupListWidget(),
-            ScreenSize.height(17),
-            shareInviteWidgt()
-          ],
+    return MediaQuery(
+      data: mediaQuery,
+      child: Scaffold(
+        appBar: appBar(),
+        body: SingleChildScrollView(
+          padding:
+              const EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 20),
+          child: Column(
+            children: [
+              headerWidget(),
+              groupListWidget(),
+              ScreenSize.height(17),
+              shareInviteWidgt()
+            ],
+          ),
         ),
-      ),
-      floatingActionButton: context.watch<NewGroupProvider>().isShow
-          ? GestureDetector(
-              onTap: () {
-                AppRoutes.pushCupertinoNavigation(const CreateGroupScreen());
-              },
-              child: Container(
-                height: 45,
-                width: 45,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: AppColor.appColor,
-                    boxShadow: [
-                      BoxShadow(
-                          offset: const Offset(0, -2),
-                          blurRadius: 6,
-                          color: AppColor.blackColor.withOpacity(.2))
-                    ]),
-                child: const Icon(
-                  Icons.arrow_forward,
-                  color: AppColor.whiteColor,
+        floatingActionButton: context.watch<NewGroupProvider>().isShow
+            ? GestureDetector(
+                onTap: () {
+                  AppRoutes.pushCupertinoNavigation(const CreateGroupScreen());
+                },
+                child: Container(
+                  height: 45,
+                  width: 45,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: AppColor.appColor,
+                      boxShadow: [
+                        BoxShadow(
+                            offset: const Offset(0, -2),
+                            blurRadius: 6,
+                            color: AppColor.blackColor.withOpacity(.2))
+                      ]),
+                  child: const Icon(
+                    Icons.arrow_forward,
+                    color: AppColor.whiteColor,
+                  ),
                 ),
-              ),
-            )
-          : Container(),
+              )
+            : Container(),
+      ),
     );
   }
 
@@ -80,13 +85,13 @@ class _ContactScreenState extends State<ContactScreen> {
             children: [
               Image.asset(
                 AppImages.newGroupIcon,
-                height: 40,
-                width: 40,
+                height: 30,
+                width: 30,
               ),
               ScreenSize.width(11),
               customText(
                 title: 'New group',
-                fontSize: 16,
+                fontSize: 14,
                 fontWeight: FontWeight.w500,
                 fontFamily: FontFamily.interMedium,
               )
@@ -98,13 +103,13 @@ class _ContactScreenState extends State<ContactScreen> {
           children: [
             Image.asset(
               AppImages.newContactIcon,
-              height: 40,
-              width: 40,
+              height: 30,
+              width: 30,
             ),
             ScreenSize.width(11),
             customText(
               title: 'New contact',
-              fontSize: 16,
+              fontSize: 14,
               fontWeight: FontWeight.w500,
               fontFamily: FontFamily.interMedium,
             )

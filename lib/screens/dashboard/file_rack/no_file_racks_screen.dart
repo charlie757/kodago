@@ -9,6 +9,8 @@ import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/screens/dashboard/file_rack/file_rack_list_screen.dart';
 import 'package:kodago/widget/appbar.dart';
 
+import '../../../uitls/mixins.dart';
+
 class NoFileRacksScreen extends StatefulWidget {
   const NoFileRacksScreen({super.key});
 
@@ -16,94 +18,97 @@ class NoFileRacksScreen extends StatefulWidget {
   State<NoFileRacksScreen> createState() => _NoFileRacksScreenState();
 }
 
-class _NoFileRacksScreenState extends State<NoFileRacksScreen> {
+class _NoFileRacksScreenState extends State<NoFileRacksScreen>with MediaQueryScaleFactor {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBar(title: 'Test'),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.only(left: 40, right: 40, bottom: 40),
-        child: Column(
-          children: [
-            Image.asset(
-              AppImages.emptyFileRackIcon,
-              height: 110,
-            ),
-            ScreenSize.height(13),
-            customText(
-              title: 'No file racks!',
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-              fontFamily: FontFamily.interSemiBold,
-            ),
-            ScreenSize.height(6),
-            customText(
-              title:
-                  'No file rack, please see demo\nsteps and create your file rack',
-              fontSize: 13,
-              fontWeight: FontWeight.w400,
-              fontFamily: FontFamily.interRegular,
-              color: AppColor.text80Color,
-            ),
-            ScreenSize.height(16),
-            CustomBtn(
-                title: 'Create form',
-                onTap: () {
-                  AppRoutes.pushCupertinoNavigation(const FileRackListScreen());
-                }),
-            ScreenSize.height(45),
-            Column(
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Column(
-                      children: [
-                        circleCountWidget('1'),
-                        verticleDividerWidget()
-                      ],
-                    ),
-                    ScreenSize.width(19),
-                    stepperTitleWidget('STEP 1', 'Enter your form name'),
-                  ],
-                ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Column(
-                      children: [
-                        circleCountWidget('2'),
-                        verticleDividerWidget()
-                      ],
-                    ),
-                    ScreenSize.width(19),
-                    stepperTitleWidget('STEP 2', 'Enter your label name'),
-                  ],
-                ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Column(
-                      children: [
-                        circleCountWidget('3'),
-                        verticleDividerWidget()
-                      ],
-                    ),
-                    ScreenSize.width(19),
-                    stepperTitleWidget('STEP 3', 'Choose your data type'),
-                  ],
-                ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    circleCountWidget('4'),
-                    ScreenSize.width(19),
-                    stepperTitleWidget('STEP 4', 'Proceed'),
-                  ],
-                ),
-              ],
-            )
-          ],
+    return MediaQuery(
+      data: mediaQuery,
+      child: Scaffold(
+        appBar: appBar(title: 'Test'),
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.only(left: 40, right: 40, bottom: 40),
+          child: Column(
+            children: [
+              Image.asset(
+                AppImages.emptyFileRackIcon,
+                height: 110,
+              ),
+              ScreenSize.height(13),
+              customText(
+                title: 'No file racks!',
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                fontFamily: FontFamily.interSemiBold,
+              ),
+              ScreenSize.height(6),
+              customText(
+                title:
+                    'No file rack, please see demo\nsteps and create your file rack',
+                fontSize: 13,
+                fontWeight: FontWeight.w400,
+                fontFamily: FontFamily.interRegular,
+                color: AppColor.text80Color,
+              ),
+              ScreenSize.height(16),
+              CustomBtn(
+                  title: 'Create form',
+                  onTap: () {
+                    AppRoutes.pushCupertinoNavigation(const FileRackListScreen());
+                  }),
+              ScreenSize.height(45),
+              Column(
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Column(
+                        children: [
+                          circleCountWidget('1'),
+                          verticleDividerWidget()
+                        ],
+                      ),
+                      ScreenSize.width(19),
+                      stepperTitleWidget('STEP 1', 'Enter your form name'),
+                    ],
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Column(
+                        children: [
+                          circleCountWidget('2'),
+                          verticleDividerWidget()
+                        ],
+                      ),
+                      ScreenSize.width(19),
+                      stepperTitleWidget('STEP 2', 'Enter your label name'),
+                    ],
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Column(
+                        children: [
+                          circleCountWidget('3'),
+                          verticleDividerWidget()
+                        ],
+                      ),
+                      ScreenSize.width(19),
+                      stepperTitleWidget('STEP 3', 'Choose your data type'),
+                    ],
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      circleCountWidget('4'),
+                      ScreenSize.width(19),
+                      stepperTitleWidget('STEP 4', 'Proceed'),
+                    ],
+                  ),
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );

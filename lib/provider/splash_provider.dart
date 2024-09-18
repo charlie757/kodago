@@ -8,9 +8,10 @@ import 'package:kodago/uitls/session_manager.dart';
 class SplashProvider extends ChangeNotifier {
   callSplash() {
     Future.delayed(const Duration(seconds: 3), () {
-      if (!SessionManager.firstTimeOpenApp) {
-        AppRoutes.pushReplacementNavigation(const OnboardingScreen());
-      } else if (SessionManager.token.isNotEmpty) {
+      // if (!SessionManager.firstTimeOpenApp) {
+      //   AppRoutes.pushReplacementNavigation(const OnboardingScreen());
+      // } else
+        if (SessionManager.token.isNotEmpty) {
         AppRoutes.pushReplacementNavigation(const DashboardScreen());
       } else {
         AppRoutes.pushReplacementNavigation(const LoginScreen());

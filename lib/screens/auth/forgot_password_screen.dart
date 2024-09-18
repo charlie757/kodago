@@ -61,7 +61,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   fontFamily: FontFamily.interRegular,
                   color: AppColor.b45Color,
                 ),
-                ScreenSize.height(60),
+                ScreenSize.height(50),
                 customText(
                   title: 'Email/Phone number',
                   fontSize: 14,

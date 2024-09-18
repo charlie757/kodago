@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kodago/config/app_routes.dart';
 import 'package:kodago/helper/app_color.dart';
+import 'package:kodago/helper/app_images.dart';
 import 'package:kodago/helper/custom_searchbar.dart';
 import 'package:kodago/helper/custom_text.dart';
 import 'package:kodago/helper/font_family.dart';
@@ -9,6 +10,8 @@ import 'package:kodago/screens/dashboard/group/chat_screen.dart';
 import 'package:kodago/screens/dashboard/group/contact_screen.dart';
 import 'package:kodago/widget/popmenuButton.dart';
 
+import '../../../uitls/mixins.dart';
+
 class GroupScreen extends StatefulWidget {
   const GroupScreen({super.key});
 
@@ -16,65 +19,65 @@ class GroupScreen extends StatefulWidget {
   State<GroupScreen> createState() => _GroupScreenState();
 }
 
-class _GroupScreenState extends State<GroupScreen> {
+class _GroupScreenState extends State<GroupScreen>with MediaQueryScaleFactor {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: appBar(),
-      body: Column(
-        children: [
-          const Padding(
-            padding: EdgeInsets.only(left: 20, right: 20),
-            child: CustomSearchbar(),
+    return MediaQuery(
+      data: mediaQuery,
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: appBar(),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Column(
+            children: [
+            const CustomSearchbar(),
+              ScreenSize.height(14),
+              Row(
+                children: [
+                  msgListTypesWidget('All'),
+                  ScreenSize.width(10),
+                  msgListTypesWidget('Unread'),
+                  ScreenSize.width(10),
+                  msgListTypesWidget('Groups'),
+                ],
+              ),
+              Expanded(
+                child: ListView.separated(
+                    separatorBuilder: (context, index) {
+                      return ScreenSize.height(20);
+                    },
+                    itemCount: 15,
+                    shrinkWrap: true,
+                    padding: const EdgeInsets.only(
+                        top: 20, bottom: 30),
+                    itemBuilder: (context, index) {
+                      return groupWidget();
+                    }),
+              )
+            ],
           ),
-          ScreenSize.height(14),
-          Padding(
-            padding: const EdgeInsets.only(left: 20),
-            child: Row(
-              children: [
-                msgListTypesWidget('All'),
-                ScreenSize.width(10),
-                msgListTypesWidget('Unread'),
-                ScreenSize.width(10),
-                msgListTypesWidget('Groups'),
-              ],
+        ),
+        floatingActionButton: GestureDetector(
+          onTap: () {
+            AppRoutes.pushCupertinoNavigation(const ContactScreen());
+          },
+          child: Container(
+            height: 45,
+            width: 45,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: AppColor.appColor,
+                boxShadow: [
+                  BoxShadow(
+                      offset: const Offset(0, -2),
+                      blurRadius: 6,
+                      color: AppColor.blackColor.withOpacity(.2))
+                ]),
+            child: const Icon(
+              Icons.add,
+              color: AppColor.whiteColor,
             ),
-          ),
-          Expanded(
-            child: ListView.separated(
-                separatorBuilder: (context, index) {
-                  return ScreenSize.height(20);
-                },
-                itemCount: 15,
-                shrinkWrap: true,
-                padding: const EdgeInsets.only(
-                    left: 20, right: 20, top: 20, bottom: 30),
-                itemBuilder: (context, index) {
-                  return groupWidget();
-                }),
-          )
-        ],
-      ),
-      floatingActionButton: GestureDetector(
-        onTap: () {
-          AppRoutes.pushCupertinoNavigation(const ContactScreen());
-        },
-        child: Container(
-          height: 45,
-          width: 45,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: AppColor.appColor,
-              boxShadow: [
-                BoxShadow(
-                    offset: const Offset(0, -2),
-                    blurRadius: 6,
-                    color: AppColor.blackColor.withOpacity(.2))
-              ]),
-          child: const Icon(
-            Icons.add,
-            color: AppColor.whiteColor,
           ),
         ),
       ),
@@ -86,10 +89,10 @@ class _GroupScreenState extends State<GroupScreen> {
   ) {
     return Container(
       padding: EdgeInsets.symmetric(
-          vertical: 7, horizontal: title.toLowerCase() == 'all' ? 20 : 14),
+          vertical: 5, horizontal: title.toLowerCase() == 'all' ? 20 : 14),
       decoration: BoxDecoration(
           color: title.toLowerCase() == 'all'
-              ? const Color(0xffE6EBF5)
+              ? AppColor.lightAppColor
               : const Color(0xffF9F9F9),
           borderRadius: BorderRadius.circular(20),
           boxShadow: title.toLowerCase() == 'all'
@@ -118,12 +121,12 @@ class _GroupScreenState extends State<GroupScreen> {
         AppRoutes.pushCupertinoNavigation(const ChatScreen());
       },
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        // crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Image.asset(
             'assets/dummay/Oval.png',
-            height: 38,
-            width: 38,
+            height: 45,
+            width: 45,
           ),
           ScreenSize.width(11),
           Expanded(
@@ -167,13 +170,8 @@ class _GroupScreenState extends State<GroupScreen> {
 
   AppBar appBar() {
     return AppBar(
-      title: customText(
-        title: 'Kodago',
-        fontSize: 20,
-        color: AppColor.darkAppColor,
-        fontWeight: FontWeight.w600,
-        fontFamily: FontFamily.interSemiBold,
-      ),
+      title: Image.asset(AppImages.appLogo,height: 25,
+          width: 94,),
       actions: [
         customPopupMenuButton(
             list: [

@@ -15,6 +15,8 @@ import 'package:kodago/widget/appbar.dart';
 import 'package:kodago/widget/popmenuButton.dart';
 import 'package:provider/provider.dart';
 
+import '../../../uitls/mixins.dart';
+
 class GroupInfoScreen extends StatefulWidget {
   const GroupInfoScreen({super.key});
 
@@ -22,68 +24,71 @@ class GroupInfoScreen extends StatefulWidget {
   State<GroupInfoScreen> createState() => _GroupInfoScreenState();
 }
 
-class _GroupInfoScreenState extends State<GroupInfoScreen> {
+class _GroupInfoScreenState extends State<GroupInfoScreen>with MediaQueryScaleFactor {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBar(title: '', actions: [popupMenuButton()]),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.only(bottom: 30),
-        child: Column(
-          children: [
-            groupDetailsWidget(),
-            ScreenSize.height(26),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.only(left: 20, right: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  customContainer(AppImages.fileIcon, 'Form', () {
-                    AppRoutes.pushCupertinoNavigation(
-                        const NoFileRacksScreen());
-                  }),
-                  ScreenSize.width(10),
-                  customContainer(AppImages.hightlightIcon, 'Highlight', () {
-                    AppRoutes.pushCupertinoNavigation(const HightlightScreen());
-                  }),
-                  ScreenSize.width(10),
-                  customContainer(AppImages.analyticsIon, 'Analytics', () {}),
-                  ScreenSize.width(10),
-                  customContainer(AppImages.addUserIcon, 'Add', () {}),
-                ],
+    return MediaQuery(
+      data: mediaQuery,
+      child: Scaffold(
+        appBar: appBar(title: '', actions: [popupMenuButton()]),
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.only(bottom: 30),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              groupDetailsWidget(),
+              ScreenSize.height(26),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.only(left: 18, right: 18),
+                child: Row(
+                  children: [
+                    customContainer(AppImages.fileIcon, 'Form', () {
+                      AppRoutes.pushCupertinoNavigation(
+                          const NoFileRacksScreen());
+                    }),
+                    ScreenSize.width(10),
+                    customContainer(AppImages.hightlightIcon, 'Highlight', () {
+                      AppRoutes.pushCupertinoNavigation(const HightlightScreen());
+                    }),
+                    ScreenSize.width(10),
+                    customContainer(AppImages.analyticsIon, 'Analytics', () {}),
+                    ScreenSize.width(10),
+                    customContainer(AppImages.addUserIcon, 'Add', () {}),
+                  ],
+                ),
               ),
-            ),
-            ScreenSize.height(19),
-            groupDescriptionWidget(),
-            ScreenSize.height(15),
-            invateLinkWidget(),
-            ScreenSize.height(17),
-            mediaLinksWidget(),
-            ScreenSize.height(19),
-            membersWidget(),
-            ScreenSize.height(22),
-            Padding(
-              padding: const EdgeInsets.only(left: 18),
-              child: Row(
-                children: [
-                  Image.asset(
-                    AppImages.logoutIcon,
-                    height: 22,
-                    width: 22,
-                  ),
-                  ScreenSize.width(12),
-                  customText(
-                    title: 'Exit group',
-                    color: AppColor.redColor,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    fontFamily: FontFamily.interMedium,
-                  )
-                ],
-              ),
-            )
-          ],
+              ScreenSize.height(19),
+              groupDescriptionWidget(),
+              ScreenSize.height(8),
+              invateLinkWidget(),
+              ScreenSize.height(17),
+              mediaLinksWidget(),
+              ScreenSize.height(19),
+              membersWidget(),
+              ScreenSize.height(22),
+              Padding(
+                padding: const EdgeInsets.only(left: 18),
+                child: Row(
+                  children: [
+                    Image.asset(
+                      AppImages.logoutIcon,
+                      height: 22,
+                      width: 22,
+                    ),
+                    ScreenSize.width(12),
+                    customText(
+                      title: 'Exit group',
+                      color: AppColor.redColor,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: FontFamily.interMedium,
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -97,20 +102,20 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
           height: 73,
           width: 123,
         ),
-        ScreenSize.height(20),
+        ScreenSize.height(10),
         customText(
           title: 'SMEC',
           fontSize: 19,
           fontWeight: FontWeight.w500,
           fontFamily: FontFamily.interSemiBold,
         ),
-        ScreenSize.height(9),
+        ScreenSize.height(4),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             customText(
               title: 'Group',
-              fontSize: 15,
+              fontSize: 13,
               fontWeight: FontWeight.w400,
               color: AppColor.grey7DColor,
             ),
@@ -126,7 +131,7 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
             ScreenSize.width(5),
             customText(
               title: '20 members',
-              fontSize: 15,
+              fontSize: 13,
               color: AppColor.grey7DColor,
               fontWeight: FontWeight.w400,
             )
@@ -157,7 +162,7 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
             fontWeight: FontWeight.w500,
             fontFamily: FontFamily.interMedium,
           ),
-          ScreenSize.height(8),
+          ScreenSize.height(4),
           customText(
             title: "Created by Manish saini, 01/09/24",
             fontSize: 13,
@@ -266,12 +271,12 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
             ],
           ),
         ),
-        ScreenSize.height(18),
+        ScreenSize.height(10),
         SizedBox(
-          height: 100,
+          height: 80,
           child: ListView.separated(
               separatorBuilder: (context, sp) {
-                return ScreenSize.width(16);
+                return ScreenSize.width(8);
               },
               itemCount: 4,
               shrinkWrap: true,
@@ -279,11 +284,11 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 19),
               itemBuilder: (context, index) {
                 return Container(
-                  width: 100,
+                  width: 80,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(color: const Color(0xffC2C2C2))),
-                  child: Image.asset('assets/dummay/Rectangle 592.png'),
+                  child: Image.asset('assets/dummay/Rectangle 592.png',fit: BoxFit.fill,),
                 );
               }),
         )
@@ -357,7 +362,8 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
                         index == 0
                             ? Container(
                                 height: 26,
-                                width: 89,
+                                // width: 89,
+                          padding:const EdgeInsets.symmetric(horizontal: 6),
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(6),
                                     color: const Color(0xffDAEFFD)),
@@ -372,7 +378,7 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
                               )
                             : Image.asset(
                                 AppImages.keyboardDownIcon,
-                                height: 19,
+                                height: 16,
                               )
                       ],
                     ),
@@ -391,7 +397,9 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
           return AlertDialog(
             insetPadding: EdgeInsets.zero,
             contentPadding: EdgeInsets.zero,
-            shape: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+            shape: OutlineInputBorder(
+                borderSide:const BorderSide(color: AppColor.whiteColor),
+                borderRadius: BorderRadius.circular(10)),
             content: Container(
               width: MediaQuery.of(context).size.width - 40,
               padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 17),
@@ -401,28 +409,28 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
                 children: [
                   customText(
                     title: 'Make group admin',
-                    fontSize: 16,
+                    fontSize: 14,
                     fontWeight: FontWeight.w400,
                     fontFamily: FontFamily.interMedium,
                   ),
                   ScreenSize.height(20),
                   customText(
                     title: "Assign a filerack's",
-                    fontSize: 16,
+                    fontSize: 14,
                     fontWeight: FontWeight.w400,
                     fontFamily: FontFamily.interMedium,
                   ),
                   ScreenSize.height(20),
                   customText(
                     title: 'Message Manish',
-                    fontSize: 16,
+                    fontSize: 14,
                     fontWeight: FontWeight.w400,
                     fontFamily: FontFamily.interMedium,
                   ),
                   ScreenSize.height(20),
                   customText(
                     title: 'Remove from group',
-                    fontSize: 16,
+                    fontSize: 14,
                     fontWeight: FontWeight.w400,
                     fontFamily: FontFamily.interMedium,
                   ),
@@ -437,8 +445,8 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: 80,
-        width: 80,
+        height: 70,
+        width: 70,
         alignment: Alignment.center,
         decoration: BoxDecoration(
             border: Border.all(
@@ -457,10 +465,10 @@ class _GroupInfoScreenState extends State<GroupInfoScreen> {
             ScreenSize.height(9),
             customText(
               title: title,
-              fontSize: 14,
+              fontSize: 12,
               fontWeight: FontWeight.w500,
               color: const Color(0xff455154),
-              fontFamily: FontFamily.interSemiBold,
+              fontFamily: FontFamily.interMedium,
             )
           ],
         ),

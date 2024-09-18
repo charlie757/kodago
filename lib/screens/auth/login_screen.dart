@@ -16,6 +16,8 @@ import 'package:kodago/uitls/utils.dart';
 import 'package:kodago/uitls/white_space_formatter.dart';
 import 'package:provider/provider.dart';
 
+import '../../uitls/mixins.dart';
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -23,7 +25,7 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends State<LoginScreen>with MediaQueryScaleFactor {
   @override
   Widget build(BuildContext context) {
     return Consumer<LoginProvider>(builder: (context, myProvider, child) {
@@ -59,7 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       fontFamily: FontFamily.interRegular,
                       color: AppColor.b45Color,
                     ),
-                    ScreenSize.height(80),
+                    ScreenSize.height(50),
                     customText(
                       title: 'Email/Phone number',
                       fontSize: 14,
@@ -92,7 +94,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         }
                       },
                     ),
-                    ScreenSize.height(25),
+                    ScreenSize.height(20),
                     customText(
                       title: 'Password',
                       fontSize: 14,
@@ -142,9 +144,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       validator: (val) {
                         if (val.isEmpty) {
                           return "Enter your password";
-                        } else if (!Utils.passwordValidateRegExp(val)) {
-                          return 'The password should contain at least one uppercase letter, one lowercase letter, one digit, and one special character.';
                         }
+                        // else if (!Utils.passwordValidateRegExp(val)) {
+                        //   return 'The password should contain at least one uppercase letter, one lowercase letter, one digit, and one special character.';
+                        // }
                       },
                     ),
                     ScreenSize.height(16),

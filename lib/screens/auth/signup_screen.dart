@@ -60,7 +60,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   fontFamily: FontFamily.interRegular,
                   color: AppColor.b45Color,
                 ),
-                ScreenSize.height(62),
+                ScreenSize.height(50),
                 customText(
                   title: 'Full Name',
                   fontSize: 14,
@@ -93,7 +93,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     }
                   },
                 ),
-                ScreenSize.height(25),
+                ScreenSize.height(20),
                 customText(
                   title: 'Email',
                   fontSize: 14,
@@ -129,7 +129,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     }
                   },
                 ),
-                ScreenSize.height(25),
+                ScreenSize.height(20),
                 customText(
                   title: 'Phone Number',
                   fontSize: 14,
@@ -164,7 +164,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     }
                   },
                 ),
-                ScreenSize.height(25),
+                ScreenSize.height(20),
                 customText(
                   title: 'Password',
                   fontSize: 14,
@@ -214,8 +214,10 @@ class _SignupScreenState extends State<SignupScreen> {
                   validator: (val) {
                     if (val.isEmpty) {
                       return "Enter your password";
-                    } else if (!Utils.passwordValidateRegExp(val)) {
-                      return 'The password should contain at least one uppercase letter, one lowercase letter, one digit, and one special character.';
+                    } else if (val.length<6) {
+                      return 'The password must be at least 6 characters';
+                    }else if(val.length>16){
+                      return 'The password must be less than 16 characters';
                     }
                   },
                 ),
@@ -271,7 +273,7 @@ class _SignupScreenState extends State<SignupScreen> {
                               ..onTap = () {
                                 Navigator.pop(context);
                               },
-                            text: 'Login here',
+                            text: 'Login',
                             style: const TextStyle(
                                 fontSize: 12,
                                 fontFamily: FontFamily.interMedium,

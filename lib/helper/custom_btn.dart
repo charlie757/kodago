@@ -19,7 +19,7 @@ class CustomBtn extends StatelessWidget {
       required this.onTap,
       this.color = AppColor.appColor,
       this.isLoading = false,
-      this.borderRadius = 8});
+      this.borderRadius =50});
 
   @override
   Widget build(BuildContext context) {

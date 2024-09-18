@@ -11,6 +11,8 @@ import 'package:kodago/screens/dashboard/group/create_topic_screen.dart';
 import 'package:kodago/widget/appbar.dart';
 import 'package:provider/provider.dart';
 
+import '../../../uitls/mixins.dart';
+
 class CreateGroupScreen extends StatefulWidget {
   const CreateGroupScreen({super.key});
 
@@ -18,38 +20,41 @@ class CreateGroupScreen extends StatefulWidget {
   State<CreateGroupScreen> createState() => _CreateGroupScreenState();
 }
 
-class _CreateGroupScreenState extends State<CreateGroupScreen> {
+class _CreateGroupScreenState extends State<CreateGroupScreen> with MediaQueryScaleFactor{
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: const Color(0xffF8F8F8),
-        appBar: appBar(title: 'New group'),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [headerWidget(), membersWidget()],
-        ),
-        floatingActionButton: GestureDetector(
-          onTap: () {
-            AppRoutes.pushCupertinoNavigation(const CreateTopicScreen());
-          },
-          child: Container(
-            height: 45,
-            width: 45,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: AppColor.appColor,
-                boxShadow: [
-                  BoxShadow(
-                      offset: const Offset(0, -2),
-                      blurRadius: 6,
-                      color: AppColor.blackColor.withOpacity(.2))
-                ]),
-            child: const Icon(
-              Icons.check,
-              color: AppColor.whiteColor,
-            ),
+    return MediaQuery(
+      data: mediaQuery,
+      child: Scaffold(
+          backgroundColor: const Color(0xffF8F8F8),
+          appBar: appBar(title: 'New group'),
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [headerWidget(), membersWidget()],
           ),
-        ));
+          floatingActionButton: GestureDetector(
+            onTap: () {
+              AppRoutes.pushCupertinoNavigation(const CreateTopicScreen());
+            },
+            child: Container(
+              height: 45,
+              width: 45,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: AppColor.appColor,
+                  boxShadow: [
+                    BoxShadow(
+                        offset: const Offset(0, -2),
+                        blurRadius: 6,
+                        color: AppColor.blackColor.withOpacity(.2))
+                  ]),
+              child: const Icon(
+                Icons.check,
+                color: AppColor.whiteColor,
+              ),
+            ),
+          )),
+    );
   }
 
   membersWidget() {
@@ -68,10 +73,10 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
         ),
         ScreenSize.height(21),
         SizedBox(
-          height: 67,
+          height: 75,
           child: ListView.separated(
-              separatorBuilder: (conttext, sp) {
-                return ScreenSize.width(26);
+              separatorBuilder: (context, sp) {
+                return ScreenSize.width(15);
               },
               shrinkWrap: true,
               padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -80,13 +85,35 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
               itemBuilder: (context, index) {
                 var model = context.watch<NewGroupProvider>().groupList[index];
                 return SizedBox(
-                  width: 43,
+                  width: 50,
                   child: Column(
                     children: [
-                      Image.asset(
-                        model['img'],
-                        height: 42,
-                        width: 42,
+                      Stack(
+                        children: [
+                          Image.asset(
+                            model['img'],
+                            height: 48,
+                            width: 48,
+                          ),
+                          Positioned(
+                            // bottom: 0,
+                            right: 0,
+                            child: Container(
+                              height: 16,
+                              width: 16,
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: AppColor.whiteColor),
+                                  shape: BoxShape.circle,
+                                  color: const Color(0xff979797)),
+                              child: const Icon(
+                                Icons.close,
+                                color: AppColor.whiteColor,
+                                size: 12,
+                              ),
+                            ),
+                          )
+                        ],
                       ),
                       ScreenSize.height(5),
                       Text(
@@ -94,7 +121,7 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
-                          fontSize: 12,
+                          fontSize: 11,
                           color: AppColor.blackColor,
                           fontWeight: FontWeight.w400,
                           fontFamily: FontFamily.interRegular,

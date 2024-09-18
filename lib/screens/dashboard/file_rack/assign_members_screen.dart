@@ -9,6 +9,8 @@ import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/uitls/my_sperator.dart';
 import 'package:kodago/widget/appbar.dart';
 
+import '../../../uitls/mixins.dart';
+
 class AssignMembersScreen extends StatefulWidget {
   const AssignMembersScreen({super.key});
 
@@ -16,7 +18,7 @@ class AssignMembersScreen extends StatefulWidget {
   State<AssignMembersScreen> createState() => _AssignMembersScreenState();
 }
 
-class _AssignMembersScreenState extends State<AssignMembersScreen> {
+class _AssignMembersScreenState extends State<AssignMembersScreen>with MediaQueryScaleFactor {
   List list = [
     "All data types",
     "State or name",
@@ -34,44 +36,47 @@ class _AssignMembersScreenState extends State<AssignMembersScreen> {
   ];
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBar(title: 'Assign members'),
-      body: Padding(
-        padding: const EdgeInsets.only(left: 17, right: 18, top: 10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                customCheckBox(index: -1, selectedIndex: 0),
-                ScreenSize.width(12),
-                customText(
-                  title: 'All Group Members',
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: AppColor.darkAppColor,
-                  fontFamily: FontFamily.interMedium,
-                )
-              ],
-            ),
-            ScreenSize.height(15),
-            const MySeparator(
-              color: Color(0xffC0D0D9),
-            ),
-            ScreenSize.height(13),
-            Expanded(
-              child: ListView.separated(
-                  separatorBuilder: (context, sp) {
-                    return ScreenSize.height(10);
-                  },
-                  itemCount: 5,
-                  padding: const EdgeInsets.only(bottom: 30),
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    return fileRackWidget(index);
-                  }),
-            )
-          ],
+    return MediaQuery(
+      data: mediaQuery,
+      child: Scaffold(
+        appBar: appBar(title: 'Assign members'),
+        body: Padding(
+          padding: const EdgeInsets.only(left: 17, right: 18, top: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  customCheckBox(index: -1, selectedIndex: 0),
+                  ScreenSize.width(12),
+                  customText(
+                    title: 'All Group Members',
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: AppColor.darkAppColor,
+                    fontFamily: FontFamily.interMedium,
+                  )
+                ],
+              ),
+              ScreenSize.height(15),
+              const MySeparator(
+                color: Color(0xffC0D0D9),
+              ),
+              ScreenSize.height(13),
+              Expanded(
+                child: ListView.separated(
+                    separatorBuilder: (context, sp) {
+                      return ScreenSize.height(10);
+                    },
+                    itemCount: 5,
+                    padding: const EdgeInsets.only(bottom: 30),
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      return fileRackWidget(index);
+                    }),
+              )
+            ],
+          ),
         ),
       ),
     );

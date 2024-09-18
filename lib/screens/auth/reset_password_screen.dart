@@ -63,7 +63,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   fontFamily: FontFamily.interRegular,
                   color: AppColor.b45Color,
                 ),
-                ScreenSize.height(60),
+                ScreenSize.height(50),
                 customText(
                   title: 'Enter new password',
                   fontSize: 14,

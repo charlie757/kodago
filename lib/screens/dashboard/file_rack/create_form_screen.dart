@@ -11,6 +11,8 @@ import 'package:kodago/uitls/my_sperator.dart';
 import 'package:kodago/widget/appbar.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 
+import '../../../uitls/mixins.dart';
+
 class CreateFormScreen extends StatefulWidget {
   const CreateFormScreen({super.key});
 
@@ -18,7 +20,7 @@ class CreateFormScreen extends StatefulWidget {
   State<CreateFormScreen> createState() => _CreateFormScreenState();
 }
 
-class _CreateFormScreenState extends State<CreateFormScreen> {
+class _CreateFormScreenState extends State<CreateFormScreen>with MediaQueryScaleFactor {
   bool switchStatus = false;
   int selectedIndex = 0;
   List list = [
@@ -39,56 +41,59 @@ class _CreateFormScreenState extends State<CreateFormScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBar(title: 'Test'),
-      body: Padding(
-        padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            CustomTextField(
-              hintText: 'Enter your form name',
-              borderColor: AppColor.appColor.withOpacity(.4),
-            ),
-            ScreenSize.height(22),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                customText(
-                  title: 'Create record',
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  fontFamily: FontFamily.interMedium,
-                ),
-                Container(
-                  // height: 30,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 9, vertical: 6),
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                      color: AppColor.appColor,
-                      borderRadius: BorderRadius.circular(5)),
-                  child: customText(
-                      title: 'Create More',
-                      fontSize: 13,
-                      fontFamily: FontFamily.interRegular,
-                      color: AppColor.whiteColor,
-                      fontWeight: FontWeight.w400),
-                )
-              ],
-            ),
-            ScreenSize.height(16),
-            recordWidget(),
-          ],
+    return MediaQuery(
+      data: mediaQuery,
+      child: Scaffold(
+        appBar: appBar(title: 'Test'),
+        body: Padding(
+          padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CustomTextField(
+                hintText: 'Enter your form name',
+                borderColor: AppColor.appColor.withOpacity(.4),
+              ),
+              ScreenSize.height(22),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  customText(
+                    title: 'Create record',
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: FontFamily.interMedium,
+                  ),
+                  Container(
+                    // height: 30,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 9, vertical: 6),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        color: AppColor.appColor,
+                        borderRadius: BorderRadius.circular(5)),
+                    child: customText(
+                        title: 'Create More',
+                        fontSize: 13,
+                        fontFamily: FontFamily.interRegular,
+                        color: AppColor.whiteColor,
+                        fontWeight: FontWeight.w400),
+                  )
+                ],
+              ),
+              ScreenSize.height(16),
+              recordWidget(),
+            ],
+          ),
         ),
-      ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
-        child: CustomBtn(
-            title: 'Submit',
-            onTap: () {
-              // AppRoutes.pushCupertinoNavigation(const FileRackListScreen());
-            }),
+        bottomNavigationBar: Padding(
+          padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
+          child: CustomBtn(
+              title: 'Submit',
+              onTap: () {
+                // AppRoutes.pushCupertinoNavigation(const FileRackListScreen());
+              }),
+        ),
       ),
     );
   }

@@ -8,6 +8,7 @@ import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/provider/profile_provider.dart';
 import 'package:kodago/screens/dashboard/profile/change_password_screen.dart';
+import 'package:kodago/uitls/mixins.dart';
 import 'package:kodago/uitls/utils.dart';
 import 'package:provider/provider.dart';
 
@@ -18,7 +19,7 @@ class ProfileScreen extends StatefulWidget {
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _ProfileScreenState extends State<ProfileScreen> with MediaQueryScaleFactor {
   @override
   void initState() {
     callInitFunction();
@@ -34,15 +35,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          topHeader(),
-          Padding(
-            padding: const EdgeInsets.only(top: 330),
-            child: menuWidget(),
-          )
-        ],
+    return MediaQuery(
+      data: mediaQuery,
+      child: Scaffold(
+        body: Stack(
+          children: [
+            topHeader(),
+            Padding(
+              padding: const EdgeInsets.only(top: 330),
+              child: menuWidget(),
+            )
+          ],
+        ),
       ),
     );
   }

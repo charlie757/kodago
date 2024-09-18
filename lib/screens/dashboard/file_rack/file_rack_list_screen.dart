@@ -13,6 +13,8 @@ import 'package:kodago/uitls/delete_file_rack_dialogbox.dart';
 import 'package:kodago/widget/appbar.dart';
 import 'package:kodago/widget/popmenuButton.dart';
 
+import '../../../uitls/mixins.dart';
+
 class FileRackListScreen extends StatefulWidget {
   const FileRackListScreen({super.key});
 
@@ -20,90 +22,93 @@ class FileRackListScreen extends StatefulWidget {
   State<FileRackListScreen> createState() => _FileRackListScreenState();
 }
 
-class _FileRackListScreenState extends State<FileRackListScreen> {
+class _FileRackListScreenState extends State<FileRackListScreen>with MediaQueryScaleFactor {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBar(title: 'Test', actions: [
-        GestureDetector(
-          onTap: () {
-            AppRoutes.pushCupertinoNavigation(const CreateFormScreen());
-          },
-          child: Container(
-            margin: const EdgeInsets.only(right: 20),
-            padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 6),
-            decoration: BoxDecoration(
-                color: AppColor.appColor,
-                borderRadius: BorderRadius.circular(50)),
-            child: customText(
-              title: 'Add file racks',
-              color: AppColor.whiteColor,
-              fontSize: 13,
-              fontWeight: FontWeight.w400,
-              fontFamily: FontFamily.interRegular,
-            ),
-          ),
-        )
-      ]),
-      body: ListView.separated(
-          separatorBuilder: (context, sp) {
-            return ScreenSize.height(20);
-          },
-          itemCount: 16,
-          shrinkWrap: true,
-          padding:
-              const EdgeInsets.only(left: 20, right: 0, top: 6, bottom: 20),
-          itemBuilder: (context, index) {
-            return GestureDetector(
-              onTap: () {
-                AppRoutes.pushCupertinoNavigation(
-                    const FileRackDetailsScreen());
-              },
-              child: Row(
-                children: [
-                  Container(
-                    height: 45,
-                    width: 45,
-                    alignment: Alignment.center,
-                    decoration: const BoxDecoration(
-                        shape: BoxShape.circle, color: Color(0xffE7E7E7)),
-                    child: Image.asset(
-                      AppImages.fileIcon,
-                      height: 21,
-                    ),
-                  ),
-                  ScreenSize.width(15),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        customText(
-                          title: 'Custom Rack',
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: AppColor.blackColor,
-                          fontFamily: FontFamily.interMedium,
-                        ),
-                        customText(
-                          title: 'Last update on 15 Aug 2022 10:55 PM',
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                          color: AppColor.grey6AColor,
-                          fontFamily: FontFamily.interRegular,
-                        )
-                      ],
-                    ),
-                  ),
-                  popupMenuButton()
-                  // Image.asset(
-                  //   AppImages.moreVerticalIcon,
-                  //   color: const Color(0xff7D7D7D),
-                  //   height: 20,
-                  // )
-                ],
+    return MediaQuery(
+      data: mediaQuery,
+      child: Scaffold(
+        appBar: appBar(title: 'Test', actions: [
+          GestureDetector(
+            onTap: () {
+              AppRoutes.pushCupertinoNavigation(const CreateFormScreen());
+            },
+            child: Container(
+              margin: const EdgeInsets.only(right: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 6),
+              decoration: BoxDecoration(
+                  color: AppColor.appColor,
+                  borderRadius: BorderRadius.circular(50)),
+              child: customText(
+                title: 'Add file racks',
+                color: AppColor.whiteColor,
+                fontSize: 13,
+                fontWeight: FontWeight.w400,
+                fontFamily: FontFamily.interRegular,
               ),
-            );
-          }),
+            ),
+          )
+        ]),
+        body: ListView.separated(
+            separatorBuilder: (context, sp) {
+              return ScreenSize.height(20);
+            },
+            itemCount: 16,
+            shrinkWrap: true,
+            padding:
+                const EdgeInsets.only(left: 20, right: 0, top: 6, bottom: 20),
+            itemBuilder: (context, index) {
+              return GestureDetector(
+                onTap: () {
+                  AppRoutes.pushCupertinoNavigation(
+                      const FileRackDetailsScreen());
+                },
+                child: Row(
+                  children: [
+                    Container(
+                      height: 45,
+                      width: 45,
+                      alignment: Alignment.center,
+                      decoration: const BoxDecoration(
+                          shape: BoxShape.circle, color: Color(0xffE7E7E7)),
+                      child: Image.asset(
+                        AppImages.fileIcon,
+                        height: 21,
+                      ),
+                    ),
+                    ScreenSize.width(15),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          customText(
+                            title: 'Custom Rack',
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: AppColor.blackColor,
+                            fontFamily: FontFamily.interMedium,
+                          ),
+                          customText(
+                            title: 'Last update on 15 Aug 2022 10:55 PM',
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                            color: AppColor.grey6AColor,
+                            fontFamily: FontFamily.interRegular,
+                          )
+                        ],
+                      ),
+                    ),
+                    popupMenuButton()
+                    // Image.asset(
+                    //   AppImages.moreVerticalIcon,
+                    //   color: const Color(0xff7D7D7D),
+                    //   height: 20,
+                    // )
+                  ],
+                ),
+              );
+            }),
+      ),
     );
   }
 
