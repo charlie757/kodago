@@ -6,8 +6,10 @@ import 'package:kodago/helper/custom_btn.dart';
 import 'package:kodago/helper/custom_text.dart';
 import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
+import 'package:kodago/helper/view_network_image.dart';
 import 'package:kodago/provider/profile_provider.dart';
 import 'package:kodago/screens/dashboard/profile/change_password_screen.dart';
+import 'package:kodago/uitls/extension.dart';
 import 'package:kodago/uitls/mixins.dart';
 import 'package:kodago/uitls/utils.dart';
 import 'package:provider/provider.dart';
@@ -35,23 +37,27 @@ class _ProfileScreenState extends State<ProfileScreen> with MediaQueryScaleFacto
 
   @override
   Widget build(BuildContext context) {
-    return MediaQuery(
-      data: mediaQuery,
-      child: Scaffold(
-        body: Stack(
-          children: [
-            topHeader(),
-            Padding(
-              padding: const EdgeInsets.only(top: 330),
-              child: menuWidget(),
-            )
-          ],
-        ),
-      ),
+    return Consumer<ProfileProvider>(
+      builder: (context,myProvider,child) {
+        return MediaQuery(
+          data: mediaQuery,
+          child: Scaffold(
+            body: Stack(
+              children: [
+                topHeader(myProvider),
+                Padding(
+                  padding: const EdgeInsets.only(top: 330),
+                  child: menuWidget(),
+                )
+              ],
+            ),
+          ),
+        );
+      }
     );
   }
 
-  topHeader() {
+  topHeader(ProfileProvider provider) {
     return Container(
       height: MediaQuery.of(context).size.height,
       padding: const EdgeInsets.only(top: 100),
@@ -65,7 +71,7 @@ class _ProfileScreenState extends State<ProfileScreen> with MediaQueryScaleFacto
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
       )),
-      child: Column(
+      child:provider.profileModel!=null&& provider.profileModel!.data!=null? Column(
         children: [
           Container(
             height: 150,
@@ -91,7 +97,9 @@ class _ProfileScreenState extends State<ProfileScreen> with MediaQueryScaleFacto
                           width: 5,
                           color: Colors.black26.withOpacity(0.04),
                         )),
-                    child: Image.asset('assets/dummay/Image.png'),
+                    child:provider.profileModel!.data!.userImage!=null? ClipRRect(
+                      borderRadius: BorderRadius.circular(100),
+                      child: ViewNetworkImage(img: provider.profileModel!.data!.userImage,),):Container(),
                   ),
                   // Positioned(
                   //     right: 0,
@@ -106,20 +114,20 @@ class _ProfileScreenState extends State<ProfileScreen> with MediaQueryScaleFacto
           ),
           ScreenSize.height(5),
           customText(
-            title: 'Sharwan Kumar',
+            title:provider.profileModel!.data!.name!=null? provider.profileModel!.data!.name.toString().capitalize():'',
             fontSize: 17,
             fontWeight: FontWeight.w500,
             fontFamily: FontFamily.interSemiBold,
           ),
           ScreenSize.height(4),
           customText(
-            title: '+91 1234567890',
+            title: '+91 ${provider.profileModel!.data!.phoneNumber??''}',
             fontSize: 13,
             fontWeight: FontWeight.w400,
             fontFamily: FontFamily.interRegular,
           ),
         ],
-      ),
+      ):Container(),
     );
   }
 
