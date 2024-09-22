@@ -8,14 +8,23 @@ import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/helper/view_network_image.dart';
 import 'package:kodago/model/feeds_model.dart';
 import 'package:kodago/presentation/dashboard/home/view_post_screen.dart';
+import 'package:kodago/provider/home/home_provider.dart';
 import 'package:kodago/widget/comment_bottomsheet.dart';
 import 'package:video_player/video_player.dart';
+import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class HomePostsWidget extends StatelessWidget {
   int index;
+  int currentIndex;
   FeedsModel? feedsModel;
-  HomePostsWidget({required this.index, this.feedsModel});
+  HomePostsWidget({
+    required this.index,
+    this.currentIndex = 0,
+    this.feedsModel,
+  });
+  ValueNotifier<bool> isSound =
+      ValueNotifier(false); // Use ValueNotifier for sound control
 
   late VideoPlayerController controller;
   @override
@@ -26,8 +35,18 @@ class HomePostsWidget extends StatelessWidget {
           VideoPlayerController.networkUrl(Uri.parse(model.video![0].mainURL))
             ..initialize().then((_) {
               controller.play();
+              print("isInsgsgd..${controller.value.isInitialized}");
+              if (currentIndex != index) {
+                controller.pause();
+              }
               // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
             });
+    } else {
+      // controller.value.isInitialized
+      //     ? controller.value.isPlaying
+      //         ? controller.pause()
+      //         : null
+      //     : null;
     }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,9 +59,43 @@ class HomePostsWidget extends StatelessWidget {
                 width: double.infinity,
               )
             : model.fieldType == 'video'
-                ? AspectRatio(
-                    aspectRatio: controller.value.aspectRatio,
-                    child: VideoPlayer(controller),
+                ? Stack(
+                    children: [
+                      AspectRatio(
+                        aspectRatio: controller.value.aspectRatio,
+                        child: VideoPlayer(controller),
+                      ),
+                      Positioned(
+                        right: 0 + 15,
+                        bottom: 0 + 15,
+                        child: GestureDetector(
+                          onTap: () {
+                            if (isSound.value == true) {
+                              isSound.value = false;
+                              controller.setVolume(0);
+                            } else {
+                              isSound.value = true;
+                              controller.setVolume(10);
+                            }
+                          },
+                          child: Container(
+                            height: 25,
+                            width: 25,
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: AppColor.blackColor.withOpacity(.3)),
+                            alignment: Alignment.center,
+                            child: Icon(
+                              isSound.value
+                                  ? Icons.volume_up_rounded
+                                  : Icons.volume_off,
+                              color: AppColor.whiteColor,
+                              size: 15,
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
                   )
                 : Image.asset('assets/dummay/Rectangle.png'),
         ScreenSize.height(12),

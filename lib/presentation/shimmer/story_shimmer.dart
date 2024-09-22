@@ -11,6 +11,7 @@ class StoryShimmer extends StatelessWidget {
     return SizedBox(
       height: 80,
       child: ListView.separated(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
           separatorBuilder: (context, sp) {
             return ScreenSize.width(20);
           },

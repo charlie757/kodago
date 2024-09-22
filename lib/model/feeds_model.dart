@@ -205,6 +205,7 @@ class Feeds {
   dynamic groupId;
   dynamic sheetId;
   dynamic sheetDataId;
+  dynamic isSound = true;
   dynamic groupName;
   dynamic sheetName;
   dynamic fieldType;

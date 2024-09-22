@@ -10,9 +10,15 @@ class HomeProvider extends ChangeNotifier {
   int perPage = 10;
   FeedsModel? feedsModel;
   bool isLoading = false;
+  // bool isSound = false;
 
   bool isLoadingMore = false;
   bool hasMoreData = true;
+
+  // updateSound(val) {
+  //   isSound = val;
+  //   notifyListeners();
+  // }
 
   updateLoading(value) async {
     isLoading = value;

@@ -86,6 +86,7 @@ class _HomeScreenState extends State<HomeScreen> with MediaQueryScaleFactor {
                               physics: const ScrollPhysics(),
                               shrinkWrap: true,
                               itemBuilder: (context, index) {
+                                int currentIndex = index;
                                 if (index ==
                                         myProvider
                                             .feedsModel!.data!.feeds!.length &&
@@ -96,6 +97,7 @@ class _HomeScreenState extends State<HomeScreen> with MediaQueryScaleFactor {
                                   return HomePostsWidget(
                                     index: index,
                                     feedsModel: myProvider.feedsModel,
+                                    currentIndex: currentIndex,
                                   );
                                 }
                               })
