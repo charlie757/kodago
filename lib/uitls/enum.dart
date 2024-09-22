@@ -1,3 +1,3 @@
 enum PlatformType { ios, android }
 
-enum OtpVerificationScreenRoute { signup, login, forgot }
+enum OtpVerificationScreenRoute { signup, login, forgot, update }

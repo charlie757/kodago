@@ -4,8 +4,8 @@ import 'package:kodago/api/api_service.dart';
 import 'package:kodago/api/api_url.dart';
 import 'package:kodago/config/app_routes.dart';
 import 'package:kodago/model/auth_model/verify_model.dart';
-import 'package:kodago/screens/auth/reset_password_screen.dart';
-import 'package:kodago/screens/dashboard/dashboard_screen.dart';
+import 'package:kodago/presentation/auth/reset_password_screen.dart';
+import 'package:kodago/presentation/dashboard/dashboard_screen.dart';
 import 'package:kodago/uitls/constants.dart';
 import 'package:kodago/uitls/enum.dart';
 import 'package:kodago/uitls/session_manager.dart';
@@ -14,7 +14,6 @@ import 'package:kodago/uitls/utils.dart';
 
 class OtpProvider extends ChangeNotifier {
   final otpController = TextEditingController();
-  final formKey = GlobalKey<FormState>();
   int counter = 30;
   Timer? timer;
   bool resend = false;
@@ -41,13 +40,11 @@ class OtpProvider extends ChangeNotifier {
   }
 
   checkValidation(String route) {
-    if (formKey.currentState!.validate()) {
-      route == OtpVerificationScreenRoute.forgot.name
-          ? AppRoutes.pushCupertinoNavigation(ResetPasswordScreen(
-              otp: otpController.text,
-            ))
-          : verifyApiFunction();
-    }
+    route == OtpVerificationScreenRoute.forgot.name
+        ? AppRoutes.pushCupertinoNavigation(ResetPasswordScreen(
+            otp: otpController.text,
+          ))
+        : verifyApiFunction();
   }
 
   resendApiFunction(String number) async {

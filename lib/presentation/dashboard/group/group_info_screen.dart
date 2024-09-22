@@ -6,11 +6,11 @@ import 'package:kodago/helper/custom_text.dart';
 import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/provider/group/new_group_provider.dart';
-import 'package:kodago/screens/dashboard/file_rack/no_file_racks_screen.dart';
-import 'package:kodago/screens/dashboard/group/add_member_screen.dart';
-import 'package:kodago/screens/dashboard/group/edit_group_profile.dart';
-import 'package:kodago/screens/dashboard/group/hightlight_screen.dart';
-import 'package:kodago/screens/dashboard/group/view_all_group_media_screen.dart';
+import 'package:kodago/presentation/dashboard/file_rack/no_file_racks_screen.dart';
+import 'package:kodago/presentation/dashboard/group/add_member_screen.dart';
+import 'package:kodago/presentation/dashboard/group/edit_group_profile.dart';
+import 'package:kodago/presentation/dashboard/group/hightlight_screen.dart';
+import 'package:kodago/presentation/dashboard/group/view_all_group_media_screen.dart';
 import 'package:kodago/widget/appbar.dart';
 import 'package:kodago/widget/popmenuButton.dart';
 import 'package:provider/provider.dart';
@@ -24,7 +24,8 @@ class GroupInfoScreen extends StatefulWidget {
   State<GroupInfoScreen> createState() => _GroupInfoScreenState();
 }
 
-class _GroupInfoScreenState extends State<GroupInfoScreen>with MediaQueryScaleFactor {
+class _GroupInfoScreenState extends State<GroupInfoScreen>
+    with MediaQueryScaleFactor {
   @override
   Widget build(BuildContext context) {
     return MediaQuery(
@@ -49,7 +50,8 @@ class _GroupInfoScreenState extends State<GroupInfoScreen>with MediaQueryScaleFa
                     }),
                     ScreenSize.width(10),
                     customContainer(AppImages.hightlightIcon, 'Highlight', () {
-                      AppRoutes.pushCupertinoNavigation(const HightlightScreen());
+                      AppRoutes.pushCupertinoNavigation(
+                          const HightlightScreen());
                     }),
                     ScreenSize.width(10),
                     customContainer(AppImages.analyticsIon, 'Analytics', () {}),
@@ -288,7 +290,10 @@ class _GroupInfoScreenState extends State<GroupInfoScreen>with MediaQueryScaleFa
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(color: const Color(0xffC2C2C2))),
-                  child: Image.asset('assets/dummay/Rectangle 592.png',fit: BoxFit.fill,),
+                  child: Image.asset(
+                    'assets/dummay/Rectangle 592.png',
+                    fit: BoxFit.fill,
+                  ),
                 );
               }),
         )
@@ -363,7 +368,8 @@ class _GroupInfoScreenState extends State<GroupInfoScreen>with MediaQueryScaleFa
                             ? Container(
                                 height: 26,
                                 // width: 89,
-                          padding:const EdgeInsets.symmetric(horizontal: 6),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 6),
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(6),
                                     color: const Color(0xffDAEFFD)),
@@ -398,7 +404,7 @@ class _GroupInfoScreenState extends State<GroupInfoScreen>with MediaQueryScaleFa
             insetPadding: EdgeInsets.zero,
             contentPadding: EdgeInsets.zero,
             shape: OutlineInputBorder(
-                borderSide:const BorderSide(color: AppColor.whiteColor),
+                borderSide: const BorderSide(color: AppColor.whiteColor),
                 borderRadius: BorderRadius.circular(10)),
             content: Container(
               width: MediaQuery.of(context).size.width - 40,

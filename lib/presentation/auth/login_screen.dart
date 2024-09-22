@@ -9,9 +9,10 @@ import 'package:kodago/helper/custom_text.dart';
 import 'package:kodago/helper/custom_textfield.dart';
 import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
+import 'package:kodago/helper/textfield_lebal_text.dart';
 import 'package:kodago/provider/auth_provider/login_provider.dart';
-import 'package:kodago/screens/auth/forgot_password_screen.dart';
-import 'package:kodago/screens/auth/signup_screen.dart';
+import 'package:kodago/presentation/auth/forgot_password_screen.dart';
+import 'package:kodago/presentation/auth/signup_screen.dart';
 import 'package:kodago/uitls/utils.dart';
 import 'package:kodago/uitls/white_space_formatter.dart';
 import 'package:provider/provider.dart';
@@ -25,7 +26,7 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen>with MediaQueryScaleFactor {
+class _LoginScreenState extends State<LoginScreen> with MediaQueryScaleFactor {
   @override
   Widget build(BuildContext context) {
     return Consumer<LoginProvider>(builder: (context, myProvider, child) {
@@ -62,13 +63,7 @@ class _LoginScreenState extends State<LoginScreen>with MediaQueryScaleFactor {
                       color: AppColor.b45Color,
                     ),
                     ScreenSize.height(50),
-                    customText(
-                      title: 'Email/Phone number',
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      fontFamily: FontFamily.interMedium,
-                      color: AppColor.blackDarkColor,
-                    ),
+                    TextfieldLebalText(title: 'Email/Phone number'),
                     ScreenSize.height(8),
                     CustomTextField(
                       hintText: 'Enter email or phone number',
@@ -95,13 +90,7 @@ class _LoginScreenState extends State<LoginScreen>with MediaQueryScaleFactor {
                       },
                     ),
                     ScreenSize.height(20),
-                    customText(
-                      title: 'Password',
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      fontFamily: FontFamily.interMedium,
-                      color: AppColor.blackDarkColor,
-                    ),
+                    TextfieldLebalText(title: "Password"),
                     ScreenSize.height(8),
                     CustomTextField(
                       hintText: 'Enter your password',

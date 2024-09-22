@@ -12,7 +12,7 @@ import 'package:kodago/provider/home/home_provider.dart';
 import 'package:kodago/provider/onboarding_provider.dart';
 import 'package:kodago/provider/profile_provider.dart';
 import 'package:kodago/provider/splash_provider.dart';
-import 'package:kodago/screens/splash_screen.dart';
+import 'package:kodago/presentation/splash_screen.dart';
 import 'package:kodago/uitls/session_manager.dart';
 import 'package:kodago/uitls/utils.dart';
 import 'package:provider/provider.dart';

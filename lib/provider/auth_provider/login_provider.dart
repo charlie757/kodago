@@ -6,8 +6,8 @@ import 'package:kodago/api/api_url.dart';
 import 'package:kodago/config/app_routes.dart';
 import 'package:kodago/model/auth_model/auth_model.dart';
 import 'package:kodago/model/auth_model/verify_model.dart';
-import 'package:kodago/screens/auth/otp_verification_screen.dart';
-import 'package:kodago/screens/dashboard/dashboard_screen.dart';
+import 'package:kodago/presentation/auth/otp_verification_screen.dart';
+import 'package:kodago/presentation/dashboard/dashboard_screen.dart';
 import 'package:kodago/uitls/constants.dart';
 import 'package:kodago/uitls/enum.dart';
 import 'package:kodago/uitls/session_manager.dart';
@@ -39,6 +39,7 @@ class LoginProvider extends ChangeNotifier {
 
   callAPiFunction() async {
     Utils.hideTextField();
+    Constants.is401Error = false;
     updateLoading(true);
     var body = {
       "email": emailController.text,

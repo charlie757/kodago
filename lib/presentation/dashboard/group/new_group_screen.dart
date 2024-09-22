@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:kodago/config/app_routes.dart';
 import 'package:kodago/helper/app_color.dart';
 import 'package:kodago/helper/app_images.dart';
@@ -7,124 +6,54 @@ import 'package:kodago/helper/custom_text.dart';
 import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/provider/group/new_group_provider.dart';
-import 'package:kodago/screens/dashboard/group/create_group_screen.dart';
-import 'package:kodago/screens/dashboard/group/new_group_screen.dart';
+import 'package:kodago/presentation/dashboard/group/create_group_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../../../uitls/mixins.dart';
 
-class ContactScreen extends StatefulWidget {
-  const ContactScreen({super.key});
+class NewGroupScreen extends StatefulWidget {
+  const NewGroupScreen({super.key});
 
   @override
-  State<ContactScreen> createState() => _ContactScreenState();
+  State<NewGroupScreen> createState() => _NewGroupScreenState();
 }
 
-class _ContactScreenState extends State<ContactScreen>with MediaQueryScaleFactor {
-  @override
-  void initState() {
-    Provider.of<NewGroupProvider>(context, listen: false).isShow = false;
-    super.initState();
-  }
-
+class _NewGroupScreenState extends State<NewGroupScreen>
+    with MediaQueryScaleFactor {
   @override
   Widget build(BuildContext context) {
     return MediaQuery(
       data: mediaQuery,
       child: Scaffold(
-        appBar: appBar(),
-        body: SingleChildScrollView(
-          padding:
-              const EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 20),
-          child: Column(
+          appBar: appBar(),
+          body: Column(
             children: [
-              headerWidget(),
+              selectedGroupWidget(),
               groupListWidget(),
-              ScreenSize.height(17),
-              shareInviteWidgt()
             ],
           ),
-        ),
-        floatingActionButton: context.watch<NewGroupProvider>().isShow
-            ? GestureDetector(
-                onTap: () {
-                  AppRoutes.pushCupertinoNavigation(const CreateGroupScreen());
-                },
-                child: Container(
-                  height: 45,
-                  width: 45,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: AppColor.appColor,
-                      boxShadow: [
-                        BoxShadow(
-                            offset: const Offset(0, -2),
-                            blurRadius: 6,
-                            color: AppColor.blackColor.withOpacity(.2))
-                      ]),
-                  child: const Icon(
-                    Icons.arrow_forward,
-                    color: AppColor.whiteColor,
-                  ),
-                ),
-              )
-            : Container(),
-      ),
-    );
-  }
-
-  headerWidget() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        GestureDetector(
-          onTap: () {
-            AppRoutes.pushCupertinoNavigation(NewGroupScreen());
-          },
-          child: Row(
-            children: [
-              Image.asset(
-                AppImages.newGroupIcon,
-                height: 30,
-                width: 30,
+          floatingActionButton: GestureDetector(
+            onTap: () {
+              AppRoutes.pushCupertinoNavigation(const CreateGroupScreen());
+            },
+            child: Container(
+              height: 45,
+              width: 45,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: AppColor.appColor,
+                  boxShadow: [
+                    BoxShadow(
+                        offset: const Offset(0, -2),
+                        blurRadius: 6,
+                        color: AppColor.blackColor.withOpacity(.2))
+                  ]),
+              child: const Icon(
+                Icons.arrow_forward,
+                color: AppColor.whiteColor,
               ),
-              ScreenSize.width(11),
-              customText(
-                title: 'New group',
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                fontFamily: FontFamily.interMedium,
-              )
-            ],
-          ),
-        ),
-        ScreenSize.height(18),
-        Row(
-          children: [
-            Image.asset(
-              AppImages.newContactIcon,
-              height: 30,
-              width: 30,
             ),
-            ScreenSize.width(11),
-            customText(
-              title: 'New contact',
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              fontFamily: FontFamily.interMedium,
-            )
-          ],
-        ),
-        ScreenSize.height(25),
-        customText(
-          title: 'Your contacts on kodago',
-          fontFamily: FontFamily.interMedium,
-          fontSize: 13,
-          fontWeight: FontWeight.w500,
-          color: const Color(0xff585757),
-        ),
-        ScreenSize.height(21),
-      ],
+          )),
     );
   }
 
@@ -133,6 +62,7 @@ class _ContactScreenState extends State<ContactScreen>with MediaQueryScaleFactor
         separatorBuilder: (context, sp) {
           return ScreenSize.height(17);
         },
+        padding: const EdgeInsets.only(left: 20, right: 20, top: 15),
         itemCount: context.watch<NewGroupProvider>().groupList.length,
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
@@ -190,13 +120,6 @@ class _ContactScreenState extends State<ContactScreen>with MediaQueryScaleFactor
                       fontFamily: FontFamily.interSemiBold,
                     ),
                   ),
-                  customText(
-                    title: index == 4 ? 'Invite' : '',
-                    color: AppColor.appColor,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    fontFamily: FontFamily.interMedium,
-                  )
                 ],
               ),
             ),
@@ -292,25 +215,6 @@ class _ContactScreenState extends State<ContactScreen>with MediaQueryScaleFactor
     );
   }
 
-  shareInviteWidgt() {
-    return Row(
-      children: [
-        Image.asset(
-          AppImages.shareInviteIcon,
-          height: 33,
-          width: 33,
-        ),
-        ScreenSize.width(16),
-        customText(
-          title: 'Share invite link',
-          fontSize: 14,
-          fontWeight: FontWeight.w500,
-          fontFamily: FontFamily.interSemiBold,
-        )
-      ],
-    );
-  }
-
   AppBar appBar() {
     return AppBar(
       automaticallyImplyLeading: false,
@@ -335,7 +239,7 @@ class _ContactScreenState extends State<ContactScreen>with MediaQueryScaleFactor
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 customText(
-                  title: 'Select contact',
+                  title: 'New group',
                   fontSize: 18,
                   fontWeight: FontWeight.w500,
                   color: AppColor.blackColor,
@@ -343,7 +247,7 @@ class _ContactScreenState extends State<ContactScreen>with MediaQueryScaleFactor
                 ),
                 ScreenSize.height(4),
                 customText(
-                  title: '250 contacts',
+                  title: 'Add members',
                   fontSize: 12,
                   fontWeight: FontWeight.w400,
                   color: AppColor.blackColor,

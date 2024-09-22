@@ -7,11 +7,11 @@ import 'package:kodago/helper/custom_horizontal_line.dart';
 import 'package:kodago/helper/custom_text.dart';
 import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
-import 'package:kodago/screens/dashboard/file_rack/add_data_screen.dart';
-import 'package:kodago/screens/dashboard/file_rack/file_rack_comment_screen.dart';
-import 'package:kodago/screens/dashboard/file_rack/file_rack_history.dart';
-import 'package:kodago/screens/dashboard/file_rack/filter_screen.dart';
-import 'package:kodago/screens/dashboard/home/view_post_screen.dart';
+import 'package:kodago/presentation/dashboard/file_rack/add_data_screen.dart';
+import 'package:kodago/presentation/dashboard/file_rack/file_rack_comment_screen.dart';
+import 'package:kodago/presentation/dashboard/file_rack/file_rack_history.dart';
+import 'package:kodago/presentation/dashboard/file_rack/filter_screen.dart';
+import 'package:kodago/presentation/dashboard/home/view_post_screen.dart';
 import 'package:kodago/uitls/delete_file_rack_dialogbox.dart';
 import 'package:kodago/widget/appbar.dart';
 import 'package:kodago/widget/popmenuButton.dart';
@@ -25,7 +25,8 @@ class FileRackDetailsScreen extends StatefulWidget {
   State<FileRackDetailsScreen> createState() => _FileRackDetailsScreenState();
 }
 
-class _FileRackDetailsScreenState extends State<FileRackDetailsScreen>with MediaQueryScaleFactor {
+class _FileRackDetailsScreenState extends State<FileRackDetailsScreen>
+    with MediaQueryScaleFactor {
   @override
   Widget build(BuildContext context) {
     return MediaQuery(

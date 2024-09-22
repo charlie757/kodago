@@ -5,6 +5,7 @@ import 'package:kodago/helper/custom_text.dart';
 import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/provider/dashboard_provider.dart';
+import 'package:kodago/provider/profile_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../uitls/mixins.dart';
@@ -16,16 +17,22 @@ class DashboardScreen extends StatefulWidget {
   State<DashboardScreen> createState() => _DashboardScreenState();
 }
 
-class _DashboardScreenState extends State<DashboardScreen>with MediaQueryScaleFactor {
+class _DashboardScreenState extends State<DashboardScreen>
+    with MediaQueryScaleFactor {
   @override
   void initState() {
-    callInitFunction();
+    Future.delayed(Duration.zero, () {
+      callInitFunction();
+    });
     super.initState();
   }
 
   callInitFunction() {
     final provider = Provider.of<DashboardProvider>(context, listen: false);
     provider.currentIndex = 0;
+    Provider.of<ProfileProvider>(context, listen: false).profileModel = null;
+    Provider.of<ProfileProvider>(context, listen: false)
+        .getProfileApiFunction();
   }
 
   @override
@@ -46,13 +53,11 @@ class _DashboardScreenState extends State<DashboardScreen>with MediaQueryScaleFa
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                bottomNavigationImage(AppImages.homeIcon, 0, 'Home'),
+                bottomNavigationImage(AppImages.groupIcon, 1, 'Group'),
                 bottomNavigationImage(
-                  AppImages.homeIcon,
-                  0,'Home'
-                ),
-                bottomNavigationImage(AppImages.groupIcon, 1,'Group'),
-                bottomNavigationImage(AppImages.notificationIcon, 2,'Notification'),
-                bottomNavigationImage(AppImages.profileIcon, 3,'Profile'),
+                    AppImages.notificationIcon, 2, 'Notification'),
+                bottomNavigationImage(AppImages.profileIcon, 3, 'Profile'),
               ],
             ),
           ),
@@ -61,11 +66,7 @@ class _DashboardScreenState extends State<DashboardScreen>with MediaQueryScaleFa
     });
   }
 
-  bottomNavigationImage(
-    String img,
-    int index,
-      String name
-  ) {
+  bottomNavigationImage(String img, int index, String name) {
     return Expanded(
       child: GestureDetector(
         onTap: () {
@@ -93,29 +94,35 @@ class _DashboardScreenState extends State<DashboardScreen>with MediaQueryScaleFa
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-
-             Container(
-               height: 27,
-               width: 50,
-               alignment: Alignment.center,
-               decoration: BoxDecoration(
-                 color:context.watch<DashboardProvider>().currentIndex == index
-                     ?  AppColor.lightAppColor:null,
-                 borderRadius: BorderRadius.circular(40)
-               ),
-               child:  Image.asset(
-                 img,
-                 height: 18,
-                 width: 18,
-                 color: context.watch<DashboardProvider>().currentIndex == index
-                     ? AppColor.darkAppColor
-                     : AppColor.blackColor,
-               ),
-             ),
+              Container(
+                height: 27,
+                width: 50,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                    color:
+                        context.watch<DashboardProvider>().currentIndex == index
+                            ? AppColor.lightAppColor
+                            : null,
+                    borderRadius: BorderRadius.circular(40)),
+                child: Image.asset(
+                  img,
+                  height: 18,
+                  width: 18,
+                  color:
+                      context.watch<DashboardProvider>().currentIndex == index
+                          ? AppColor.darkAppColor
+                          : AppColor.blackColor,
+                ),
+              ),
               ScreenSize.height(2),
-              customText(title: name,fontSize: 11,fontWeight: FontWeight.w500,
-                fontFamily:context.watch<DashboardProvider>().currentIndex == index
-                    ?  FontFamily.interSemiBold:FontFamily.interRegular,
+              customText(
+                title: name,
+                fontSize: 11,
+                fontWeight: FontWeight.w500,
+                fontFamily:
+                    context.watch<DashboardProvider>().currentIndex == index
+                        ? FontFamily.interSemiBold
+                        : FontFamily.interRegular,
               )
             ],
           ),

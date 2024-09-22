@@ -7,6 +7,7 @@ import 'package:kodago/helper/custom_text.dart';
 import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/provider/auth_provider/otp_provider.dart';
+import 'package:kodago/provider/profile_provider.dart';
 import 'package:kodago/uitls/enum.dart';
 import 'package:kodago/widget/appbar.dart';
 import 'package:pinput/pinput.dart';
@@ -39,13 +40,16 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     }
   }
 
+  final formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
+    final profileProvider = Provider.of<ProfileProvider>(context);
     return Consumer<OtpProvider>(builder: (context, myProvider, child) {
       return Scaffold(
         appBar: appBar(title: ''),
         body: Form(
-          key: myProvider.formKey,
+          key: formKey,
           child: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 59),
             child: Column(
@@ -74,16 +78,30 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                     borderRadius: 50,
                     isLoading: myProvider.isLoading,
                     onTap: () {
-                      myProvider.isLoading
-                          ? null
-                          : myProvider.checkValidation(widget.route);
+                      if (formKey.currentState!.validate()) {
+                        if (widget.route ==
+                            OtpVerificationScreenRoute.update.name) {
+                          profileProvider.updateProfileApiFunction(true,
+                              otp: myProvider.otpController.text, isOtp: true);
+                        } else {
+                          myProvider.isLoading
+                              ? null
+                              : myProvider.checkValidation(widget.route);
+                        }
+                      }
                     }),
                 ScreenSize.height(15),
                 InkWell(
                   onTap: () {
-                    myProvider.counter == 0
-                        ? myProvider.resendApiFunction('123123123123')
-                        : null;
+                    if (myProvider.counter == 0) {
+                      if (widget.route ==
+                          OtpVerificationScreenRoute.update.name) {
+                        profileProvider.updateProfileApiFunction(true,
+                            isOtp: true);
+                      } else {
+                        myProvider.resendApiFunction(widget.mobileNumber);
+                      }
+                    }
                   },
                   child: Container(
                       height: 30,

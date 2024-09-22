@@ -8,6 +8,7 @@ import 'package:kodago/helper/custom_text.dart';
 import 'package:kodago/helper/custom_textfield.dart';
 import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
+import 'package:kodago/helper/textfield_lebal_text.dart';
 import 'package:kodago/provider/auth_provider/signup_provider.dart';
 import 'package:kodago/uitls/utils.dart';
 import 'package:kodago/uitls/white_space_formatter.dart';
@@ -61,13 +62,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   color: AppColor.b45Color,
                 ),
                 ScreenSize.height(50),
-                customText(
-                  title: 'Full Name',
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: FontFamily.interMedium,
-                  color: AppColor.blackDarkColor,
-                ),
+                TextfieldLebalText(title: 'Full Name'),
                 ScreenSize.height(8),
                 CustomTextField(
                   hintText: 'Enter your full name',
@@ -94,13 +89,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   },
                 ),
                 ScreenSize.height(20),
-                customText(
-                  title: 'Email',
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: FontFamily.interMedium,
-                  color: AppColor.blackDarkColor,
-                ),
+                TextfieldLebalText(title: 'Email'),
                 ScreenSize.height(8),
                 CustomTextField(
                   hintText: 'Enter your email',
@@ -130,13 +119,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   },
                 ),
                 ScreenSize.height(20),
-                customText(
-                  title: 'Phone Number',
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: FontFamily.interMedium,
-                  color: AppColor.blackDarkColor,
-                ),
+                TextfieldLebalText(title: 'Phone Number'),
                 ScreenSize.height(8),
                 CustomTextField(
                   hintText: 'Enter your phone number',
@@ -165,13 +148,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   },
                 ),
                 ScreenSize.height(20),
-                customText(
-                  title: 'Password',
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: FontFamily.interMedium,
-                  color: AppColor.blackDarkColor,
-                ),
+                TextfieldLebalText(title: 'Password'),
                 ScreenSize.height(8),
                 CustomTextField(
                   hintText: 'Enter your password',
@@ -179,6 +156,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   isReadOnly: myProvider.isLoading,
                   controller: myProvider.passwordController,
                   inputFormatters: [
+                    CustomFormatter(),
                     FilteringTextInputFormatter.deny(
                         RegExp(Utils.regexToRemoveEmoji)),
                   ],
@@ -214,9 +192,9 @@ class _SignupScreenState extends State<SignupScreen> {
                   validator: (val) {
                     if (val.isEmpty) {
                       return "Enter your password";
-                    } else if (val.length<6) {
+                    } else if (val.length < 6) {
                       return 'The password must be at least 6 characters';
-                    }else if(val.length>16){
+                    } else if (val.length > 16) {
                       return 'The password must be less than 16 characters';
                     }
                   },

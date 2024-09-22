@@ -4,8 +4,9 @@ import 'package:kodago/helper/app_images.dart';
 import 'package:kodago/helper/custom_text.dart';
 import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
+import 'package:kodago/provider/home/home_provider.dart';
 import 'package:kodago/widget/home_posts_widget.dart';
-
+import 'package:provider/provider.dart';
 import '../../../uitls/mixins.dart';
 
 class HightlightScreen extends StatefulWidget {
@@ -15,26 +16,35 @@ class HightlightScreen extends StatefulWidget {
   State<HightlightScreen> createState() => _HightlightScreenState();
 }
 
-class _HightlightScreenState extends State<HightlightScreen>with MediaQueryScaleFactor {
+class _HightlightScreenState extends State<HightlightScreen>
+    with MediaQueryScaleFactor {
   @override
   Widget build(BuildContext context) {
-    return MediaQuery(
-      data: mediaQuery,
-      child: Scaffold(
-        appBar: appBar(),
-        body: ListView.separated(
-            separatorBuilder: (context, sp) {
-              return ScreenSize.height(15);
-            },
-            padding: const EdgeInsets.only(top: 15, bottom: 30),
-            itemCount: 4,
-            physics: const ScrollPhysics(),
-            shrinkWrap: true,
-            itemBuilder: (context, index) {
-              return const HomePostsWidget();
-            }),
-      ),
-    );
+    return Consumer<HomeProvider>(builder: (context, myProvider, child) {
+      return MediaQuery(
+        data: mediaQuery,
+        child: Scaffold(
+          appBar: appBar(),
+          body: myProvider.feedsModel != null &&
+                  myProvider.feedsModel!.data != null
+              ? ListView.separated(
+                  separatorBuilder: (context, sp) {
+                    return ScreenSize.height(15);
+                  },
+                  padding: const EdgeInsets.only(top: 15, bottom: 30),
+                  itemCount: myProvider.feedsModel!.data!.feeds!.length,
+                  physics: const ScrollPhysics(),
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return HomePostsWidget(
+                      index: index,
+                      feedsModel: myProvider.feedsModel,
+                    );
+                  })
+              : Container(),
+        ),
+      );
+    });
   }
 
   AppBar appBar() {

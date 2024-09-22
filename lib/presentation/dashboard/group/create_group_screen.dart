@@ -7,7 +7,7 @@ import 'package:kodago/helper/custom_text.dart';
 import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/provider/group/new_group_provider.dart';
-import 'package:kodago/screens/dashboard/group/create_topic_screen.dart';
+import 'package:kodago/presentation/dashboard/group/create_topic_screen.dart';
 import 'package:kodago/widget/appbar.dart';
 import 'package:provider/provider.dart';
 
@@ -20,7 +20,8 @@ class CreateGroupScreen extends StatefulWidget {
   State<CreateGroupScreen> createState() => _CreateGroupScreenState();
 }
 
-class _CreateGroupScreenState extends State<CreateGroupScreen> with MediaQueryScaleFactor{
+class _CreateGroupScreenState extends State<CreateGroupScreen>
+    with MediaQueryScaleFactor {
   @override
   Widget build(BuildContext context) {
     return MediaQuery(
@@ -102,8 +103,8 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> with MediaQuerySc
                               height: 16,
                               width: 16,
                               decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: AppColor.whiteColor),
+                                  border:
+                                      Border.all(color: AppColor.whiteColor),
                                   shape: BoxShape.circle,
                                   color: const Color(0xff979797)),
                               child: const Icon(

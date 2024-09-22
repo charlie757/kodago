@@ -5,8 +5,8 @@ import 'package:kodago/helper/custom_text.dart';
 import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/provider/onboarding_provider.dart';
-import 'package:kodago/screens/auth/login_screen.dart';
-import 'package:kodago/screens/dashboard/dashboard_screen.dart';
+import 'package:kodago/presentation/auth/login_screen.dart';
+import 'package:kodago/presentation/dashboard/dashboard_screen.dart';
 import 'package:kodago/uitls/session_manager.dart';
 import 'package:provider/provider.dart';
 

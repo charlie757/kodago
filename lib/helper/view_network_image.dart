@@ -22,9 +22,9 @@ class ViewNetworkImage extends StatelessWidget {
           alignment: Alignment.center,
           child: CircularProgressIndicator(
               color: AppColor.appColor,
-              strokeWidth: 2,
+              strokeWidth: 1,
               value: downloadProgress.progress)),
-      errorWidget: (context, url, error) =>const Icon(Icons.error),
+      errorWidget: (context, url, error) => const Icon(Icons.error),
     );
   }
 }

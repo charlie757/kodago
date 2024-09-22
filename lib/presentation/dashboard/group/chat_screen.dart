@@ -5,9 +5,9 @@ import 'package:kodago/helper/custom_text.dart';
 import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/provider/group/chat_provider.dart';
-import 'package:kodago/screens/dashboard/group/add_edit_topic_screen.dart';
-import 'package:kodago/screens/dashboard/group/group_info_screen.dart';
-import 'package:kodago/screens/dashboard/group/hightlight_screen.dart';
+import 'package:kodago/presentation/dashboard/group/add_edit_topic_screen.dart';
+import 'package:kodago/presentation/dashboard/group/group_info_screen.dart';
+import 'package:kodago/presentation/dashboard/group/hightlight_screen.dart';
 import 'package:kodago/widget/popmenuButton.dart';
 import 'package:provider/provider.dart';
 import '../../../helper/app_images.dart';
@@ -20,7 +20,7 @@ class ChatScreen extends StatefulWidget {
   State<ChatScreen> createState() => _ChatScreenState();
 }
 
-class _ChatScreenState extends State<ChatScreen>with MediaQueryScaleFactor {
+class _ChatScreenState extends State<ChatScreen> with MediaQueryScaleFactor {
   @override
   Widget build(BuildContext context) {
     return MediaQuery(
@@ -100,7 +100,7 @@ class _ChatScreenState extends State<ChatScreen>with MediaQueryScaleFactor {
 
   folderTypesWidget() {
     return Container(
-      padding: const EdgeInsets.only(top: 25,left: 50,right: 50),
+      padding: const EdgeInsets.only(top: 25, left: 50, right: 50),
       width: MediaQuery.of(context).size.width - 20,
       decoration: BoxDecoration(
           color: AppColor.whiteColor, borderRadius: BorderRadius.circular(10)),
@@ -108,8 +108,7 @@ class _ChatScreenState extends State<ChatScreen>with MediaQueryScaleFactor {
           shrinkWrap: true,
           itemCount: context.watch<ChatProvider>().foldersList.length,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,mainAxisSpacing: 8
-          ),
+              crossAxisCount: 3, mainAxisSpacing: 8),
           itemBuilder: (context, index) {
             var model = context.watch<ChatProvider>().foldersList[index];
             return Column(
@@ -172,14 +171,11 @@ class _ChatScreenState extends State<ChatScreen>with MediaQueryScaleFactor {
 
   replyTextField() {
     return Container(
-      height: 42,
+        height: 42,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          border:const Border(
-            bottom: BorderSide(
-              color: AppColor.lightGreyD9Color
-            )
-          ),
+          border: const Border(
+              bottom: BorderSide(color: AppColor.lightGreyD9Color)),
           borderRadius: BorderRadius.circular(50),
           color: AppColor.whiteColor,
         ),
@@ -187,7 +183,7 @@ class _ChatScreenState extends State<ChatScreen>with MediaQueryScaleFactor {
           textAlign: TextAlign.left,
           textAlignVertical: TextAlignVertical.center,
           decoration: InputDecoration(
-            isDense: true,
+              isDense: true,
               border: InputBorder.none,
               prefixIcon: Container(
                 height: 21,

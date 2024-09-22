@@ -61,11 +61,11 @@ class ApiService {
     }
   }
 
-  static Future multiPartApiMethod({
-    required String url,
-    required var body,
-    bool isErrorMessageShow = true,
-  }) async {
+  static Future multiPartApiMethod(
+      {required String url,
+      required var body,
+      bool isErrorMessageShow = true,
+      File? imgFile}) async {
     try {
       final result = await InternetAddress.lookup('example.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
@@ -75,7 +75,13 @@ class ApiService {
             "Authkey": Constants.authkey
           };
           print(headers);
+
           var request = http.MultipartRequest('POST', Uri.parse(url));
+          if (imgFile != null) {
+            final file =
+                await http.MultipartFile.fromPath('image', imgFile.path);
+            request.files.add(file);
+          }
           request.fields.addAll(body);
           request.headers.addAll(headers);
 
@@ -102,6 +108,15 @@ class ApiService {
       var dataAll = json.decode(response.body);
       if (dataAll['status'] == 1) {
         return json.decode(response.body);
+      } else if (dataAll['status'] == 2) {
+        Utils.errorSnackBar(dataAll['message'], navigatorKey.currentContext);
+        print(Constants.is401Error);
+        if (Constants.is401Error == false) {
+          Future.delayed(const Duration(seconds: 1), () {
+            Constants.is401Error = true;
+            Utils.logout();
+          });
+        }
       } else {
         isErrorMessageShow
             ? Utils.errorSnackBar(

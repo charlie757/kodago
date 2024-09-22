@@ -6,8 +6,8 @@ import 'package:kodago/helper/custom_searchbar.dart';
 import 'package:kodago/helper/custom_text.dart';
 import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
-import 'package:kodago/screens/dashboard/group/chat_screen.dart';
-import 'package:kodago/screens/dashboard/group/contact_screen.dart';
+import 'package:kodago/presentation/dashboard/group/chat_screen.dart';
+import 'package:kodago/presentation/dashboard/group/contact_screen.dart';
 import 'package:kodago/widget/popmenuButton.dart';
 
 import '../../../uitls/mixins.dart';
@@ -19,7 +19,7 @@ class GroupScreen extends StatefulWidget {
   State<GroupScreen> createState() => _GroupScreenState();
 }
 
-class _GroupScreenState extends State<GroupScreen>with MediaQueryScaleFactor {
+class _GroupScreenState extends State<GroupScreen> with MediaQueryScaleFactor {
   @override
   Widget build(BuildContext context) {
     return MediaQuery(
@@ -31,7 +31,7 @@ class _GroupScreenState extends State<GroupScreen>with MediaQueryScaleFactor {
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Column(
             children: [
-            const CustomSearchbar(),
+              const CustomSearchbar(),
               ScreenSize.height(14),
               Row(
                 children: [
@@ -49,8 +49,7 @@ class _GroupScreenState extends State<GroupScreen>with MediaQueryScaleFactor {
                     },
                     itemCount: 15,
                     shrinkWrap: true,
-                    padding: const EdgeInsets.only(
-                        top: 20, bottom: 30),
+                    padding: const EdgeInsets.only(top: 20, bottom: 30),
                     itemBuilder: (context, index) {
                       return groupWidget();
                     }),
@@ -170,8 +169,11 @@ class _GroupScreenState extends State<GroupScreen>with MediaQueryScaleFactor {
 
   AppBar appBar() {
     return AppBar(
-      title: Image.asset(AppImages.appLogo,height: 25,
-          width: 94,),
+      title: Image.asset(
+        AppImages.appLogo,
+        height: 25,
+        width: 94,
+      ),
       actions: [
         customPopupMenuButton(
             list: [

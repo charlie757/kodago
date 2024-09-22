@@ -6,7 +6,7 @@ import 'package:kodago/helper/custom_btn.dart';
 import 'package:kodago/helper/custom_text.dart';
 import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
-import 'package:kodago/screens/dashboard/file_rack/file_rack_list_screen.dart';
+import 'package:kodago/presentation/dashboard/file_rack/file_rack_list_screen.dart';
 import 'package:kodago/widget/appbar.dart';
 
 import '../../../uitls/mixins.dart';
@@ -18,7 +18,8 @@ class NoFileRacksScreen extends StatefulWidget {
   State<NoFileRacksScreen> createState() => _NoFileRacksScreenState();
 }
 
-class _NoFileRacksScreenState extends State<NoFileRacksScreen>with MediaQueryScaleFactor {
+class _NoFileRacksScreenState extends State<NoFileRacksScreen>
+    with MediaQueryScaleFactor {
   @override
   Widget build(BuildContext context) {
     return MediaQuery(
@@ -53,7 +54,8 @@ class _NoFileRacksScreenState extends State<NoFileRacksScreen>with MediaQuerySca
               CustomBtn(
                   title: 'Create form',
                   onTap: () {
-                    AppRoutes.pushCupertinoNavigation(const FileRackListScreen());
+                    AppRoutes.pushCupertinoNavigation(
+                        const FileRackListScreen());
                   }),
               ScreenSize.height(45),
               Column(

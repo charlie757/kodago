@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:kodago/screens/dashboard/group/group_screen.dart';
-import 'package:kodago/screens/dashboard/home/home_screen.dart';
-import 'package:kodago/screens/dashboard/notification/notification_screen.dart';
-import 'package:kodago/screens/dashboard/profile/profile_screen.dart';
+import 'package:kodago/presentation/dashboard/group/group_screen.dart';
+import 'package:kodago/presentation/dashboard/home/home_screen.dart';
+import 'package:kodago/presentation/dashboard/notification/notification_screen.dart';
+import 'package:kodago/presentation/dashboard/profile/profile_screen.dart';
 
 class DashboardProvider extends ChangeNotifier {
   int currentIndex = 0;

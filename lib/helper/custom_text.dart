@@ -9,19 +9,24 @@ class customText extends StatelessWidget {
   FontWeight fontWeight;
   String fontFamily;
   TextAlign textAlign;
-  customText(
-      {required this.title,
-      this.fontSize = 14,
-      this.color = Colors.black,
-      this.fontWeight = FontWeight.w400,
-      this.fontFamily = FontFamily.interRegular,
-      this.textAlign = TextAlign.start});
+  int? maxLines;
+  customText({
+    required this.title,
+    this.fontSize = 14,
+    this.color = Colors.black,
+    this.fontWeight = FontWeight.w400,
+    this.fontFamily = FontFamily.interRegular,
+    this.textAlign = TextAlign.start,
+    this.maxLines,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Text(
       title,
       textAlign: textAlign,
+      maxLines: maxLines,
+      overflow: maxLines != null ? TextOverflow.ellipsis : null,
       style: TextStyle(
           decoration: TextDecoration.none,
           fontSize: fontSize,

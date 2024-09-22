@@ -7,6 +7,7 @@ import 'package:kodago/helper/custom_text.dart';
 import 'package:kodago/helper/custom_textfield.dart';
 import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
+import 'package:kodago/helper/textfield_lebal_text.dart';
 import 'package:kodago/provider/auth_provider/forgot_password_provider.dart';
 import 'package:kodago/uitls/utils.dart';
 import 'package:kodago/widget/appbar.dart';
@@ -62,13 +63,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   color: AppColor.b45Color,
                 ),
                 ScreenSize.height(50),
-                customText(
-                  title: 'Email/Phone number',
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: FontFamily.interMedium,
-                  color: AppColor.blackDarkColor,
-                ),
+                TextfieldLebalText(title: 'Email/Phone number'),
                 ScreenSize.height(8),
                 CustomTextField(
                   hintText: 'Enter email or phone number',

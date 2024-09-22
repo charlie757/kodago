@@ -12,6 +12,9 @@ class ApiUrl {
 
   /// profile
   static String getProfileUrl = '${baseUrl}authentication/get_profile';
+  static String updateProfileUrl = '${baseUrl}authentication/edit_profile';
+  static String updateImageUrl = "${baseUrl}authentication/update_user_image";
+  static String changePasswordUrl = '${baseUrl}authentication/change_password';
 
   /// feeds
   static String feedsUrl = '${baseUrl}groups/feeds';

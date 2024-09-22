@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:kodago/config/app_routes.dart';
 import 'package:kodago/helper/app_color.dart';
-import 'package:kodago/screens/auth/login_screen.dart';
+import 'package:kodago/presentation/auth/login_screen.dart';
+import 'package:kodago/uitls/constants.dart';
 import 'package:kodago/uitls/session_manager.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -33,7 +35,7 @@ class Utils {
         behavior: SnackBarBehavior.floating,
         duration: const Duration(seconds: 2),
         shape: OutlineInputBorder(
-            borderSide: BorderSide(color: AppColor.appColor.withOpacity(.9)),
+            borderSide: BorderSide(color: Colors.green.withOpacity(.9)),
             borderRadius: BorderRadius.circular(3)),
         // margin: EdgeInsets.only(left: 20, right: 20,),
         backgroundColor: Colors.green,
@@ -43,14 +45,14 @@ class Utils {
         )));
   }
 
-  // static showToast(String title, {Color color = Colors.black}) {
-  //   Fluttertoast.showToast(
-  //       msg: title,
-  //       toastLength: Toast.LENGTH_SHORT,
-  //       gravity: ToastGravity.CENTER,
-  //       timeInSecForIosWeb: 1,
-  //       textColor: AppColor.whiteColor);
-  // }
+  static showToast(String title, {Color color = Colors.black}) {
+    Fluttertoast.showToast(
+        msg: title,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        textColor: AppColor.whiteColor);
+  }
 
   static internetSnackBar(
     context,
@@ -92,6 +94,7 @@ class Utils {
   static logout() {
     SessionManager.setToken = '';
     SessionManager.setUserId = '';
+    Constants.is401Error = true;
     AppRoutes.pushReplacementNavigation(const LoginScreen());
   }
 }
