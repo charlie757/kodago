@@ -14,17 +14,10 @@ import 'package:kodago/uitls/session_manager.dart';
 import 'package:kodago/uitls/utils.dart';
 
 class LoginProvider extends ChangeNotifier {
-  final formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   bool isVisible = true;
   bool isLoading = false;
-
-  checkValidation() {
-    if (formKey.currentState!.validate()) {
-      callAPiFunction();
-    }
-  }
 
   updateLoading(val) {
     isLoading = val;

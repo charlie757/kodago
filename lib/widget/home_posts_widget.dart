@@ -8,10 +8,11 @@ import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/helper/view_network_image.dart';
 import 'package:kodago/model/feeds_model.dart';
 import 'package:kodago/presentation/dashboard/home/view_post_screen.dart';
-import 'package:kodago/provider/home/home_provider.dart';
 import 'package:kodago/widget/comment_bottomsheet.dart';
+import 'package:kodago/widget/zoom_widget.dart';
 import 'package:video_player/video_player.dart';
 import 'package:provider/provider.dart';
+import 'package:pinch_zoom_release_unzoom/pinch_zoom_release_unzoom.dart';
 
 // ignore: must_be_immutable
 class HomePostsWidget extends StatelessWidget {
@@ -34,6 +35,7 @@ class HomePostsWidget extends StatelessWidget {
       controller =
           VideoPlayerController.networkUrl(Uri.parse(model.video![0].mainURL))
             ..initialize().then((_) {
+              controller.setVolume(0);
               controller.play();
               print("isInsgsgd..${controller.value.isInitialized}");
               if (currentIndex != index) {
@@ -54,9 +56,11 @@ class HomePostsWidget extends StatelessWidget {
         userInfoHeaderWidget(),
         ScreenSize.height(10),
         model.fieldType == 'image'
-            ? ViewNetworkImage(
-                img: model.image[0]['thumbURL'],
-                width: double.infinity,
+            ? zoomInOutWidget(
+                child: ViewNetworkImage(
+                  img: model.image[0]['thumbURL'],
+                  width: double.infinity,
+                ),
               )
             : model.fieldType == 'video'
                 ? Stack(
@@ -97,7 +101,8 @@ class HomePostsWidget extends StatelessWidget {
                       )
                     ],
                   )
-                : Image.asset('assets/dummay/Rectangle.png'),
+                : zoomInOutWidget(
+                    child: Image.asset('assets/dummay/Rectangle.png')),
         ScreenSize.height(12),
         likeCommentSeeMoreWidget(),
         ScreenSize.height(16),

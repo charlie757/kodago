@@ -27,6 +27,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> with MediaQueryScaleFactor {
+  final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Consumer<LoginProvider>(builder: (context, myProvider, child) {
@@ -35,7 +36,7 @@ class _LoginScreenState extends State<LoginScreen> with MediaQueryScaleFactor {
         // appBar: appBar(title: '', onTap: () {}),
         body: SafeArea(
           child: Form(
-            key: myProvider.formKey,
+            key: formKey,
             child: SingleChildScrollView(
               padding: const EdgeInsets.only(left: 20, right: 20),
               child: ConstrainedBox(
@@ -162,7 +163,11 @@ class _LoginScreenState extends State<LoginScreen> with MediaQueryScaleFactor {
                         borderRadius: 50,
                         isLoading: myProvider.isLoading,
                         onTap: () {
-                          myProvider.checkValidation();
+                          if (formKey.currentState!.validate()) {
+                            myProvider.isLoading
+                                ? null
+                                : myProvider.callAPiFunction();
+                          }
                         }),
                     ScreenSize.height(30),
                     Align(
