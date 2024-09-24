@@ -18,4 +18,7 @@ class ApiUrl {
 
   /// feeds
   static String feedsUrl = '${baseUrl}groups/feeds';
+
+  /// notification
+  static String notificationUrl = '${baseUrl}groups/notifications';
 }

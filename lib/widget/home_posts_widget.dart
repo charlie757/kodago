@@ -11,11 +11,9 @@ import 'package:kodago/presentation/dashboard/home/view_post_screen.dart';
 import 'package:kodago/widget/comment_bottomsheet.dart';
 import 'package:kodago/widget/zoom_widget.dart';
 import 'package:video_player/video_player.dart';
-import 'package:provider/provider.dart';
-import 'package:pinch_zoom_release_unzoom/pinch_zoom_release_unzoom.dart';
 
 // ignore: must_be_immutable
-class HomePostsWidget extends StatelessWidget {
+class HomePostsWidget extends StatefulWidget {
   int index;
   int currentIndex;
   FeedsModel? feedsModel;
@@ -24,25 +22,37 @@ class HomePostsWidget extends StatelessWidget {
     this.currentIndex = 0,
     this.feedsModel,
   });
-  ValueNotifier<bool> isSound =
-      ValueNotifier(false); // Use ValueNotifier for sound control
 
+  @override
+  State<HomePostsWidget> createState() => _HomePostsWidgetState();
+}
+
+class _HomePostsWidgetState extends State<HomePostsWidget> {
+  ValueNotifier<bool> isSound = ValueNotifier(false);
+  // Use ValueNotifier for sound control
   late VideoPlayerController controller;
+
+  @override
+  void dispose() {
+    // controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    var model = feedsModel!.data!.feeds![index];
+    var model = widget.feedsModel!.data!.feeds![widget.index];
     if (model.fieldType == 'video') {
-      controller =
-          VideoPlayerController.networkUrl(Uri.parse(model.video![0].mainURL))
-            ..initialize().then((_) {
-              controller.setVolume(0);
-              controller.play();
-              print("isInsgsgd..${controller.value.isInitialized}");
-              if (currentIndex != index) {
-                controller.pause();
-              }
-              // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-            });
+      // controller =
+      //     VideoPlayerController.networkUrl(Uri.parse(model.video![0].mainURL))
+      //       ..initialize().then((_) {
+      //         controller.setVolume(0);
+      //         controller.play();
+      //         print("isInsgsgd..${controller.value.isInitialized}");
+      //         if (widget.currentIndex != widget.index) {
+      //           controller.pause();
+      //         }
+      //         // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+      //       });
     } else {
       // controller.value.isInitialized
       //     ? controller.value.isPlaying
@@ -56,13 +66,14 @@ class HomePostsWidget extends StatelessWidget {
         userInfoHeaderWidget(),
         ScreenSize.height(10),
         model.fieldType == 'image'
-            ? zoomInOutWidget(
+            ? ZoomOverlay(
                 child: ViewNetworkImage(
                   img: model.image[0]['thumbURL'],
                   width: double.infinity,
                 ),
               )
-            : model.fieldType == 'video'
+            : model.fieldType == ''
+                // video
                 ? Stack(
                     children: [
                       AspectRatio(
@@ -101,7 +112,7 @@ class HomePostsWidget extends StatelessWidget {
                       )
                     ],
                   )
-                : zoomInOutWidget(
+                : ZoomOverlay(
                     child: Image.asset('assets/dummay/Rectangle.png')),
         ScreenSize.height(12),
         likeCommentSeeMoreWidget(),
@@ -114,7 +125,7 @@ class HomePostsWidget extends StatelessWidget {
   }
 
   userInfoHeaderWidget() {
-    var model = feedsModel!.data!.feeds![index];
+    var model = widget.feedsModel!.data!.feeds![widget.index];
     return Padding(
       padding: const EdgeInsets.only(left: 20, right: 25),
       child: Row(

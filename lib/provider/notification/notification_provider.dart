@@ -1,29 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:kodago/api/api_service.dart';
 import 'package:kodago/api/api_url.dart';
-import 'package:kodago/model/feeds_model.dart';
+import 'package:kodago/model/notification_model.dart';
 import 'package:kodago/uitls/constants.dart';
 import 'package:kodago/uitls/session_manager.dart';
+import 'package:kodago/uitls/utils.dart';
 
-class HomeProvider extends ChangeNotifier {
+class NotificationProvider extends ChangeNotifier {
+  NotificationModel? model;
   int page = 0;
   int perPage = 10;
-  FeedsModel? feedsModel;
   bool isLoading = false;
   // bool isSound = false;
 
   bool isLoadingMore = false;
   bool hasMoreData = true;
-
-  // updateSound(val) {
-  //   isSound = val;
-  //   notifyListeners();
-  // }
-
-  updateLoading(value) async {
-    isLoading = value;
-  }
-
   clearvalues() {
     page = 0;
     perPage = 10;
@@ -31,11 +22,11 @@ class HomeProvider extends ChangeNotifier {
     hasMoreData = true;
   }
 
-  Future<void> feedsApiFunction({bool isLoadMore = false}) async {
+  Future<void> notificationApiFunction({bool isLoadMore = false}) async {
     if (isLoadMore) {
       isLoadingMore = true;
     } else {
-      feedsModel == null ? updateLoading(true) : null;
+      // mod == null ? updateLoading(true) : null;
     }
     var body = {
       'perpage': perPage.toString(),
@@ -48,32 +39,31 @@ class HomeProvider extends ChangeNotifier {
     };
     print("body....$body");
 
-    final response =
-        await ApiService.multiPartApiMethod(url: ApiUrl.feedsUrl, body: body);
+    final response = await ApiService.multiPartApiMethod(
+        url: ApiUrl.notificationUrl, body: body);
     if (!isLoadMore) {
-      updateLoading(false);
     } else {
       isLoadingMore = false;
     }
 
     if (response != null && response['status'] == 1) {
-      var newFeeds = FeedsModel.fromJson(response);
+      var newModel = NotificationModel.fromJson(response);
       if (isLoadMore) {
-        feedsModel?.data!.feeds!
-            .addAll(newFeeds.data!.feeds!); // Append new data to the list
+        model!.data!.dbdata!
+            .addAll(newModel.data!.dbdata!); // Append new data to the list
       } else {
-        feedsModel = newFeeds; // Initial load
+        model = newModel; // Initial load
       }
 
-      if (newFeeds.data!.feeds!.isEmpty ||
-          newFeeds.data!.feeds!.length < perPage) {
+      if (newModel.data!.dbdata!.isEmpty ||
+          newModel.data!.dbdata!.length < perPage) {
         hasMoreData = false; // No more data to load
       } else {
         page++; // Increment page for next load
         perPage += 10;
       }
     } else {
-      feedsModel = null;
+      model = null;
     }
 
     notifyListeners();
