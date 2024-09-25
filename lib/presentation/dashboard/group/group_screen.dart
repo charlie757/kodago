@@ -8,8 +8,9 @@ import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/presentation/dashboard/group/chat_screen.dart';
 import 'package:kodago/presentation/dashboard/group/contact_screen.dart';
+import 'package:kodago/provider/group/group_provider.dart';
 import 'package:kodago/widget/popmenuButton.dart';
-
+import 'package:provider/provider.dart';
 import '../../../uitls/mixins.dart';
 
 class GroupScreen extends StatefulWidget {
@@ -21,66 +22,79 @@ class GroupScreen extends StatefulWidget {
 
 class _GroupScreenState extends State<GroupScreen> with MediaQueryScaleFactor {
   @override
+  void initState() {
+    callInitFunction();
+    super.initState();
+  }
+
+  callInitFunction() async {
+    final provider = Provider.of<GroupProvider>(context, listen: false);
+    provider.groupApiFunction();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return MediaQuery(
-      data: mediaQuery,
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        appBar: appBar(),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Column(
-            children: [
-              const CustomSearchbar(),
-              ScreenSize.height(14),
-              Row(
-                children: [
-                  msgListTypesWidget('All'),
-                  ScreenSize.width(10),
-                  msgListTypesWidget('Unread'),
-                  ScreenSize.width(10),
-                  msgListTypesWidget('Groups'),
-                ],
-              ),
-              Expanded(
-                child: ListView.separated(
-                    separatorBuilder: (context, index) {
-                      return ScreenSize.height(20);
-                    },
-                    itemCount: 15,
-                    shrinkWrap: true,
-                    padding: const EdgeInsets.only(top: 20, bottom: 30),
-                    itemBuilder: (context, index) {
-                      return groupWidget();
-                    }),
-              )
-            ],
+    return Consumer<GroupProvider>(builder: (context, myProvider, child) {
+      return MediaQuery(
+        data: mediaQuery,
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          appBar: appBar(),
+          body: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Column(
+              children: [
+                const CustomSearchbar(),
+                ScreenSize.height(14),
+                Row(
+                  children: [
+                    msgListTypesWidget('All'),
+                    ScreenSize.width(10),
+                    msgListTypesWidget('Unread'),
+                    ScreenSize.width(10),
+                    msgListTypesWidget('Groups'),
+                  ],
+                ),
+                Expanded(
+                  child: ListView.separated(
+                      separatorBuilder: (context, index) {
+                        return ScreenSize.height(20);
+                      },
+                      itemCount: 15,
+                      shrinkWrap: true,
+                      padding: const EdgeInsets.only(top: 20, bottom: 30),
+                      itemBuilder: (context, index) {
+                        return groupWidget();
+                      }),
+                )
+              ],
+            ),
           ),
-        ),
-        floatingActionButton: GestureDetector(
-          onTap: () {
-            AppRoutes.pushCupertinoNavigation(const ContactScreen());
-          },
-          child: Container(
-            height: 45,
-            width: 45,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: AppColor.appColor,
-                boxShadow: [
-                  BoxShadow(
-                      offset: const Offset(0, -2),
-                      blurRadius: 6,
-                      color: AppColor.blackColor.withOpacity(.2))
-                ]),
-            child: const Icon(
-              Icons.add,
-              color: AppColor.whiteColor,
+          floatingActionButton: GestureDetector(
+            onTap: () {
+              AppRoutes.pushCupertinoNavigation(const ContactScreen());
+            },
+            child: Container(
+              height: 45,
+              width: 45,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: AppColor.appColor,
+                  boxShadow: [
+                    BoxShadow(
+                        offset: const Offset(0, -2),
+                        blurRadius: 6,
+                        color: AppColor.blackColor.withOpacity(.2))
+                  ]),
+              child: const Icon(
+                Icons.add,
+                color: AppColor.whiteColor,
+              ),
             ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 
   msgListTypesWidget(

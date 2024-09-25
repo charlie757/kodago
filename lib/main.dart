@@ -7,6 +7,7 @@ import 'package:kodago/provider/auth_provider/otp_provider.dart';
 import 'package:kodago/provider/auth_provider/signup_provider.dart';
 import 'package:kodago/provider/dashboard_provider.dart';
 import 'package:kodago/provider/group/chat_provider.dart';
+import 'package:kodago/provider/group/group_provider.dart';
 import 'package:kodago/provider/group/new_group_provider.dart';
 import 'package:kodago/provider/home/home_provider.dart';
 import 'package:kodago/provider/notification/notification_provider.dart';
@@ -51,6 +52,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ProfileProvider()),
         ChangeNotifierProvider(create: (_) => HomeProvider()),
         ChangeNotifierProvider(create: (_) => NotificationProvider()),
+        ChangeNotifierProvider(create: (_) => GroupProvider()),
         ChangeNotifierProvider.value(
           value: NewGroupProvider(),
         ),

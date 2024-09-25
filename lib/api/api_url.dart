@@ -21,4 +21,7 @@ class ApiUrl {
 
   /// notification
   static String notificationUrl = '${baseUrl}groups/notifications';
+
+  /// group
+  static String groupUrl = '${baseUrl}groups/index';
 }

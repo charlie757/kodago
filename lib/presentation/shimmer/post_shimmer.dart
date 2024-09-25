@@ -31,9 +31,8 @@ class PostShimmer extends StatelessWidget {
                           height: 35,
                           width: 35,
                           decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.white,
-                          ),
+                              shape: BoxShape.circle,
+                              color: AppColor.whiteColor),
                         )),
                     ScreenSize.width(15),
                     Expanded(
