@@ -6,9 +6,12 @@ import 'package:kodago/helper/custom_searchbar.dart';
 import 'package:kodago/helper/custom_text.dart';
 import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
+import 'package:kodago/helper/view_network_image.dart';
 import 'package:kodago/presentation/dashboard/group/chat_screen.dart';
 import 'package:kodago/presentation/dashboard/group/contact_screen.dart';
+import 'package:kodago/presentation/shimmer/gropup_shimmer.dart';
 import 'package:kodago/provider/group/group_provider.dart';
+import 'package:kodago/uitls/time_format.dart';
 import 'package:kodago/widget/popmenuButton.dart';
 import 'package:provider/provider.dart';
 import '../../../uitls/mixins.dart';
@@ -29,7 +32,9 @@ class _GroupScreenState extends State<GroupScreen> with MediaQueryScaleFactor {
 
   callInitFunction() async {
     final provider = Provider.of<GroupProvider>(context, listen: false);
-    provider.groupApiFunction();
+    Future.delayed(Duration.zero, () {
+      provider.groupApiFunction();
+    });
   }
 
   @override
@@ -40,34 +45,58 @@ class _GroupScreenState extends State<GroupScreen> with MediaQueryScaleFactor {
         child: Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: appBar(),
-          body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Column(
-              children: [
-                const CustomSearchbar(),
-                ScreenSize.height(14),
-                Row(
-                  children: [
-                    msgListTypesWidget('All'),
-                    ScreenSize.width(10),
-                    msgListTypesWidget('Unread'),
-                    ScreenSize.width(10),
-                    msgListTypesWidget('Groups'),
-                  ],
-                ),
-                Expanded(
-                  child: ListView.separated(
-                      separatorBuilder: (context, index) {
-                        return ScreenSize.height(20);
-                      },
-                      itemCount: 15,
-                      shrinkWrap: true,
-                      padding: const EdgeInsets.only(top: 20, bottom: 30),
-                      itemBuilder: (context, index) {
-                        return groupWidget();
-                      }),
-                )
-              ],
+          body: NotificationListener(
+            // onNotification: (ScrollNotification scrollInfo) {
+            // if (!myProvider.isLoadingMore &&
+            //     myProvider.hasMoreData &&
+            //     scrollInfo.metrics.pixels ==
+            //         scrollInfo.metrics.maxScrollExtent) {
+            //   // User reached the bottom, load more data
+            //   myProvider.groupApiFunction(isLoadMore: true);
+            // }
+            // return true;
+            // },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Column(
+                children: [
+                  const CustomSearchbar(),
+                  ScreenSize.height(14),
+                  Row(
+                    children: [
+                      msgListTypesWidget('All'),
+                      ScreenSize.width(10),
+                      msgListTypesWidget('Unread'),
+                      ScreenSize.width(10),
+                      msgListTypesWidget('Groups'),
+                    ],
+                  ),
+                  Expanded(
+                    child: myProvider.isLoading
+                        ? const GropupShimmer()
+                        : myProvider.model != null &&
+                                myProvider.model!.data != null
+                            ? ListView.separated(
+                                separatorBuilder: (context, index) {
+                                  return ScreenSize.height(20);
+                                },
+                                itemCount: myProvider.model!.data!.length,
+                                shrinkWrap: true,
+                                padding:
+                                    const EdgeInsets.only(top: 20, bottom: 30),
+                                itemBuilder: (context, index) {
+                                  if (index == myProvider.model!.data!.length &&
+                                      myProvider.isLoadingMore) {
+                                    return const Center(
+                                        child: CircularProgressIndicator());
+                                  } else {
+                                    return groupWidget(index, myProvider);
+                                  }
+                                })
+                            : Container(),
+                  )
+                ],
+              ),
             ),
           ),
           floatingActionButton: GestureDetector(
@@ -128,7 +157,8 @@ class _GroupScreenState extends State<GroupScreen> with MediaQueryScaleFactor {
     );
   }
 
-  groupWidget() {
+  groupWidget(int index, GroupProvider provider) {
+    var model = provider.model!.data![index];
     return GestureDetector(
       onTap: () {
         AppRoutes.pushCupertinoNavigation(const ChatScreen());
@@ -136,10 +166,12 @@ class _GroupScreenState extends State<GroupScreen> with MediaQueryScaleFactor {
       child: Row(
         // crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Image.asset(
-            'assets/dummay/Oval.png',
-            height: 45,
-            width: 45,
+          ClipOval(
+            child: ViewNetworkImage(
+              img: model.image,
+              height: 45.0,
+              width: 45.0,
+            ),
           ),
           ScreenSize.width(11),
           Expanded(
@@ -147,15 +179,16 @@ class _GroupScreenState extends State<GroupScreen> with MediaQueryScaleFactor {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 customText(
-                  title: 'Kodago Attendance',
+                  title: model.name ?? "",
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
                   color: AppColor.blackColor,
                   fontFamily: FontFamily.interSemiBold,
+                  maxLines: 1,
                 ),
                 ScreenSize.height(4),
                 customText(
-                  title: 'Empolyee Attendance Group',
+                  title: model.alias ?? '',
                   fontSize: 11,
                   fontWeight: FontWeight.w400,
                   color: AppColor.grey7DColor,
@@ -164,11 +197,12 @@ class _GroupScreenState extends State<GroupScreen> with MediaQueryScaleFactor {
               ],
             ),
           ),
+          ScreenSize.width(5),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               customText(
-                title: '5:01 pm',
+                title: TimeFormat.convertDate(model.createdAt),
                 fontSize: 11,
                 fontWeight: FontWeight.w400,
                 color: AppColor.grey7DColor,

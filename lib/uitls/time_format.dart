@@ -7,7 +7,7 @@ class TimeFormat {
 
     DateTime dateTime = dateFormat.parse(utcDate, true).toLocal();
 
-    return '${DateFormat('dd, MMMM yyyy').format(dateTime)}, ${DateFormat('jm').format(dateTime)}';
+    return DateFormat('jm').format(dateTime);
   }
 
   static convertDate1(String dateString) {

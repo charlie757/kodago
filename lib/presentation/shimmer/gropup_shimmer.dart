@@ -13,6 +13,7 @@ class GropupShimmer extends StatelessWidget {
           return ScreenSize.height(14);
         },
         itemCount: 10,
+        padding: const EdgeInsets.only(top: 20, bottom: 30),
         shrinkWrap: true,
         itemBuilder: (context, index) {
           return Row(
@@ -29,31 +30,45 @@ class GropupShimmer extends StatelessWidget {
                 ),
               ),
               ScreenSize.width(15),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Shimmer.fromColors(
-                    baseColor: Colors.grey.shade300,
-                    highlightColor: Colors.grey.shade100,
-                    enabled: true,
-                    child: Container(
-                      width: 8,
-                      height: 100,
-                      decoration:
-                          const BoxDecoration(color: AppColor.whiteColor),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Shimmer.fromColors(
+                      baseColor: Colors.grey.shade300,
+                      highlightColor: Colors.grey.shade100,
+                      enabled: true,
+                      child: Container(
+                        width: 100,
+                        height: 8,
+                        decoration:
+                            const BoxDecoration(color: AppColor.whiteColor),
+                      ),
                     ),
-                  ),
-                  Container(
-                    width: 8,
-                    height: 120,
-                    decoration: const BoxDecoration(color: AppColor.whiteColor),
-                  ),
-                ],
+                    ScreenSize.height(7),
+                    Shimmer.fromColors(
+                      baseColor: Colors.grey.shade300,
+                      highlightColor: Colors.grey.shade100,
+                      enabled: true,
+                      child: Container(
+                        width: 130,
+                        height: 8,
+                        decoration:
+                            const BoxDecoration(color: AppColor.whiteColor),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              Container(
-                width: 8,
-                height: 50,
-                decoration: const BoxDecoration(color: AppColor.whiteColor),
+              Shimmer.fromColors(
+                baseColor: Colors.grey.shade300,
+                highlightColor: Colors.grey.shade100,
+                enabled: true,
+                child: Container(
+                  width: 50,
+                  height: 8,
+                  decoration: const BoxDecoration(color: AppColor.whiteColor),
+                ),
               ),
             ],
           );
