@@ -4,7 +4,7 @@ import 'package:kodago/helper/custom_btn.dart';
 import 'package:kodago/helper/custom_textfield.dart';
 import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/helper/textfield_lebal_text.dart';
-import 'package:kodago/provider/profile_provider.dart';
+import 'package:kodago/services/provider/profile_provider.dart';
 import 'package:kodago/uitls/utils.dart';
 import 'package:kodago/uitls/white_space_formatter.dart';
 import 'package:kodago/widget/appBar_leading.dart';

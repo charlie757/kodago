@@ -30,7 +30,7 @@ class Utils {
     String title,
     BuildContext context,
   ) {
-    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    // ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         behavior: SnackBarBehavior.floating,
         duration: const Duration(seconds: 2),
@@ -51,6 +51,7 @@ class Utils {
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
         timeInSecForIosWeb: 1,
+        backgroundColor: color,
         textColor: AppColor.whiteColor);
   }
 

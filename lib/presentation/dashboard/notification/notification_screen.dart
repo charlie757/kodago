@@ -5,7 +5,7 @@ import 'package:kodago/helper/custom_text.dart';
 import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/helper/view_network_image.dart';
-import 'package:kodago/provider/notification/notification_provider.dart';
+import 'package:kodago/services/provider/notification/notification_provider.dart';
 import 'package:kodago/uitls/scroll_loader.dart';
 import 'package:kodago/widget/appbar.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -24,12 +24,15 @@ class _NotificationScreenState extends State<NotificationScreen>
     with MediaQueryScaleFactor {
   @override
   void initState() {
-    callInitFunction();
+    WidgetsBinding.instance.addPostFrameCallback((val) {
+      callInitFunction();
+    });
     super.initState();
   }
 
   callInitFunction() async {
     final provider = Provider.of<NotificationProvider>(context, listen: false);
+    provider.clearvalues();
     provider.notificationApiFunction();
   }
 
@@ -39,7 +42,6 @@ class _NotificationScreenState extends State<NotificationScreen>
       data: mediaQuery,
       child:
           Consumer<NotificationProvider>(builder: (context, myProvider, child) {
-        print(myProvider.model!.data!.dbdata!.length);
         return Scaffold(
           appBar: appBar(
               title: 'Notification',
@@ -48,11 +50,14 @@ class _NotificationScreenState extends State<NotificationScreen>
           body: NotificationListener(
             onNotification: (ScrollNotification scrollInfo) {
               if (!myProvider.isLoadingMore &&
-                  myProvider.hasMoreData &&
+                  // myProvider.hasMoreData &&
                   scrollInfo.metrics.pixels ==
                       scrollInfo.metrics.maxScrollExtent) {
                 // User reached the bottom, load more data
-                myProvider.notificationApiFunction(isLoadMore: true);
+                if (myProvider.model!.data!.dbdata!.length <
+                    int.parse(myProvider.model!.data!.total.toString())) {
+                  myProvider.notificationApiFunction(isLoadMore: true);
+                }
               }
               return true;
             },
@@ -94,18 +99,30 @@ class _NotificationScreenState extends State<NotificationScreen>
         motion: const ScrollMotion(),
         children: [
           Flexible(
-            child: Container(
-              width: 50,
-              height: 100,
-              alignment: Alignment.center,
-              decoration: const BoxDecoration(
-                  color: Color(0xffFF4141),
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(10),
-                      bottomLeft: Radius.circular(10))),
-              child: Image.asset(
-                AppImages.delete1Icon,
-                height: 20,
+            child: GestureDetector(
+              onTap: () {
+                // provider.deleteNotificationApiFunction(model.rowId).then((val) {
+                //   if (val != null) {
+                //     print(val);
+                //     provider.model!.data!.dbdata!.removeAt(index);
+                //     controller!.close();
+                //     setState(() {});
+                //   }
+                // });
+              },
+              child: Container(
+                width: 50,
+                height: 100,
+                alignment: Alignment.center,
+                decoration: const BoxDecoration(
+                    color: Color(0xffFF4141),
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(10),
+                        bottomLeft: Radius.circular(10))),
+                child: Image.asset(
+                  AppImages.delete1Icon,
+                  height: 20,
+                ),
               ),
             ),
           )

@@ -4,8 +4,8 @@ import 'package:kodago/helper/app_images.dart';
 import 'package:kodago/helper/custom_text.dart';
 import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
-import 'package:kodago/provider/dashboard_provider.dart';
-import 'package:kodago/provider/profile_provider.dart';
+import 'package:kodago/services/provider/dashboard_provider.dart';
+import 'package:kodago/services/provider/profile_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../uitls/mixins.dart';
@@ -29,7 +29,7 @@ class _DashboardScreenState extends State<DashboardScreen>
 
   callInitFunction() {
     final provider = Provider.of<DashboardProvider>(context, listen: false);
-    provider.currentIndex = 0;
+    provider.updateIndex(0);
     Provider.of<ProfileProvider>(context, listen: false).profileModel = null;
     Provider.of<ProfileProvider>(context, listen: false)
         .getProfileApiFunction();

@@ -33,12 +33,15 @@ AppBar appBar(
               )
             : Container(),
         ScreenSize.width(isLeading ? 15 : 5),
-        customText(
-          title: title,
-          fontSize: 18,
-          fontWeight: FontWeight.w500,
-          color: titleColor,
-          fontFamily: FontFamily.interSemiBold,
+        Flexible(
+          child: customText(
+            title: title,
+            fontSize: 18,
+            fontWeight: FontWeight.w500,
+            color: titleColor,
+            maxLines: 1,
+            fontFamily: FontFamily.interSemiBold,
+          ),
         ),
       ],
     ),

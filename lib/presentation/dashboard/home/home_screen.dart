@@ -7,7 +7,7 @@ import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/helper/view_network_image.dart';
 import 'package:kodago/presentation/shimmer/story_shimmer.dart';
-import 'package:kodago/provider/home/home_provider.dart';
+import 'package:kodago/services/provider/home/home_provider.dart';
 import 'package:kodago/presentation/shimmer/post_shimmer.dart';
 import 'package:kodago/presentation/dashboard/home/view_story_screen.dart';
 import 'package:kodago/widget/home_posts_widget.dart';

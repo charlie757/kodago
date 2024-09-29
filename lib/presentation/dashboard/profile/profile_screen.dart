@@ -6,10 +6,12 @@ import 'package:kodago/helper/custom_text.dart';
 import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/helper/view_network_image.dart';
-import 'package:kodago/provider/profile_provider.dart';
+import 'package:kodago/services/image_picker_service.dart';
+import 'package:kodago/services/provider/profile_provider.dart';
 import 'package:kodago/uitls/extension.dart';
 import 'package:kodago/uitls/mixins.dart';
 import 'package:kodago/uitls/utils.dart';
+import 'package:kodago/widget/image_bottomsheet.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -113,7 +115,32 @@ class _ProfileScreenState extends State<ProfileScreen>
                             bottom: 0,
                             child: GestureDetector(
                               onTap: () {
-                                imageBottomSheet(provider);
+                                imageBottomSheet(
+                                  cameraTap: () {
+                                    ImagePickerService.pickImage(
+                                            ImageSource.camera)
+                                        .then((val) {
+                                      if (val != null) {
+                                        provider.img = val;
+                                        provider.uploadImageApiFunction();
+                                        setState(() {});
+                                      }
+                                      Navigator.pop(context);
+                                    });
+                                  },
+                                  galleryTap: () {
+                                    ImagePickerService.pickImage(
+                                            ImageSource.gallery)
+                                        .then((val) {
+                                      if (val != null) {
+                                        provider.img = val;
+                                        provider.uploadImageApiFunction();
+                                        setState(() {});
+                                      }
+                                      Navigator.pop(context);
+                                    });
+                                  },
+                                );
                               },
                               child: Image.asset(
                                 AppImages.editIcon,
@@ -219,71 +246,6 @@ class _ProfileScreenState extends State<ProfileScreen>
           ],
         ),
       ),
-    );
-  }
-
-  imageBottomSheet(ProfileProvider provider) {
-    showModalBottomSheet(
-        context: context,
-        backgroundColor: AppColor.whiteColor,
-        shape: const OutlineInputBorder(
-            borderSide: BorderSide(color: AppColor.whiteColor),
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20), topRight: Radius.circular(20))),
-        builder: (context) {
-          return Container(
-            padding: const EdgeInsets.symmetric(vertical: 20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    GestureDetector(
-                        onTap: () {
-                          provider.pickImage(ImageSource.camera);
-                          Navigator.pop(context);
-                        },
-                        child: iconcreation(
-                            Icons.camera_alt, Colors.pink, "Camera")),
-                    GestureDetector(
-                        onTap: () {
-                          provider.pickImage(ImageSource.gallery);
-                          Navigator.pop(context);
-                        },
-                        child: iconcreation(
-                            Icons.insert_photo, Colors.purple, "Gallery"))
-                  ],
-                ),
-              ],
-            ),
-          );
-        });
-  }
-
-  Widget iconcreation(IconData icon, Color color, String text) {
-    return Column(
-      children: [
-        CircleAvatar(
-          backgroundColor: color,
-          radius: 30,
-          child: Icon(
-            icon,
-            size: 29,
-            color: Colors.white,
-          ),
-        ),
-        const SizedBox(
-          height: 5,
-        ),
-        customText(
-            title: text,
-            fontSize: 14,
-            color: AppColor.blackColor,
-            fontWeight: FontWeight.w500,
-            fontFamily: FontFamily.interMedium),
-      ],
     );
   }
 }

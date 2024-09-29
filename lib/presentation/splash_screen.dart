@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kodago/helper/app_images.dart';
-import 'package:kodago/provider/splash_provider.dart';
+import 'package:kodago/services/provider/splash_provider.dart';
 import 'package:provider/provider.dart';
 
 class SplashScreen extends StatefulWidget {

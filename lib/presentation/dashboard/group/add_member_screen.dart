@@ -4,7 +4,7 @@ import 'package:kodago/helper/app_images.dart';
 import 'package:kodago/helper/custom_text.dart';
 import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
-import 'package:kodago/provider/group/new_group_provider.dart';
+import 'package:kodago/services/provider/group/new_group_provider.dart';
 import 'package:kodago/widget/appbar.dart';
 import 'package:provider/provider.dart';
 
@@ -17,7 +17,8 @@ class AddMemberScreen extends StatefulWidget {
   State<AddMemberScreen> createState() => _AddMemberScreenState();
 }
 
-class _AddMemberScreenState extends State<AddMemberScreen>with MediaQueryScaleFactor {
+class _AddMemberScreenState extends State<AddMemberScreen>
+    with MediaQueryScaleFactor {
   @override
   Widget build(BuildContext context) {
     return MediaQuery(

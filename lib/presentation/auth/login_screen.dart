@@ -10,7 +10,7 @@ import 'package:kodago/helper/custom_textfield.dart';
 import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/helper/textfield_lebal_text.dart';
-import 'package:kodago/provider/auth_provider/login_provider.dart';
+import 'package:kodago/services/provider/auth_provider/login_provider.dart';
 import 'package:kodago/presentation/auth/forgot_password_screen.dart';
 import 'package:kodago/presentation/auth/signup_screen.dart';
 import 'package:kodago/uitls/utils.dart';

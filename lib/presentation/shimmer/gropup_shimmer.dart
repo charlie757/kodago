@@ -4,7 +4,8 @@ import 'package:kodago/helper/screen_size.dart';
 import 'package:shimmer/shimmer.dart';
 
 class GropupShimmer extends StatelessWidget {
-  const GropupShimmer({super.key});
+  final String route;
+  const GropupShimmer({this.route = 'group'});
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +13,7 @@ class GropupShimmer extends StatelessWidget {
         separatorBuilder: (context, sp) {
           return ScreenSize.height(14);
         },
-        itemCount: 10,
+        itemCount: 15,
         padding: const EdgeInsets.only(top: 20, bottom: 30),
         shrinkWrap: true,
         itemBuilder: (context, index) {
@@ -51,7 +52,7 @@ class GropupShimmer extends StatelessWidget {
                       highlightColor: Colors.grey.shade100,
                       enabled: true,
                       child: Container(
-                        width: 130,
+                        width: 150,
                         height: 8,
                         decoration:
                             const BoxDecoration(color: AppColor.whiteColor),
@@ -60,16 +61,19 @@ class GropupShimmer extends StatelessWidget {
                   ],
                 ),
               ),
-              Shimmer.fromColors(
-                baseColor: Colors.grey.shade300,
-                highlightColor: Colors.grey.shade100,
-                enabled: true,
-                child: Container(
-                  width: 50,
-                  height: 8,
-                  decoration: const BoxDecoration(color: AppColor.whiteColor),
-                ),
-              ),
+              route == 'group'
+                  ? Shimmer.fromColors(
+                      baseColor: Colors.grey.shade300,
+                      highlightColor: Colors.grey.shade100,
+                      enabled: true,
+                      child: Container(
+                        width: 50,
+                        height: 8,
+                        decoration:
+                            const BoxDecoration(color: AppColor.whiteColor),
+                      ),
+                    )
+                  : Container(),
             ],
           );
         });

@@ -8,7 +8,7 @@ import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/uitls/utils.dart';
 
-deleteFileRackDialogBox() {
+deleteFileRackDialogBox({required Function() deleteTap}) {
   showGeneralDialog(
     context: navigatorKey.currentContext!,
     barrierLabel: "Barrier",
@@ -42,16 +42,24 @@ deleteFileRackDialogBox() {
                   title: "Yes, Delete",
                   color: AppColor.orangeColor,
                   width: 144,
-                  onTap: () {
-                    Navigator.pop(navigatorKey.currentContext!);
-                  }),
+                  onTap: deleteTap),
               ScreenSize.height(15),
-              customText(
-                title: 'Keep File racks',
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
-                fontFamily: FontFamily.interSemiBold,
-                color: AppColor.orangeColor,
+              GestureDetector(
+                onTap: () {
+                  Navigator.pop(navigatorKey.currentContext!);
+                },
+                child: Container(
+                  width: double.infinity,
+                  alignment: Alignment.center,
+                  height: 25,
+                  child: customText(
+                    title: 'Keep File racks',
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: FontFamily.interSemiBold,
+                    color: AppColor.orangeColor,
+                  ),
+                ),
               )
             ],
           ),

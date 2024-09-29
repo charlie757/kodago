@@ -21,7 +21,17 @@ class ApiUrl {
 
   /// notification
   static String notificationUrl = '${baseUrl}groups/notifications';
+  static String deleteNotificationApi = "${baseUrl}groups/read_notification";
 
   /// group
   static String groupUrl = '${baseUrl}groups/index';
+  static String groupDetailsUrl = '${baseUrl}groups/members';
+  static String updateGroupNameUrl = '${baseUrl}groups/update_group';
+  static String exitGroupUrl = 'groups/member_action';
+  static String updateGroupImageUrl = "${baseUrl}groups/update_group_image";
+
+  /// file rack
+  static String createFileRackUrl = '${baseUrl}sheets/createSheet';
+  static String fileRackListUrl = '${baseUrl}sheets/index';
+  static String deleteFileRackUrl = '${baseUrl}sheets/deleteSheet';
 }

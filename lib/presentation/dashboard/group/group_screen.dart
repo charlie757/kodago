@@ -10,7 +10,7 @@ import 'package:kodago/helper/view_network_image.dart';
 import 'package:kodago/presentation/dashboard/group/chat_screen.dart';
 import 'package:kodago/presentation/dashboard/group/contact_screen.dart';
 import 'package:kodago/presentation/shimmer/gropup_shimmer.dart';
-import 'package:kodago/provider/group/group_provider.dart';
+import 'package:kodago/services/provider/group/group_provider.dart';
 import 'package:kodago/uitls/time_format.dart';
 import 'package:kodago/widget/popmenuButton.dart';
 import 'package:provider/provider.dart';
@@ -161,56 +161,63 @@ class _GroupScreenState extends State<GroupScreen> with MediaQueryScaleFactor {
     var model = provider.model!.data![index];
     return GestureDetector(
       onTap: () {
-        AppRoutes.pushCupertinoNavigation(const ChatScreen());
+        AppRoutes.pushCupertinoNavigation(ChatScreen(
+          groupId: model.id,
+        )).then((val) {
+          provider.groupApiFunction(isLoading: false);
+        });
       },
-      child: Row(
-        // crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClipOval(
-            child: ViewNetworkImage(
-              img: model.image,
-              height: 45.0,
-              width: 45.0,
+      child: Container(
+        color: AppColor.whiteColor,
+        child: Row(
+          // crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ClipOval(
+              child: ViewNetworkImage(
+                img: model.image,
+                height: 45.0,
+                width: 45.0,
+              ),
             ),
-          ),
-          ScreenSize.width(11),
-          Expanded(
-            child: Column(
+            ScreenSize.width(11),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  customText(
+                    title: model.name ?? "",
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: AppColor.blackColor,
+                    fontFamily: FontFamily.interSemiBold,
+                    maxLines: 1,
+                  ),
+                  ScreenSize.height(4),
+                  customText(
+                    title: model.alias ?? '',
+                    fontSize: 11,
+                    fontWeight: FontWeight.w400,
+                    color: AppColor.grey7DColor,
+                    fontFamily: FontFamily.interRegular,
+                  ),
+                ],
+              ),
+            ),
+            ScreenSize.width(5),
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 customText(
-                  title: model.name ?? "",
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: AppColor.blackColor,
-                  fontFamily: FontFamily.interSemiBold,
-                  maxLines: 1,
-                ),
-                ScreenSize.height(4),
-                customText(
-                  title: model.alias ?? '',
+                  title: TimeFormat.convertTime(model.createdAt),
                   fontSize: 11,
                   fontWeight: FontWeight.w400,
                   color: AppColor.grey7DColor,
                   fontFamily: FontFamily.interRegular,
                 ),
               ],
-            ),
-          ),
-          ScreenSize.width(5),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              customText(
-                title: TimeFormat.convertDate(model.createdAt),
-                fontSize: 11,
-                fontWeight: FontWeight.w400,
-                color: AppColor.grey7DColor,
-                fontFamily: FontFamily.interRegular,
-              ),
-            ],
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }

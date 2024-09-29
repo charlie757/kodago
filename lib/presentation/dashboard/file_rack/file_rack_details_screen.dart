@@ -271,7 +271,7 @@ class _FileRackDetailsScreenState extends State<FileRackDetailsScreen>
           } else if (value == 2) {
             assignMembersBottomSheet();
           } else if (value == 3) {
-            deleteFileRackDialogBox();
+            deleteFileRackDialogBox(deleteTap: () {});
           }
         });
   }

@@ -1,24 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:kodago/config/app_routes.dart';
 import 'package:kodago/helper/app_color.dart';
 import 'package:kodago/helper/app_images.dart';
 import 'package:kodago/helper/custom_text.dart';
 import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
-import 'package:kodago/provider/group/new_group_provider.dart';
+import 'package:kodago/helper/view_network_image.dart';
+import 'package:kodago/services/provider/group/group_details_provider.dart';
+import 'package:kodago/services/provider/group/new_group_provider.dart';
 import 'package:kodago/presentation/dashboard/file_rack/no_file_racks_screen.dart';
 import 'package:kodago/presentation/dashboard/group/add_member_screen.dart';
 import 'package:kodago/presentation/dashboard/group/edit_group_profile.dart';
 import 'package:kodago/presentation/dashboard/group/hightlight_screen.dart';
 import 'package:kodago/presentation/dashboard/group/view_all_group_media_screen.dart';
+import 'package:kodago/uitls/time_format.dart';
 import 'package:kodago/widget/appbar.dart';
 import 'package:kodago/widget/popmenuButton.dart';
 import 'package:provider/provider.dart';
-
+import 'package:provider/provider.dart';
 import '../../../uitls/mixins.dart';
 
 class GroupInfoScreen extends StatefulWidget {
-  const GroupInfoScreen({super.key});
+  final String groupId;
+  const GroupInfoScreen({required this.groupId});
 
   @override
   State<GroupInfoScreen> createState() => _GroupInfoScreenState();
@@ -27,89 +32,121 @@ class GroupInfoScreen extends StatefulWidget {
 class _GroupInfoScreenState extends State<GroupInfoScreen>
     with MediaQueryScaleFactor {
   @override
-  Widget build(BuildContext context) {
-    return MediaQuery(
-      data: mediaQuery,
-      child: Scaffold(
-        appBar: appBar(title: '', actions: [popupMenuButton()]),
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.only(bottom: 30),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              groupDetailsWidget(),
-              ScreenSize.height(26),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.only(left: 18, right: 18),
-                child: Row(
-                  children: [
-                    customContainer(AppImages.fileIcon, 'Form', () {
-                      AppRoutes.pushCupertinoNavigation(
-                          const NoFileRacksScreen());
-                    }),
-                    ScreenSize.width(10),
-                    customContainer(AppImages.hightlightIcon, 'Highlight', () {
-                      AppRoutes.pushCupertinoNavigation(
-                          const HightlightScreen());
-                    }),
-                    ScreenSize.width(10),
-                    customContainer(AppImages.analyticsIon, 'Analytics', () {}),
-                    ScreenSize.width(10),
-                    customContainer(AppImages.addUserIcon, 'Add', () {}),
-                  ],
-                ),
-              ),
-              ScreenSize.height(19),
-              groupDescriptionWidget(),
-              ScreenSize.height(8),
-              invateLinkWidget(),
-              ScreenSize.height(17),
-              mediaLinksWidget(),
-              ScreenSize.height(19),
-              membersWidget(),
-              ScreenSize.height(22),
-              Padding(
-                padding: const EdgeInsets.only(left: 18),
-                child: Row(
-                  children: [
-                    Image.asset(
-                      AppImages.logoutIcon,
-                      height: 22,
-                      width: 22,
-                    ),
-                    ScreenSize.width(12),
-                    customText(
-                      title: 'Exit group',
-                      color: AppColor.redColor,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      fontFamily: FontFamily.interMedium,
-                    )
-                  ],
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((val) {
+      callInitFunction();
+    });
+    super.initState();
   }
 
-  groupDetailsWidget() {
+  callInitFunction() async {
+    final provider = Provider.of<GroupDetailsProvider>(context, listen: false);
+    provider.groupDetailsApiFunction(widget.groupId);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<GroupDetailsProvider>(
+        builder: (context, myProvider, child) {
+      return MediaQuery(
+        data: mediaQuery,
+        child: Scaffold(
+          appBar: appBar(title: '', actions: [popupMenuButton()]),
+          body: SingleChildScrollView(
+            padding: const EdgeInsets.only(bottom: 30),
+            child: myProvider.model == null
+                ? Container()
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      groupDetailsWidget(myProvider),
+                      ScreenSize.height(26),
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        padding: const EdgeInsets.only(left: 18, right: 18),
+                        child: Row(
+                          children: [
+                            customContainer(AppImages.fileIcon, 'Form', () {
+                              AppRoutes.pushCupertinoNavigation(
+                                  NoFileRacksScreen(
+                                groupId: widget.groupId,
+                                groupName: myProvider.model!.data != null &&
+                                        myProvider.model!.data!.groupDetail !=
+                                            null
+                                    ? myProvider
+                                            .model!.data!.groupDetail!.name ??
+                                        ""
+                                    : "",
+                              ));
+                            }),
+                            ScreenSize.width(10),
+                            customContainer(
+                                AppImages.hightlightIcon, 'Highlight', () {
+                              AppRoutes.pushCupertinoNavigation(
+                                  const HightlightScreen());
+                            }),
+                            ScreenSize.width(10),
+                            customContainer(
+                                AppImages.analyticsIon, 'Analytics', () {}),
+                            ScreenSize.width(10),
+                            customContainer(
+                                AppImages.addUserIcon, 'Add', () {}),
+                          ],
+                        ),
+                      ),
+                      ScreenSize.height(19),
+                      groupDescriptionWidget(myProvider),
+                      ScreenSize.height(8),
+                      invateLinkWidget(myProvider),
+                      ScreenSize.height(17),
+                      mediaLinksWidget(),
+                      ScreenSize.height(19),
+                      membersWidget(myProvider),
+                      ScreenSize.height(22),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 18),
+                        child: Row(
+                          children: [
+                            Image.asset(
+                              AppImages.logoutIcon,
+                              height: 22,
+                              width: 22,
+                            ),
+                            ScreenSize.width(12),
+                            customText(
+                              title: 'Exit group',
+                              color: AppColor.redColor,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              fontFamily: FontFamily.interMedium,
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+          ),
+        ),
+      );
+    });
+  }
+
+  groupDetailsWidget(GroupDetailsProvider provider) {
+    var model = provider.model!.data!.groupDetail!;
     return Column(
       children: [
-        Image.asset(
-          'assets/dummay/Oval (2).png',
-          height: 73,
-          width: 123,
+        ViewNetworkImage(
+          img: model.imageLink,
+          height: 73.0,
         ),
         ScreenSize.height(10),
         customText(
-          title: 'SMEC',
+          title: model.name ?? '',
           fontSize: 19,
           fontWeight: FontWeight.w500,
           fontFamily: FontFamily.interSemiBold,
+          maxLines: 1,
+          textAlign: TextAlign.center,
         ),
         ScreenSize.height(4),
         Row(
@@ -132,7 +169,7 @@ class _GroupInfoScreenState extends State<GroupInfoScreen>
             ),
             ScreenSize.width(5),
             customText(
-              title: '20 members',
+              title: '${model.members!.length} members',
               fontSize: 13,
               color: AppColor.grey7DColor,
               fontWeight: FontWeight.w400,
@@ -143,7 +180,8 @@ class _GroupInfoScreenState extends State<GroupInfoScreen>
     );
   }
 
-  groupDescriptionWidget() {
+  groupDescriptionWidget(GroupDetailsProvider provider) {
+    var model = provider.model!.data!.groupDetail!;
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -166,7 +204,8 @@ class _GroupInfoScreenState extends State<GroupInfoScreen>
           ),
           ScreenSize.height(4),
           customText(
-            title: "Created by Manish saini, 01/09/24",
+            title:
+                "Created by ${model.name ?? ''}, ${TimeFormat.convertDate(model.createdAt)}",
             fontSize: 13,
             fontWeight: FontWeight.w400,
             color: const Color(0xff455154),
@@ -177,7 +216,8 @@ class _GroupInfoScreenState extends State<GroupInfoScreen>
     );
   }
 
-  invateLinkWidget() {
+  invateLinkWidget(GroupDetailsProvider provider) {
+    var model = provider.model!.data!.groupDetail!;
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -217,12 +257,18 @@ class _GroupInfoScreenState extends State<GroupInfoScreen>
                       fontWeight: FontWeight.w500,
                       fontFamily: FontFamily.interMedium,
                     ),
-                    customText(
-                      title: 'Copy',
-                      fontSize: 12,
-                      color: AppColor.darkAppColor,
-                      fontWeight: FontWeight.w500,
-                      fontFamily: FontFamily.interMedium,
+                    InkWell(
+                      onTap: () async {
+                        await Clipboard.setData(
+                            ClipboardData(text: model.shareLink));
+                      },
+                      child: customText(
+                        title: 'Copy',
+                        fontSize: 12,
+                        color: AppColor.darkAppColor,
+                        fontWeight: FontWeight.w500,
+                        fontFamily: FontFamily.interMedium,
+                      ),
                     ),
                   ],
                 ),
@@ -301,7 +347,8 @@ class _GroupInfoScreenState extends State<GroupInfoScreen>
     );
   }
 
-  membersWidget() {
+  membersWidget(GroupDetailsProvider provider) {
+    var model = provider.model!.data!.groupDetail!;
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -318,7 +365,7 @@ class _GroupInfoScreenState extends State<GroupInfoScreen>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               customText(
-                title: '5 members',
+                title: '${model.members!.length} members',
                 fontSize: 14,
                 fontFamily: FontFamily.interMedium,
                 fontWeight: FontWeight.w500,
@@ -332,65 +379,68 @@ class _GroupInfoScreenState extends State<GroupInfoScreen>
             ],
           ),
           ScreenSize.height(15),
-          ListView.separated(
-              separatorBuilder: (context, sp) {
-                return ScreenSize.height(17);
-              },
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: context.watch<NewGroupProvider>().groupList.length,
-              itemBuilder: (context, index) {
-                var model = context.watch<NewGroupProvider>().groupList[index];
-                return GestureDetector(
-                  onTap: () {
-                    showDialogBox();
+          model.members!.isEmpty
+              ? Container()
+              : ListView.separated(
+                  separatorBuilder: (context, sp) {
+                    return ScreenSize.height(17);
                   },
-                  child: Container(
-                    color: AppColor.whiteColor,
-                    child: Row(
-                      children: [
-                        Image.asset(
-                          model['img'],
-                          height: 33,
-                          width: 33,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: model.members!.length,
+                  itemBuilder: (context, index) {
+                    var memberModel = model.members![index];
+                    return GestureDetector(
+                      onTap: () {
+                        showDialogBox();
+                      },
+                      child: Container(
+                        color: AppColor.whiteColor,
+                        child: Row(
+                          children: [
+                            ClipOval(
+                              child: ViewNetworkImage(
+                                img: memberModel.imageLink,
+                                height: 33.0,
+                              ),
+                            ),
+                            ScreenSize.width(15),
+                            Expanded(
+                              child: customText(
+                                title: memberModel.name ?? "",
+                                fontSize: 14,
+                                color: AppColor.blackColor,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: FontFamily.interSemiBold,
+                              ),
+                            ),
+                            memberModel.isAdmin.toString() == '1'
+                                ? Container(
+                                    height: 26,
+                                    // width: 89,
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 6),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(6),
+                                        color: const Color(0xffDAEFFD)),
+                                    alignment: Alignment.center,
+                                    child: customText(
+                                      title: "Group Admin",
+                                      fontSize: 12,
+                                      color: AppColor.appColor,
+                                      fontWeight: FontWeight.w500,
+                                      fontFamily: FontFamily.interMedium,
+                                    ),
+                                  )
+                                : Image.asset(
+                                    AppImages.keyboardDownIcon,
+                                    height: 16,
+                                  )
+                          ],
                         ),
-                        ScreenSize.width(15),
-                        Expanded(
-                          child: customText(
-                            title: model['name'],
-                            fontSize: 14,
-                            color: AppColor.blackColor,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: FontFamily.interSemiBold,
-                          ),
-                        ),
-                        index == 0
-                            ? Container(
-                                height: 26,
-                                // width: 89,
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 6),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(6),
-                                    color: const Color(0xffDAEFFD)),
-                                alignment: Alignment.center,
-                                child: customText(
-                                  title: "Group Admin",
-                                  fontSize: 12,
-                                  color: AppColor.appColor,
-                                  fontWeight: FontWeight.w500,
-                                  fontFamily: FontFamily.interMedium,
-                                ),
-                              )
-                            : Image.asset(
-                                AppImages.keyboardDownIcon,
-                                height: 16,
-                              )
-                      ],
-                    ),
-                  ),
-                );
-              })
+                      ),
+                    );
+                  })
         ],
       ),
     );
@@ -495,7 +545,13 @@ class _GroupInfoScreenState extends State<GroupInfoScreen>
           if (value == 0) {
             AppRoutes.pushCupertinoNavigation(const AddMemberScreen());
           } else if (value == 1 || value == 2) {
-            AppRoutes.pushCupertinoNavigation(const EditGroupProfile());
+            AppRoutes.pushCupertinoNavigation(EditGroupProfile(
+              route: value == 1 ? 'name' : 'image',
+              groupId: widget.groupId,
+            )).then((val) {
+              Provider.of<GroupDetailsProvider>(context, listen: false)
+                  .groupDetailsApiFunction(widget.groupId, isShowLoader: false);
+            });
           }
         });
   }

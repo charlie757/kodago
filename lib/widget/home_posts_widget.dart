@@ -112,8 +112,22 @@ class _HomePostsWidgetState extends State<HomePostsWidget> {
                       )
                     ],
                   )
-                : ZoomOverlay(
-                    child: Image.asset('assets/dummay/Rectangle.png')),
+                : Container(
+                    height: 400,
+                    width: double.infinity,
+                    color: AppColor.storyGradientColor1,
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 30, vertical: 10),
+                    child: customText(
+                      title: model.text ?? '',
+                      fontSize: 18,
+                      color: AppColor.whiteColor,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: FontFamily.interMedium,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
         ScreenSize.height(12),
         likeCommentSeeMoreWidget(),
         ScreenSize.height(16),

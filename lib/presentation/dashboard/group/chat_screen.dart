@@ -4,7 +4,7 @@ import 'package:kodago/helper/app_color.dart';
 import 'package:kodago/helper/custom_text.dart';
 import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
-import 'package:kodago/provider/group/chat_provider.dart';
+import 'package:kodago/services/provider/group/chat_provider.dart';
 import 'package:kodago/presentation/dashboard/group/add_edit_topic_screen.dart';
 import 'package:kodago/presentation/dashboard/group/group_info_screen.dart';
 import 'package:kodago/presentation/dashboard/group/hightlight_screen.dart';
@@ -14,7 +14,8 @@ import '../../../helper/app_images.dart';
 import '../../../uitls/mixins.dart';
 
 class ChatScreen extends StatefulWidget {
-  const ChatScreen({super.key});
+  final String groupId;
+  const ChatScreen({required this.groupId});
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -336,7 +337,9 @@ class _ChatScreenState extends State<ChatScreen> with MediaQueryScaleFactor {
             ],
             onSelected: (value) {
               if (value == 0) {
-                AppRoutes.pushCupertinoNavigation(const GroupInfoScreen());
+                AppRoutes.pushCupertinoNavigation(GroupInfoScreen(
+                  groupId: widget.groupId,
+                ));
               } else if (value == 2) {
                 AppRoutes.pushCupertinoNavigation(const AddEditTopicScreen());
               }

@@ -25,10 +25,10 @@ class GroupProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future groupApiFunction({bool isLoadMore = false}) async {
-    if (isLoadMore) {
-      isLoadingMore = true;
-    } else {
+  Future groupApiFunction({
+    bool isLoading = true,
+  }) async {
+    if (isLoading) {
       model = null;
       updateLoading(true);
     }
@@ -44,19 +44,7 @@ class GroupProvider extends ChangeNotifier {
         await ApiService.multiPartApiMethod(url: ApiUrl.groupUrl, body: body);
     updateLoading(false);
     if (response != null && response['status'] == 1) {
-      var newModel = GroupModel.fromJson(response);
-      if (isLoadMore) {
-        model!.data!.addAll(newModel.data!); // Append new data to the list
-      } else {
-        model = newModel; // Initial load
-      }
-
-      if (newModel.data!.isEmpty || newModel.data!.length < perPage) {
-        hasMoreData = false; // No more data to load
-      } else {
-        page++;
-        perPage += 20;
-      }
+      model = GroupModel.fromJson(response);
     } else {
       model = null;
     }

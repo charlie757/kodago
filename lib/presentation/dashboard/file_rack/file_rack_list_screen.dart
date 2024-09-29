@@ -9,14 +9,22 @@ import 'package:kodago/presentation/dashboard/file_rack/add_data_screen.dart';
 import 'package:kodago/presentation/dashboard/file_rack/assign_members_screen.dart';
 import 'package:kodago/presentation/dashboard/file_rack/create_form_screen.dart';
 import 'package:kodago/presentation/dashboard/file_rack/file_rack_details_screen.dart';
+import 'package:kodago/presentation/shimmer/gropup_shimmer.dart';
+import 'package:kodago/services/provider/file_rack/file_rack_provider.dart';
 import 'package:kodago/uitls/delete_file_rack_dialogbox.dart';
+import 'package:kodago/uitls/time_format.dart';
+import 'package:kodago/uitls/utils.dart';
 import 'package:kodago/widget/appbar.dart';
+import 'package:kodago/widget/no_data_found.dart';
 import 'package:kodago/widget/popmenuButton.dart';
+import 'package:provider/provider.dart';
 
 import '../../../uitls/mixins.dart';
 
 class FileRackListScreen extends StatefulWidget {
-  const FileRackListScreen({super.key});
+  final String groupId;
+  final String groupName;
+  const FileRackListScreen({required this.groupId, required this.groupName});
 
   @override
   State<FileRackListScreen> createState() => _FileRackListScreenState();
@@ -25,95 +33,124 @@ class FileRackListScreen extends StatefulWidget {
 class _FileRackListScreenState extends State<FileRackListScreen>
     with MediaQueryScaleFactor {
   @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((val) {
+      callInitFunction();
+    });
+    super.initState();
+  }
+
+  callInitFunction() {
+    final provider = Provider.of<FileRackProvider>(context, listen: false);
+    provider.fileRackApiFunction(widget.groupId);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MediaQuery(
       data: mediaQuery,
-      child: Scaffold(
-        appBar: appBar(title: 'Test', actions: [
-          GestureDetector(
-            onTap: () {
-              AppRoutes.pushCupertinoNavigation(const CreateFormScreen());
-            },
-            child: Container(
-              margin: const EdgeInsets.only(right: 20),
-              padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 6),
-              decoration: BoxDecoration(
-                  color: AppColor.appColor,
-                  borderRadius: BorderRadius.circular(50)),
-              child: customText(
-                title: 'Add file racks',
-                color: AppColor.whiteColor,
-                fontSize: 13,
-                fontWeight: FontWeight.w400,
-                fontFamily: FontFamily.interRegular,
-              ),
-            ),
-          )
-        ]),
-        body: ListView.separated(
-            separatorBuilder: (context, sp) {
-              return ScreenSize.height(20);
-            },
-            itemCount: 16,
-            shrinkWrap: true,
-            padding:
-                const EdgeInsets.only(left: 20, right: 0, top: 6, bottom: 20),
-            itemBuilder: (context, index) {
-              return GestureDetector(
-                onTap: () {
-                  AppRoutes.pushCupertinoNavigation(
-                      const FileRackDetailsScreen());
-                },
-                child: Row(
-                  children: [
-                    Container(
-                      height: 45,
-                      width: 45,
-                      alignment: Alignment.center,
-                      decoration: const BoxDecoration(
-                          shape: BoxShape.circle, color: Color(0xffE7E7E7)),
-                      child: Image.asset(
-                        AppImages.fileIcon,
-                        height: 21,
-                      ),
-                    ),
-                    ScreenSize.width(15),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          customText(
-                            title: 'Custom Rack',
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                            color: AppColor.blackColor,
-                            fontFamily: FontFamily.interMedium,
-                          ),
-                          customText(
-                            title: 'Last update on 15 Aug 2022 10:55 PM',
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                            color: AppColor.grey6AColor,
-                            fontFamily: FontFamily.interRegular,
-                          )
-                        ],
-                      ),
-                    ),
-                    popupMenuButton()
-                    // Image.asset(
-                    //   AppImages.moreVerticalIcon,
-                    //   color: const Color(0xff7D7D7D),
-                    //   height: 20,
-                    // )
-                  ],
+      child: Consumer<FileRackProvider>(builder: (context, myProvider, child) {
+        return Scaffold(
+          appBar: appBar(title: widget.groupName, actions: [
+            GestureDetector(
+              onTap: () {
+                AppRoutes.pushCupertinoNavigation(const CreateFormScreen());
+              },
+              child: Container(
+                margin: const EdgeInsets.only(right: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 6),
+                decoration: BoxDecoration(
+                    color: AppColor.appColor,
+                    borderRadius: BorderRadius.circular(50)),
+                child: customText(
+                  title: 'Add file racks',
+                  color: AppColor.whiteColor,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: FontFamily.interRegular,
                 ),
-              );
-            }),
-      ),
+              ),
+            )
+          ]),
+          body: myProvider.isLoading
+              ? const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: GropupShimmer(
+                    route: '',
+                  ),
+                )
+              : myProvider.model != null && myProvider.model!.data != null
+                  ? myProvider.model!.data!.sheets == null ||
+                          myProvider.model!.data!.sheets!.isEmpty
+                      ? noDataFound("No File Rack")
+                      : ListView.separated(
+                          separatorBuilder: (context, sp) {
+                            return ScreenSize.height(20);
+                          },
+                          itemCount: myProvider.model!.data!.sheets!.length,
+                          shrinkWrap: true,
+                          padding: const EdgeInsets.only(
+                              left: 20, right: 0, top: 6, bottom: 25),
+                          itemBuilder: (context, index) {
+                            var model = myProvider.model!.data!.sheets![index];
+                            return GestureDetector(
+                              onTap: () {
+                                AppRoutes.pushCupertinoNavigation(
+                                    const FileRackDetailsScreen());
+                              },
+                              child: Row(
+                                children: [
+                                  Container(
+                                    height: 45,
+                                    width: 45,
+                                    alignment: Alignment.center,
+                                    decoration: const BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Color(0xffE7E7E7)),
+                                    child: Image.asset(
+                                      AppImages.fileIcon,
+                                      height: 21,
+                                    ),
+                                  ),
+                                  ScreenSize.width(15),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        customText(
+                                          title: model.name ?? '',
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500,
+                                          color: AppColor.blackColor,
+                                          fontFamily: FontFamily.interMedium,
+                                          maxLines: 1,
+                                        ),
+                                        customText(
+                                          title:
+                                              'Last update on ${TimeFormat.convertDateWithTime(model.updatedAt)}',
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w400,
+                                          color: AppColor.grey6AColor,
+                                          fontFamily: FontFamily.interRegular,
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  popupMenuButton(
+                                      index: index, provider: myProvider)
+                                ],
+                              ),
+                            );
+                          })
+                  : Container(),
+        );
+      }),
     );
   }
 
-  PopupMenuButton popupMenuButton() {
+  PopupMenuButton popupMenuButton(
+      {required int index, required FileRackProvider provider}) {
     return customPopupMenuButton(
         list: [
           customPopMenuItem(value: 0, title: 'Edit'),
@@ -129,7 +166,20 @@ class _FileRackListScreenState extends State<FileRackListScreen>
           } else if (value == 2) {
             // assignCategoryBottomSheet();
           } else if (value == 3) {
-            deleteFileRackDialogBox();
+            deleteFileRackDialogBox(deleteTap: () {
+              provider
+                  .deleteFileRackApiFunction(
+                      groupId: widget.groupId,
+                      sheetId:
+                          provider.model!.data!.sheets![index].id.toString())
+                  .then((val) {
+                if (val != null) {
+                  Utils.showToast(val['message'], color: Colors.green);
+                  provider.model!.data!.sheets!.removeAt(index);
+                  setState(() {});
+                }
+              });
+            });
           }
         });
   }

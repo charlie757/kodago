@@ -4,7 +4,7 @@ import 'package:kodago/helper/app_images.dart';
 import 'package:kodago/helper/custom_text.dart';
 import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
-import 'package:kodago/provider/home/home_provider.dart';
+import 'package:kodago/services/provider/home/home_provider.dart';
 import 'package:kodago/widget/home_posts_widget.dart';
 import 'package:provider/provider.dart';
 import '../../../uitls/mixins.dart';

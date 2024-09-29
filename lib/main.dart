@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kodago/helper/app_color.dart';
-import 'package:kodago/provider/auth_provider/forgot_password_provider.dart';
-import 'package:kodago/provider/auth_provider/login_provider.dart';
-import 'package:kodago/provider/auth_provider/otp_provider.dart';
-import 'package:kodago/provider/auth_provider/signup_provider.dart';
-import 'package:kodago/provider/dashboard_provider.dart';
-import 'package:kodago/provider/group/chat_provider.dart';
-import 'package:kodago/provider/group/group_provider.dart';
-import 'package:kodago/provider/group/new_group_provider.dart';
-import 'package:kodago/provider/home/home_provider.dart';
-import 'package:kodago/provider/notification/notification_provider.dart';
-import 'package:kodago/provider/onboarding_provider.dart';
-import 'package:kodago/provider/profile_provider.dart';
-import 'package:kodago/provider/splash_provider.dart';
+import 'package:kodago/services/provider/auth_provider/forgot_password_provider.dart';
+import 'package:kodago/services/provider/auth_provider/login_provider.dart';
+import 'package:kodago/services/provider/auth_provider/otp_provider.dart';
+import 'package:kodago/services/provider/auth_provider/signup_provider.dart';
+import 'package:kodago/services/provider/dashboard_provider.dart';
+import 'package:kodago/services/provider/file_rack/file_rack_provider.dart';
+import 'package:kodago/services/provider/group/chat_provider.dart';
+import 'package:kodago/services/provider/group/group_details_provider.dart';
+import 'package:kodago/services/provider/group/group_provider.dart';
+import 'package:kodago/services/provider/group/new_group_provider.dart';
+import 'package:kodago/services/provider/home/home_provider.dart';
+import 'package:kodago/services/provider/notification/notification_provider.dart';
+import 'package:kodago/services/provider/onboarding_provider.dart';
+import 'package:kodago/services/provider/profile_provider.dart';
+import 'package:kodago/services/provider/splash_provider.dart';
 import 'package:kodago/presentation/splash_screen.dart';
 import 'package:kodago/uitls/session_manager.dart';
 import 'package:kodago/uitls/utils.dart';
@@ -53,6 +55,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => HomeProvider()),
         ChangeNotifierProvider(create: (_) => NotificationProvider()),
         ChangeNotifierProvider(create: (_) => GroupProvider()),
+        ChangeNotifierProvider(create: (_) => GroupDetailsProvider()),
+        ChangeNotifierProvider(create: (_) => FileRackProvider()),
         ChangeNotifierProvider.value(
           value: NewGroupProvider(),
         ),

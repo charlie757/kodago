@@ -12,7 +12,9 @@ import 'package:kodago/widget/appbar.dart';
 import '../../../uitls/mixins.dart';
 
 class NoFileRacksScreen extends StatefulWidget {
-  const NoFileRacksScreen({super.key});
+  final String groupId;
+  final String groupName;
+  const NoFileRacksScreen({required this.groupId, required this.groupName});
 
   @override
   State<NoFileRacksScreen> createState() => _NoFileRacksScreenState();
@@ -25,7 +27,7 @@ class _NoFileRacksScreenState extends State<NoFileRacksScreen>
     return MediaQuery(
       data: mediaQuery,
       child: Scaffold(
-        appBar: appBar(title: 'Test'),
+        appBar: appBar(title: widget.groupName),
         body: SingleChildScrollView(
           padding: const EdgeInsets.only(left: 40, right: 40, bottom: 40),
           child: Column(
@@ -54,8 +56,10 @@ class _NoFileRacksScreenState extends State<NoFileRacksScreen>
               CustomBtn(
                   title: 'Create form',
                   onTap: () {
-                    AppRoutes.pushCupertinoNavigation(
-                        const FileRackListScreen());
+                    AppRoutes.pushCupertinoNavigation(FileRackListScreen(
+                      groupId: widget.groupId,
+                      groupName: widget.groupName,
+                    ));
                   }),
               ScreenSize.height(45),
               Column(
