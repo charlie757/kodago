@@ -35,6 +35,11 @@ class ChatProvider extends ChangeNotifier {
       'title': 'Contact',
       'color': const Color(0xffD6DBF3)
     },
+    {
+      'img': AppImages.chatDocument1,
+      'title': 'Pole',
+      'color': const Color(0xffD6F3E0)
+    },
   ];
 
   List chatTypesList = ['All', 'Geo tagging', 'TPI', 'Skill Development'];

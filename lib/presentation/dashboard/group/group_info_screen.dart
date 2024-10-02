@@ -8,7 +8,6 @@ import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/helper/view_network_image.dart';
 import 'package:kodago/services/provider/group/group_details_provider.dart';
-import 'package:kodago/services/provider/group/new_group_provider.dart';
 import 'package:kodago/presentation/dashboard/file_rack/no_file_racks_screen.dart';
 import 'package:kodago/presentation/dashboard/group/add_member_screen.dart';
 import 'package:kodago/presentation/dashboard/group/edit_group_profile.dart';
@@ -17,7 +16,6 @@ import 'package:kodago/presentation/dashboard/group/view_all_group_media_screen.
 import 'package:kodago/uitls/time_format.dart';
 import 'package:kodago/widget/appbar.dart';
 import 'package:kodago/widget/popmenuButton.dart';
-import 'package:provider/provider.dart';
 import 'package:provider/provider.dart';
 import '../../../uitls/mixins.dart';
 
@@ -135,9 +133,11 @@ class _GroupInfoScreenState extends State<GroupInfoScreen>
     var model = provider.model!.data!.groupDetail!;
     return Column(
       children: [
-        ViewNetworkImage(
-          img: model.imageLink,
-          height: 73.0,
+        ClipOval(
+          child: ViewNetworkImage(
+            img: model.imageLink,
+            height: 73.0,
+          ),
         ),
         ScreenSize.height(10),
         customText(
@@ -392,7 +392,7 @@ class _GroupInfoScreenState extends State<GroupInfoScreen>
                     var memberModel = model.members![index];
                     return GestureDetector(
                       onTap: () {
-                        showDialogBox();
+                        showDialogBox(provider, memberModel.memberJoinId);
                       },
                       child: Container(
                         color: AppColor.whiteColor,
@@ -446,11 +446,12 @@ class _GroupInfoScreenState extends State<GroupInfoScreen>
     );
   }
 
-  showDialogBox() {
+  showDialogBox(GroupDetailsProvider provider, String id) {
     showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
+            backgroundColor: AppColor.whiteColor,
             insetPadding: EdgeInsets.zero,
             contentPadding: EdgeInsets.zero,
             shape: OutlineInputBorder(
@@ -463,11 +464,21 @@ class _GroupInfoScreenState extends State<GroupInfoScreen>
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  customText(
-                    title: 'Make group admin',
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: FontFamily.interMedium,
+                  InkWell(
+                    onTap: () {
+                      provider.exitGroupApiFunction(
+                          widget.groupId, id, 'makeadmin');
+                    },
+                    child: Container(
+                      color: AppColor.whiteColor,
+                      width: double.infinity,
+                      child: customText(
+                        title: 'Make group admin',
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: FontFamily.interMedium,
+                      ),
+                    ),
                   ),
                   ScreenSize.height(20),
                   customText(
@@ -484,11 +495,21 @@ class _GroupInfoScreenState extends State<GroupInfoScreen>
                     fontFamily: FontFamily.interMedium,
                   ),
                   ScreenSize.height(20),
-                  customText(
-                    title: 'Remove from group',
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: FontFamily.interMedium,
+                  InkWell(
+                    onTap: () {
+                      provider.exitGroupApiFunction(
+                          widget.groupId, id, 'remove');
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      color: AppColor.whiteColor,
+                      child: customText(
+                        title: 'Remove from group',
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: FontFamily.interMedium,
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -543,7 +564,12 @@ class _GroupInfoScreenState extends State<GroupInfoScreen>
         ],
         onSelected: (value) {
           if (value == 0) {
-            AppRoutes.pushCupertinoNavigation(const AddMemberScreen());
+            AppRoutes.pushCupertinoNavigation(AddMemberScreen(
+              groupId: widget.groupId,
+            )).then((val) {
+              Provider.of<GroupDetailsProvider>(context, listen: false)
+                  .groupDetailsApiFunction(widget.groupId, isShowLoader: false);
+            });
           } else if (value == 1 || value == 2) {
             AppRoutes.pushCupertinoNavigation(EditGroupProfile(
               route: value == 1 ? 'name' : 'image',

@@ -11,7 +11,7 @@ class SplashProvider extends ChangeNotifier {
       //   AppRoutes.pushReplacementNavigation(const OnboardingScreen());
       // } else
       if (SessionManager.token.isNotEmpty) {
-        AppRoutes.pushReplacementNavigation(const DashboardScreen());
+        AppRoutes.pushReplacementNavigation(DashboardScreen());
       } else {
         AppRoutes.pushReplacementNavigation(const LoginScreen());
       }

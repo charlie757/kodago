@@ -21,7 +21,7 @@ class NotificationScreen extends StatefulWidget {
 }
 
 class _NotificationScreenState extends State<NotificationScreen>
-    with MediaQueryScaleFactor {
+    with MediaQueryScaleFactor, SingleTickerProviderStateMixin {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((val) {
@@ -35,6 +35,9 @@ class _NotificationScreenState extends State<NotificationScreen>
     provider.clearvalues();
     provider.notificationApiFunction();
   }
+
+  bool closedWhenTap = false;
+  late final controller = SlidableController(this);
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +67,8 @@ class _NotificationScreenState extends State<NotificationScreen>
             child: myProvider.model != null && myProvider.model!.data != null
                 ? myProvider.model!.data!.dbdata != null
                     ? SlidableAutoCloseBehavior(
+                        closeWhenOpened: true,
+                        // closeWhenTapped: closedWhenTap,
                         child: ListView.separated(
                             separatorBuilder: (context, sp) {
                               return ScreenSize.height(25);
@@ -94,21 +99,31 @@ class _NotificationScreenState extends State<NotificationScreen>
   notificationWidget(int index, NotificationProvider provider) {
     var model = provider.model!.data!.dbdata![index];
     return Slidable(
+      key: Key(index.toString()),
       endActionPane: ActionPane(
         extentRatio: .2,
         motion: const ScrollMotion(),
         children: [
+          SlidableAction(
+            onPressed: (val) {},
+            autoClose: true,
+            icon: Icons.abc,
+          ),
           Flexible(
             child: GestureDetector(
               onTap: () {
-                // provider.deleteNotificationApiFunction(model.rowId).then((val) {
-                //   if (val != null) {
-                //     print(val);
-                //     provider.model!.data!.dbdata!.removeAt(index);
-                //     controller!.close();
-                //     setState(() {});
-                //   }
-                // });
+                // controller.close()
+                // Slidable.of(context)?.close();
+                print('object');
+                setState(() {});
+                // Navigator.pop(context);
+                provider.deleteNotificationApiFunction(model.rowId).then((val) {
+                  if (val != null) {
+                    print(val);
+                    provider.model!.data!.dbdata!.removeAt(index);
+                    setState(() {});
+                  }
+                });
               },
               child: Container(
                 width: 50,

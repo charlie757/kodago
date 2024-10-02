@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:kodago/helper/app_color.dart';
 import 'package:kodago/helper/app_images.dart';
-import 'package:kodago/helper/custom_text.dart';
-import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/services/provider/group/new_group_provider.dart';
 import 'package:kodago/widget/appbar.dart';
+import 'package:kodago/widget/selected_contact_widget.dart';
+import 'package:kodago/widget/view_contact_widget.dart';
 import 'package:provider/provider.dart';
-
 import '../../../uitls/mixins.dart';
 
 class AddMemberScreen extends StatefulWidget {
-  const AddMemberScreen({super.key});
+  final String groupId;
+  const AddMemberScreen({required this.groupId});
 
   @override
   State<AddMemberScreen> createState() => _AddMemberScreenState();
@@ -20,192 +20,103 @@ class AddMemberScreen extends StatefulWidget {
 class _AddMemberScreenState extends State<AddMemberScreen>
     with MediaQueryScaleFactor {
   @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((val) {
+      callInitFunction();
+    });
+    super.initState();
+  }
+
+  callInitFunction() async {
+    final provider = Provider.of<NewGroupProvider>(context, listen: false);
+    provider.contactApiFunction('Ravi');
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MediaQuery(
       data: mediaQuery,
-      child: Scaffold(
-        appBar: appBar(title: 'Add members', actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 15),
-            child: Image.asset(
-              AppImages.searchIcon,
-              height: 17,
-              width: 17,
-            ),
-          )
-        ]),
-        body: Column(
-          children: [selectedGroupWidget(), Expanded(child: groupListWidget())],
-        ),
-        floatingActionButton: GestureDetector(
-          onTap: () {},
-          child: Container(
-            height: 45,
-            width: 45,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: AppColor.appColor,
-                boxShadow: [
-                  BoxShadow(
-                      offset: const Offset(0, -2),
-                      blurRadius: 6,
-                      color: AppColor.blackColor.withOpacity(.2))
-                ]),
-            child: const Icon(
-              Icons.check,
-              color: AppColor.whiteColor,
-            ),
-          ),
-        ),
-      ),
+      child: Consumer<NewGroupProvider>(builder: (context, myProvider, child) {
+        return Scaffold(
+          appBar: appBar(title: 'Add members', actions: [
+            Padding(
+              padding: const EdgeInsets.only(right: 15),
+              child: Image.asset(
+                AppImages.searchIcon,
+                height: 17,
+                width: 17,
+              ),
+            )
+          ]),
+          body: myProvider.model != null && myProvider.model!.data != null
+              ? Column(
+                  children: [
+                    myProvider.model!.addedList.isEmpty
+                        ? Container()
+                        : selectedGroupWidget(myProvider),
+                    Expanded(child: groupListWidget(myProvider))
+                  ],
+                )
+              : Container(),
+          floatingActionButton:
+              myProvider.model != null && myProvider.model!.addedList.isNotEmpty
+                  ? GestureDetector(
+                      onTap: () {
+                        myProvider.addMemberApiFunction(widget.groupId);
+                      },
+                      child: Container(
+                        height: 45,
+                        width: 45,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: AppColor.appColor,
+                            boxShadow: [
+                              BoxShadow(
+                                  offset: const Offset(0, -2),
+                                  blurRadius: 6,
+                                  color: AppColor.blackColor.withOpacity(.2))
+                            ]),
+                        child: const Icon(
+                          Icons.check,
+                          color: AppColor.whiteColor,
+                        ),
+                      ),
+                    )
+                  : Container(),
+        );
+      }),
     );
   }
 
-  groupListWidget() {
+  groupListWidget(NewGroupProvider provider) {
     return ListView.separated(
         separatorBuilder: (context, sp) {
           return ScreenSize.height(17);
         },
-        itemCount: context.watch<NewGroupProvider>().groupList.length,
+        itemCount: provider.model!.data!.length,
         shrinkWrap: true,
         padding:
             const EdgeInsets.only(left: 21, right: 20, top: 20, bottom: 30),
         itemBuilder: (context, index) {
-          var model = context.watch<NewGroupProvider>().groupList[index];
-          return GestureDetector(
-            onLongPress: () {
-              Provider.of<NewGroupProvider>(context, listen: false).isShow =
-                  true;
-              setState(() {});
-            },
-            child: Container(
-              color: AppColor.whiteColor,
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 38,
-                    child: Stack(
-                      children: [
-                        Image.asset(
-                          model['img'],
-                          height: 33,
-                          width: 33,
-                        ),
-                        Positioned(
-                          bottom: 0 + 2,
-                          right: 0,
-                          child: Container(
-                            height: 16,
-                            width: 16,
-                            decoration: BoxDecoration(
-                                border: Border.all(color: AppColor.whiteColor),
-                                shape: BoxShape.circle,
-                                color: AppColor.appColor),
-                            child: const Icon(
-                              Icons.check,
-                              color: AppColor.whiteColor,
-                              size: 12,
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  ScreenSize.width(15),
-                  Expanded(
-                    child: customText(
-                      title: model['name'],
-                      fontSize: 14,
-                      color: AppColor.blackColor,
-                      fontWeight: FontWeight.w500,
-                      fontFamily: FontFamily.interSemiBold,
-                    ),
-                  )
-                ],
-              ),
-            ),
+          return ViewContactWidget(
+            model: provider.model!,
+            index: index,
           );
         });
   }
 
-  selectedGroupWidget() {
+  selectedGroupWidget(NewGroupProvider provider) {
     return Padding(
       padding: const EdgeInsets.only(top: 15),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(
-            height: 68,
-            child: ListView.separated(
-                separatorBuilder: (context, sp) {
-                  return ScreenSize.width(10);
-                },
-                itemCount: context.watch<NewGroupProvider>().groupList.length,
-                scrollDirection: Axis.horizontal,
-                shrinkWrap: true,
-                padding: const EdgeInsets.only(left: 20, right: 20),
-                itemBuilder: (context, index) {
-                  var model =
-                      context.watch<NewGroupProvider>().groupList[index];
-                  return GestureDetector(
-                    onTap: () {},
-                    child: SizedBox(
-                      width: 50,
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            width: 50,
-                            child: Stack(
-                              children: [
-                                Image.asset(
-                                  model['img'],
-                                  height: 48,
-                                  width: 48,
-                                ),
-                                Positioned(
-                                  bottom: 0,
-                                  right: 0,
-                                  child: Container(
-                                    height: 16,
-                                    width: 16,
-                                    decoration: BoxDecoration(
-                                        border: Border.all(
-                                            color: AppColor.whiteColor),
-                                        shape: BoxShape.circle,
-                                        color: const Color(0xff979797)),
-                                    child: const Icon(
-                                      Icons.close,
-                                      color: AppColor.whiteColor,
-                                      size: 12,
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                          ScreenSize.height(5),
-                          Expanded(
-                              child: Text(
-                            model['name'],
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: AppColor.blackColor,
-                              fontWeight: FontWeight.w400,
-                              fontFamily: FontFamily.interRegular,
-                            ),
-                          ))
-                        ],
-                      ),
-                    ),
-                  );
-                }),
-          ),
+          const SelectedContactWidget(),
           ScreenSize.height(19),
           Container(
             height: 1,
             width: double.infinity,
-            color: Color(0xffEEEEEE),
+            color: const Color(0xffEEEEEE),
           )
         ],
       ),

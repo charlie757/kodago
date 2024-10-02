@@ -25,13 +25,20 @@ class ApiUrl {
 
   /// group
   static String groupUrl = '${baseUrl}groups/index';
+  static String groupContactsUrl = '${baseUrl}groups/search_users';
+  static String createGroupUrl = '${baseUrl}groups/create_group';
   static String groupDetailsUrl = '${baseUrl}groups/members';
   static String updateGroupNameUrl = '${baseUrl}groups/update_group';
-  static String exitGroupUrl = 'groups/member_action';
+  static String exitGroupUrl = '${baseUrl}groups/member_action';
   static String updateGroupImageUrl = "${baseUrl}groups/update_group_image";
+  static String addMemberUrl = '${baseUrl}groups/addMember';
+
+  /// topic
+  static String topicUrl = '${baseUrl}groups/create_topics';
 
   /// file rack
   static String createFileRackUrl = '${baseUrl}sheets/createSheet';
   static String fileRackListUrl = '${baseUrl}sheets/index';
   static String deleteFileRackUrl = '${baseUrl}sheets/deleteSheet';
+  static String fileRackDetailsUrl = '${baseUrl}sheets/viewData_v1';
 }

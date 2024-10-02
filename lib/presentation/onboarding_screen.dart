@@ -64,8 +64,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      AppRoutes.pushReplacementNavigation(
-                          const DashboardScreen());
+                      AppRoutes.pushReplacementNavigation(DashboardScreen());
                     },
                     child: customText(
                       title: "Skip..",

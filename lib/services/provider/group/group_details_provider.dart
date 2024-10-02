@@ -33,16 +33,25 @@ class GroupDetailsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  exitGroupApiFunction(String groupId) async {
+  exitGroupApiFunction(String groupId, String uniqueId, String type) async {
+    showLoader(navigatorKey.currentContext!);
     var body = {
       "group_id": groupId,
       'Authkey': Constants.authkey,
       'Userid': SessionManager.userId,
       'Token': SessionManager.token,
+      'uniqueId': uniqueId,
+      'action': type,
+
+      /// remove or makeadmin
     };
     final response = await ApiService.multiPartApiMethod(
         url: ApiUrl.exitGroupUrl, body: body);
-    if (response != null && response['status'] == 1) {}
+    Navigator.pop(navigatorKey.currentContext!);
+    if (response != null && response['status'] == 1) {
+      Navigator.pop(navigatorKey.currentContext!);
+      groupDetailsApiFunction(groupId, isShowLoader: false);
+    }
     notifyListeners();
   }
 

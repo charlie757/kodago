@@ -9,6 +9,7 @@ import 'package:kodago/helper/view_network_image.dart';
 import 'package:kodago/model/feeds_model.dart';
 import 'package:kodago/presentation/dashboard/home/view_post_screen.dart';
 import 'package:kodago/widget/comment_bottomsheet.dart';
+import 'package:kodago/widget/view_video.dart';
 import 'package:kodago/widget/zoom_widget.dart';
 import 'package:video_player/video_player.dart';
 
@@ -34,7 +35,7 @@ class _HomePostsWidgetState extends State<HomePostsWidget> {
 
   @override
   void dispose() {
-    // controller.dispose();
+    controller.dispose();
     super.dispose();
   }
 
@@ -42,24 +43,13 @@ class _HomePostsWidgetState extends State<HomePostsWidget> {
   Widget build(BuildContext context) {
     var model = widget.feedsModel!.data!.feeds![widget.index];
     if (model.fieldType == 'video') {
-      // controller =
-      //     VideoPlayerController.networkUrl(Uri.parse(model.video![0].mainURL))
-      //       ..initialize().then((_) {
-      //         controller.setVolume(0);
-      //         controller.play();
-      //         print("isInsgsgd..${controller.value.isInitialized}");
-      //         if (widget.currentIndex != widget.index) {
-      //           controller.pause();
-      //         }
-      //         // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-      //       });
-    } else {
-      // controller.value.isInitialized
-      //     ? controller.value.isPlaying
-      //         ? controller.pause()
-      //         : null
-      //     : null;
-    }
+      controller =
+          VideoPlayerController.networkUrl(Uri.parse(model.video![0].mainURL))
+            ..initialize().then((_) {
+              // controller.setVolume(0);
+              controller.pause();
+            });
+    } else {}
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -72,44 +62,66 @@ class _HomePostsWidgetState extends State<HomePostsWidget> {
                   width: double.infinity,
                 ),
               )
-            : model.fieldType == ''
-                // video
+            : model.fieldType == 'video'
                 ? Stack(
                     children: [
-                      AspectRatio(
-                        aspectRatio: controller.value.aspectRatio,
-                        child: VideoPlayer(controller),
-                      ),
-                      Positioned(
-                        right: 0 + 15,
-                        bottom: 0 + 15,
-                        child: GestureDetector(
-                          onTap: () {
-                            if (isSound.value == true) {
-                              isSound.value = false;
-                              controller.setVolume(0);
-                            } else {
-                              isSound.value = true;
-                              controller.setVolume(10);
-                            }
-                          },
-                          child: Container(
-                            height: 25,
-                            width: 25,
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: AppColor.blackColor.withOpacity(.3)),
-                            alignment: Alignment.center,
-                            child: Icon(
-                              isSound.value
-                                  ? Icons.volume_up_rounded
-                                  : Icons.volume_off,
-                              color: AppColor.whiteColor,
-                              size: 15,
-                            ),
-                          ),
+                      GestureDetector(
+                        onTap: () {
+                          AppRoutes.pushCupertinoNavigation(
+                              ViewVideo(videoUrl: model.video![0].mainURL));
+                        },
+                        child: AspectRatio(
+                          aspectRatio: controller.value.aspectRatio,
+                          child: VideoPlayer(controller),
                         ),
-                      )
+                      ),
+                      // GestureDetector(
+                      //   onTap: () {
+                      //     controller.play();
+                      //   },
+                      //   child: Align(
+                      //       alignment: Alignment.bottomCenter,
+                      //       child: Container(
+                      //           height: 40,
+                      //           width: 40,
+                      //           decoration: BoxDecoration(
+                      //               shape: BoxShape.circle,
+                      //               color: AppColor.blackColor.withOpacity(.3)),
+                      //           child: const Icon(
+                      //             Icons.play_arrow,
+                      //             color: AppColor.whiteColor,
+                      //           ))),
+                      // )
+                      // Positioned(
+                      //   right: 0 + 15,
+                      //   bottom: 0 + 15,
+                      //   child: GestureDetector(
+                      //     onTap: () {
+                      //       if (isSound.value == true) {
+                      //         isSound.value = false;
+                      //         controller.setVolume(0);
+                      //       } else {
+                      //         isSound.value = true;
+                      //         controller.setVolume(10);
+                      //       }
+                      //     },
+                      //     child: Container(
+                      //       height: 25,
+                      //       width: 25,
+                      //       decoration: BoxDecoration(
+                      //           shape: BoxShape.circle,
+                      //           color: AppColor.blackColor.withOpacity(.3)),
+                      //       alignment: Alignment.center,
+                      //       child: Icon(
+                      //         isSound.value
+                      //             ? Icons.volume_up_rounded
+                      //             : Icons.volume_off,
+                      //         color: AppColor.whiteColor,
+                      //         size: 15,
+                      //       ),
+                      //     ),
+                      //   ),
+                      // )
                     ],
                   )
                 : Container(

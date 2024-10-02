@@ -11,7 +11,8 @@ import 'package:provider/provider.dart';
 import '../../uitls/mixins.dart';
 
 class DashboardScreen extends StatefulWidget {
-  const DashboardScreen({super.key});
+  final int index;
+  DashboardScreen({this.index = 0});
 
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();
@@ -29,7 +30,7 @@ class _DashboardScreenState extends State<DashboardScreen>
 
   callInitFunction() {
     final provider = Provider.of<DashboardProvider>(context, listen: false);
-    provider.updateIndex(0);
+    provider.updateIndex(widget.index);
     Provider.of<ProfileProvider>(context, listen: false).profileModel = null;
     Provider.of<ProfileProvider>(context, listen: false)
         .getProfileApiFunction();

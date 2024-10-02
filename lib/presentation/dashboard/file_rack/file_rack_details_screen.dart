@@ -12,14 +12,21 @@ import 'package:kodago/presentation/dashboard/file_rack/file_rack_comment_screen
 import 'package:kodago/presentation/dashboard/file_rack/file_rack_history.dart';
 import 'package:kodago/presentation/dashboard/file_rack/filter_screen.dart';
 import 'package:kodago/presentation/dashboard/home/view_post_screen.dart';
+import 'package:kodago/services/provider/file_rack/file_rack_details_provider.dart';
 import 'package:kodago/uitls/delete_file_rack_dialogbox.dart';
 import 'package:kodago/widget/appbar.dart';
 import 'package:kodago/widget/popmenuButton.dart';
-
+import 'package:provider/provider.dart';
 import '../../../uitls/mixins.dart';
 
 class FileRackDetailsScreen extends StatefulWidget {
-  const FileRackDetailsScreen({super.key});
+  final String groupId;
+  final String sheetId;
+  final String sheetDataId;
+  const FileRackDetailsScreen(
+      {required this.groupId,
+      required this.sheetDataId,
+      required this.sheetId});
 
   @override
   State<FileRackDetailsScreen> createState() => _FileRackDetailsScreenState();
@@ -27,6 +34,20 @@ class FileRackDetailsScreen extends StatefulWidget {
 
 class _FileRackDetailsScreenState extends State<FileRackDetailsScreen>
     with MediaQueryScaleFactor {
+  @override
+  void initState() {
+    callInitFunction();
+    // TODO: implement initState
+    super.initState();
+  }
+
+  callInitFunction() async {
+    final provider =
+        Provider.of<FileRackDetailsProvider>(context, listen: false);
+    provider.fileRackDetailsApiFunction(
+        groupId: widget.groupId, sheetId: widget.sheetId, sheetDataId: '');
+  }
+
   @override
   Widget build(BuildContext context) {
     return MediaQuery(

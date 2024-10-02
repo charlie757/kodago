@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kodago/helper/app_color.dart';
+import 'package:kodago/model/topic_provider.dart';
 import 'package:kodago/services/provider/auth_provider/forgot_password_provider.dart';
 import 'package:kodago/services/provider/auth_provider/login_provider.dart';
 import 'package:kodago/services/provider/auth_provider/otp_provider.dart';
 import 'package:kodago/services/provider/auth_provider/signup_provider.dart';
 import 'package:kodago/services/provider/dashboard_provider.dart';
+import 'package:kodago/services/provider/file_rack/file_rack_details_provider.dart';
 import 'package:kodago/services/provider/file_rack/file_rack_provider.dart';
 import 'package:kodago/services/provider/group/chat_provider.dart';
 import 'package:kodago/services/provider/group/group_details_provider.dart';
@@ -57,8 +59,10 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => GroupProvider()),
         ChangeNotifierProvider(create: (_) => GroupDetailsProvider()),
         ChangeNotifierProvider(create: (_) => FileRackProvider()),
-        ChangeNotifierProvider.value(
-          value: NewGroupProvider(),
+        ChangeNotifierProvider(create: (_) => FileRackDetailsProvider()),
+        ChangeNotifierProvider(create: (_) => TopicProvider()),
+        ChangeNotifierProvider(
+          create: (_) => NewGroupProvider(),
         ),
       ],
       child: GestureDetector(

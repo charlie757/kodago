@@ -96,7 +96,11 @@ class _FileRackListScreenState extends State<FileRackListScreen>
                             return GestureDetector(
                               onTap: () {
                                 AppRoutes.pushCupertinoNavigation(
-                                    const FileRackDetailsScreen());
+                                    FileRackDetailsScreen(
+                                  groupId: widget.groupId,
+                                  sheetId: model.id,
+                                  sheetDataId: '',
+                                ));
                               },
                               child: Row(
                                 children: [

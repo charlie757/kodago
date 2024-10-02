@@ -63,7 +63,7 @@ class LoginProvider extends ChangeNotifier {
         SessionManager.setToken = verfiyModel.data!.token ?? '';
         SessionManager.setUserId = verfiyModel.data!.userid;
         resetValues();
-        AppRoutes.pushReplacementNavigation(const DashboardScreen());
+        AppRoutes.pushReplacementNavigation(DashboardScreen());
       }
     }
   }

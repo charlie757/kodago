@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:kodago/config/app_routes.dart';
@@ -6,11 +8,15 @@ import 'package:kodago/helper/app_images.dart';
 import 'package:kodago/helper/custom_text.dart';
 import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
+import 'package:kodago/helper/view_network_image.dart';
+import 'package:kodago/services/image_picker_service.dart';
 import 'package:kodago/services/provider/group/new_group_provider.dart';
 import 'package:kodago/presentation/dashboard/group/create_topic_screen.dart';
 import 'package:kodago/widget/appbar.dart';
+import 'package:kodago/widget/image_bottomsheet.dart';
+import 'package:kodago/widget/selected_contact_widget.dart';
 import 'package:provider/provider.dart';
-
+import 'package:image_picker/image_picker.dart';
 import '../../../uitls/mixins.dart';
 
 class CreateGroupScreen extends StatefulWidget {
@@ -22,50 +28,58 @@ class CreateGroupScreen extends StatefulWidget {
 
 class _CreateGroupScreenState extends State<CreateGroupScreen>
     with MediaQueryScaleFactor {
+  final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return MediaQuery(
       data: mediaQuery,
-      child: Scaffold(
-          backgroundColor: const Color(0xffF8F8F8),
-          appBar: appBar(title: 'New group'),
-          body: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [headerWidget(), membersWidget()],
-          ),
-          floatingActionButton: GestureDetector(
-            onTap: () {
-              AppRoutes.pushCupertinoNavigation(const CreateTopicScreen());
-            },
-            child: Container(
-              height: 45,
-              width: 45,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: AppColor.appColor,
-                  boxShadow: [
-                    BoxShadow(
-                        offset: const Offset(0, -2),
-                        blurRadius: 6,
-                        color: AppColor.blackColor.withOpacity(.2))
-                  ]),
-              child: const Icon(
-                Icons.check,
-                color: AppColor.whiteColor,
+      child: Consumer<NewGroupProvider>(builder: (context, myProvider, child) {
+        return Scaffold(
+            backgroundColor: const Color(0xffF8F8F8),
+            appBar: appBar(title: 'New group'),
+            body: Form(
+              key: formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [headerWidget(myProvider), membersWidget(myProvider)],
               ),
             ),
-          )),
+            floatingActionButton: GestureDetector(
+              onTap: () {
+                if (formKey.currentState!.validate()) {
+                  myProvider.createGroupApiFunction();
+                }
+              },
+              child: Container(
+                height: 45,
+                width: 45,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: AppColor.appColor,
+                    boxShadow: [
+                      BoxShadow(
+                          offset: const Offset(0, -2),
+                          blurRadius: 6,
+                          color: AppColor.blackColor.withOpacity(.2))
+                    ]),
+                child: const Icon(
+                  Icons.check,
+                  color: AppColor.whiteColor,
+                ),
+              ),
+            ));
+      }),
     );
   }
 
-  membersWidget() {
+  membersWidget(NewGroupProvider provider) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: const EdgeInsets.only(left: 20, top: 18),
           child: customText(
-            title: 'Members: 6',
+            title: 'Members: ${provider.model!.addedList.length}',
             fontSize: 13,
             fontWeight: FontWeight.w500,
             fontFamily: FontFamily.interMedium,
@@ -73,71 +87,12 @@ class _CreateGroupScreenState extends State<CreateGroupScreen>
           ),
         ),
         ScreenSize.height(21),
-        SizedBox(
-          height: 75,
-          child: ListView.separated(
-              separatorBuilder: (context, sp) {
-                return ScreenSize.width(15);
-              },
-              shrinkWrap: true,
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              scrollDirection: Axis.horizontal,
-              itemCount: context.watch<NewGroupProvider>().groupList.length,
-              itemBuilder: (context, index) {
-                var model = context.watch<NewGroupProvider>().groupList[index];
-                return SizedBox(
-                  width: 50,
-                  child: Column(
-                    children: [
-                      Stack(
-                        children: [
-                          Image.asset(
-                            model['img'],
-                            height: 48,
-                            width: 48,
-                          ),
-                          Positioned(
-                            // bottom: 0,
-                            right: 0,
-                            child: Container(
-                              height: 16,
-                              width: 16,
-                              decoration: BoxDecoration(
-                                  border:
-                                      Border.all(color: AppColor.whiteColor),
-                                  shape: BoxShape.circle,
-                                  color: const Color(0xff979797)),
-                              child: const Icon(
-                                Icons.close,
-                                color: AppColor.whiteColor,
-                                size: 12,
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                      ScreenSize.height(5),
-                      Text(
-                        model['name'],
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 11,
-                          color: AppColor.blackColor,
-                          fontWeight: FontWeight.w400,
-                          fontFamily: FontFamily.interRegular,
-                        ),
-                      )
-                    ],
-                  ),
-                );
-              }),
-        )
+        const SelectedContactWidget()
       ],
     );
   }
 
-  headerWidget() {
+  headerWidget(NewGroupProvider provider) {
     return Container(
       height: 100,
       alignment: Alignment.center,
@@ -146,34 +101,66 @@ class _CreateGroupScreenState extends State<CreateGroupScreen>
       color: AppColor.whiteColor,
       child: Row(
         children: [
-          Container(
-            height: 38,
-            width: 38,
-            decoration: const BoxDecoration(
-                shape: BoxShape.circle, color: Color(0xffEAEAEA)),
-            alignment: Alignment.center,
-            child: Image.asset(
-              AppImages.cameraIcon,
-              height: 20,
-              width: 20,
-            ),
+          GestureDetector(
+            onTap: () {
+              imageBottomSheet(
+                cameraTap: () {
+                  ImagePickerService.pickImage(ImageSource.camera).then((val) {
+                    if (val != null) {
+                      provider.img = val;
+                      setState(() {});
+                    }
+                    Navigator.pop(context);
+                  });
+                },
+                galleryTap: () {
+                  ImagePickerService.pickImage(ImageSource.gallery).then((val) {
+                    if (val != null) {
+                      provider.img = val;
+                      setState(() {});
+                    }
+                    Navigator.pop(context);
+                  });
+                },
+              );
+            },
+            child: provider.img != null
+                ? ClipOval(
+                    child: Image.file(
+                      provider.img!,
+                      height: 38,
+                    ),
+                  )
+                : Container(
+                    height: 38,
+                    width: 38,
+                    decoration: const BoxDecoration(
+                        shape: BoxShape.circle, color: Color(0xffEAEAEA)),
+                    alignment: Alignment.center,
+                    child: Image.asset(
+                      AppImages.cameraIcon,
+                      height: 20,
+                      width: 20,
+                    ),
+                  ),
           ),
           ScreenSize.width(12),
           Expanded(
               child: TextFormField(
             cursorHeight: 20,
-            decoration: InputDecoration(
+            controller: provider.groupNameController,
+            decoration: const InputDecoration(
                 isDense: false,
-                suffixIcon: Container(
-                  height: 20,
-                  width: 20,
-                  alignment: Alignment.center,
-                  child: Image.asset(
-                    AppImages.emojiIcon,
-                    height: 18,
-                    width: 18,
-                  ),
-                ),
+                // suffixIcon: Container(
+                //   height: 20,
+                //   width: 20,
+                //   alignment: Alignment.center,
+                //   child: Image.asset(
+                //     AppImages.emojiIcon,
+                //     height: 18,
+                //     width: 18,
+                //   ),
+                // ),
                 hintText: 'Group name',
                 hintStyle: const TextStyle(
                     fontSize: 13,
@@ -183,8 +170,19 @@ class _CreateGroupScreenState extends State<CreateGroupScreen>
                 enabledBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(color: Color(0xffEEEEEE)),
                 ),
+                focusedErrorBorder: const UnderlineInputBorder(
+                  borderSide: BorderSide(color: AppColor.redColor, width: 1),
+                ),
+                errorBorder: const UnderlineInputBorder(
+                  borderSide: BorderSide(color: AppColor.redColor, width: 1),
+                ),
                 focusedBorder: const UnderlineInputBorder(
                     borderSide: BorderSide(color: Color(0xffEEEEEE)))),
+            validator: (val) {
+              if (val!.isEmpty) {
+                return "Please enter group name";
+              }
+            },
           ))
         ],
       ),
