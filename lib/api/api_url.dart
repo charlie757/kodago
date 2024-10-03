@@ -1,6 +1,9 @@
 class ApiUrl {
   static String baseUrl = 'https://staging.kodago.com/api_v2/';
   // static String baseUrl = 'https://www.kodago.com/api_v2/';
+
+  static String termsConditionUrl = 'https://www.kodago.com/page/terms';
+
   /// auth api url
   static String loginUrl = '${baseUrl}authentication/login';
   static String registerUrl = '${baseUrl}authentication/register';

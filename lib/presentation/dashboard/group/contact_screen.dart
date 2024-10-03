@@ -57,32 +57,6 @@ class _ContactScreenState extends State<ContactScreen>
               ],
             ),
           ),
-          floatingActionButton:
-              myProvider.model != null && myProvider.model!.addedList.isNotEmpty
-                  ? GestureDetector(
-                      onTap: () {
-                        AppRoutes.pushCupertinoNavigation(
-                            const CreateGroupScreen());
-                      },
-                      child: Container(
-                        height: 45,
-                        width: 45,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: AppColor.appColor,
-                            boxShadow: [
-                              BoxShadow(
-                                  offset: const Offset(0, -2),
-                                  blurRadius: 6,
-                                  color: AppColor.blackColor.withOpacity(.2))
-                            ]),
-                        child: const Icon(
-                          Icons.arrow_forward,
-                          color: AppColor.whiteColor,
-                        ),
-                      ),
-                    )
-                  : Container(),
         );
       }),
     );
@@ -112,23 +86,6 @@ class _ContactScreenState extends State<ContactScreen>
               )
             ],
           ),
-        ),
-        ScreenSize.height(18),
-        Row(
-          children: [
-            Image.asset(
-              AppImages.newContactIcon,
-              height: 30,
-              width: 30,
-            ),
-            ScreenSize.width(11),
-            customText(
-              title: 'New contact',
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              fontFamily: FontFamily.interMedium,
-            )
-          ],
         ),
         ScreenSize.height(25),
         customText(
@@ -160,94 +117,6 @@ class _ContactScreenState extends State<ContactScreen>
             })
         : Container();
   }
-
-  // selectedGroupWidget() {
-  //   return Padding(
-  //     padding: const EdgeInsets.only(top: 15),
-  //     child: Column(
-  //       children: [
-  //         SizedBox(
-  //           height: 60,
-  //           child: ListView.separated(
-  //               separatorBuilder: (context, sp) {
-  //                 return ScreenSize.width(10);
-  //               },
-  //               itemCount: context.watch<NewGroupProvider>().groupList.length,
-  //               scrollDirection: Axis.horizontal,
-  //               shrinkWrap: true,
-  //               padding: const EdgeInsets.only(left: 20, right: 20),
-  //               itemBuilder: (context, index) {
-  //                 var model =
-  //                     context.watch<NewGroupProvider>().groupList[index];
-  //                 return GestureDetector(
-  //                   onTap: () {
-  //                     Provider.of<NewGroupProvider>(context, listen: false)
-  //                         .isShow = false;
-  //                     setState(() {});
-  //                   },
-  //                   child: SizedBox(
-  //                     width: 50,
-  //                     child: Column(
-  //                       children: [
-  //                         SizedBox(
-  //                           width: 50,
-  //                           child: Stack(
-  //                             children: [
-  //                               Image.asset(
-  //                                 model['img'],
-  //                                 height: 42,
-  //                                 width: 42,
-  //                               ),
-  //                               Positioned(
-  //                                 bottom: 0,
-  //                                 right: 0,
-  //                                 child: Container(
-  //                                   height: 16,
-  //                                   width: 16,
-  //                                   decoration: BoxDecoration(
-  //                                       border: Border.all(
-  //                                           color: AppColor.whiteColor),
-  //                                       shape: BoxShape.circle,
-  //                                       color: const Color(0xff979797)),
-  //                                   child: const Icon(
-  //                                     Icons.close,
-  //                                     color: AppColor.whiteColor,
-  //                                     size: 12,
-  //                                   ),
-  //                                 ),
-  //                               )
-  //                             ],
-  //                           ),
-  //                         ),
-  //                         ScreenSize.height(5),
-  //                         Expanded(
-  //                             child: Text(
-  //                           model['name'],
-  //                           maxLines: 1,
-  //                           overflow: TextOverflow.ellipsis,
-  //                           style: const TextStyle(
-  //                             fontSize: 12,
-  //                             color: AppColor.blackColor,
-  //                             fontWeight: FontWeight.w400,
-  //                             fontFamily: FontFamily.interRegular,
-  //                           ),
-  //                         ))
-  //                       ],
-  //                     ),
-  //                   ),
-  //                 );
-  //               }),
-  //         ),
-  //         ScreenSize.height(19),
-  //         Container(
-  //           height: 1,
-  //           width: double.infinity,
-  //           color: Color(0xffEEEEEE),
-  //         )
-  //       ],
-  //     ),
-  //   );
-  // }
 
   shareInviteWidgt() {
     return Row(

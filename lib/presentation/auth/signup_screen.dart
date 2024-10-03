@@ -1,12 +1,14 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:kodago/api/api_url.dart';
 import 'package:kodago/helper/app_color.dart';
 import 'package:kodago/helper/app_images.dart';
 import 'package:kodago/helper/custom_btn.dart';
 import 'package:kodago/helper/custom_text.dart';
 import 'package:kodago/helper/custom_textfield.dart';
 import 'package:kodago/helper/font_family.dart';
+import 'package:kodago/helper/launch_url.dart';
 import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/helper/textfield_lebal_text.dart';
 import 'package:kodago/services/provider/auth_provider/signup_provider.dart';
@@ -182,7 +184,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       width: 20,
                       alignment: Alignment.center,
                       child: Image.asset(
-                        myProvider.isVisible
+                        !myProvider.isVisible
                             ? AppImages.visibilityOffIcon
                             : AppImages.visibilityIcon,
                         height: 20,
@@ -200,22 +202,80 @@ class _SignupScreenState extends State<SignupScreen> {
                   },
                 ),
                 ScreenSize.height(20),
+                TextfieldLebalText(title: 'Confirm Password'),
+                ScreenSize.height(8),
+                CustomTextField(
+                  hintText: 'Enter your confirm password',
+                  isObscureText: myProvider.isConfirmVisible,
+                  isReadOnly: myProvider.isLoading,
+                  controller: myProvider.confirmPasswordController,
+                  inputFormatters: [
+                    CustomFormatter(),
+                    FilteringTextInputFormatter.deny(
+                        RegExp(Utils.regexToRemoveEmoji)),
+                  ],
+                  prefixWidget: Container(
+                      height: 20,
+                      width: 20,
+                      alignment: Alignment.center,
+                      child: Image.asset(
+                        AppImages.lockIcon,
+                        height: 20,
+                      )),
+                  suffixWidget: GestureDetector(
+                    onTap: () {
+                      if (myProvider.isConfirmVisible) {
+                        myProvider.isConfirmVisible = false;
+                      } else {
+                        myProvider.isConfirmVisible = true;
+                      }
+                      setState(() {});
+                    },
+                    child: Container(
+                      height: 20,
+                      width: 20,
+                      alignment: Alignment.center,
+                      child: Image.asset(
+                        !myProvider.isConfirmVisible
+                            ? AppImages.visibilityOffIcon
+                            : AppImages.visibilityIcon,
+                        height: 20,
+                      ),
+                    ),
+                  ),
+                  validator: (val) {
+                    if (val.isEmpty) {
+                      return "Enter your confirm password";
+                    } else if (val.length < 6) {
+                      return 'The password must be at least 6 characters';
+                    } else if (val.length > 16) {
+                      return 'The password must be less than 16 characters';
+                    } else if (myProvider.passwordController.text != val) {
+                      return "Password does not match";
+                    }
+                  },
+                ),
+                ScreenSize.height(20),
                 Row(
                   children: [
                     checkBox(myProvider),
                     ScreenSize.width(10),
-                    const Expanded(
+                    Expanded(
                       child: Text.rich(TextSpan(
                           text: 'By continuing, you agree to our ',
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w300,
                               fontFamily: FontFamily.interRegular,
                               color: AppColor.blackColor),
                           children: [
                             TextSpan(
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  launchURL(ApiUrl.termsConditionUrl);
+                                },
                               text: 'terms of service.',
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w300,
                                   fontFamily: FontFamily.interRegular,

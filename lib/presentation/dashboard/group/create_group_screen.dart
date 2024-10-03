@@ -1,17 +1,13 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:kodago/config/app_routes.dart';
 import 'package:kodago/helper/app_color.dart';
 import 'package:kodago/helper/app_images.dart';
 import 'package:kodago/helper/custom_text.dart';
 import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
-import 'package:kodago/helper/view_network_image.dart';
 import 'package:kodago/services/image_picker_service.dart';
 import 'package:kodago/services/provider/group/new_group_provider.dart';
-import 'package:kodago/presentation/dashboard/group/create_topic_screen.dart';
+import 'package:kodago/uitls/utils.dart';
 import 'package:kodago/widget/appbar.dart';
 import 'package:kodago/widget/image_bottomsheet.dart';
 import 'package:kodago/widget/selected_contact_widget.dart';
@@ -47,7 +43,11 @@ class _CreateGroupScreenState extends State<CreateGroupScreen>
             floatingActionButton: GestureDetector(
               onTap: () {
                 if (formKey.currentState!.validate()) {
-                  myProvider.createGroupApiFunction();
+                  if (myProvider.model!.addedList.isNotEmpty) {
+                    myProvider.createGroupApiFunction();
+                  } else {
+                    Utils.showToast("Please add members");
+                  }
                 }
               },
               child: Container(

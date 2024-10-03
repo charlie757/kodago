@@ -16,6 +16,7 @@ import 'package:kodago/uitls/time_format.dart';
 import 'package:kodago/uitls/utils.dart';
 import 'package:kodago/widget/appbar.dart';
 import 'package:kodago/widget/no_data_found.dart';
+import 'package:kodago/widget/no_file_rack.dart';
 import 'package:kodago/widget/popmenuButton.dart';
 import 'package:provider/provider.dart';
 
@@ -51,27 +52,36 @@ class _FileRackListScreenState extends State<FileRackListScreen>
       data: mediaQuery,
       child: Consumer<FileRackProvider>(builder: (context, myProvider, child) {
         return Scaffold(
-          appBar: appBar(title: widget.groupName, actions: [
-            GestureDetector(
-              onTap: () {
-                AppRoutes.pushCupertinoNavigation(const CreateFormScreen());
-              },
-              child: Container(
-                margin: const EdgeInsets.only(right: 20),
-                padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 6),
-                decoration: BoxDecoration(
-                    color: AppColor.appColor,
-                    borderRadius: BorderRadius.circular(50)),
-                child: customText(
-                  title: 'Add file racks',
-                  color: AppColor.whiteColor,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w400,
-                  fontFamily: FontFamily.interRegular,
-                ),
-              ),
-            )
-          ]),
+          appBar: appBar(
+              title: widget.groupName,
+              actions: myProvider.model != null &&
+                      myProvider.model!.data != null &&
+                      myProvider.model!.data!.sheets != null &&
+                      myProvider.model!.data!.sheets!.isNotEmpty
+                  ? [
+                      GestureDetector(
+                        onTap: () {
+                          AppRoutes.pushCupertinoNavigation(
+                              const CreateFormScreen());
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.only(right: 20),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 9, vertical: 6),
+                          decoration: BoxDecoration(
+                              color: AppColor.appColor,
+                              borderRadius: BorderRadius.circular(50)),
+                          child: customText(
+                            title: 'Add file racks',
+                            color: AppColor.whiteColor,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w400,
+                            fontFamily: FontFamily.interRegular,
+                          ),
+                        ),
+                      )
+                    ]
+                  : []),
           body: myProvider.isLoading
               ? const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20),
@@ -82,7 +92,7 @@ class _FileRackListScreenState extends State<FileRackListScreen>
               : myProvider.model != null && myProvider.model!.data != null
                   ? myProvider.model!.data!.sheets == null ||
                           myProvider.model!.data!.sheets!.isEmpty
-                      ? noDataFound("No File Rack")
+                      ? const NoFileRack()
                       : ListView.separated(
                           separatorBuilder: (context, sp) {
                             return ScreenSize.height(20);
@@ -90,7 +100,7 @@ class _FileRackListScreenState extends State<FileRackListScreen>
                           itemCount: myProvider.model!.data!.sheets!.length,
                           shrinkWrap: true,
                           padding: const EdgeInsets.only(
-                              left: 20, right: 0, top: 6, bottom: 25),
+                              left: 20, right: 0, top: 10, bottom: 25),
                           itemBuilder: (context, index) {
                             var model = myProvider.model!.data!.sheets![index];
                             return GestureDetector(

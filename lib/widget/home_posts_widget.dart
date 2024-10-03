@@ -35,7 +35,7 @@ class _HomePostsWidgetState extends State<HomePostsWidget> {
 
   @override
   void dispose() {
-    controller.dispose();
+    // controller.dispose();
     super.dispose();
   }
 
@@ -56,11 +56,9 @@ class _HomePostsWidgetState extends State<HomePostsWidget> {
         userInfoHeaderWidget(),
         ScreenSize.height(10),
         model.fieldType == 'image'
-            ? ZoomOverlay(
-                child: ViewNetworkImage(
-                  img: model.image[0]['thumbURL'],
-                  width: double.infinity,
-                ),
+            ? ViewNetworkImage(
+                img: model.image[0]['thumbURL'],
+                width: double.infinity,
               )
             : model.fieldType == 'video'
                 ? Stack(

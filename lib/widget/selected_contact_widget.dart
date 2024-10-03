@@ -7,7 +7,8 @@ import 'package:kodago/services/provider/group/new_group_provider.dart';
 import 'package:provider/provider.dart';
 
 class SelectedContactWidget extends StatelessWidget {
-  const SelectedContactWidget({super.key});
+  final bool topClose;
+  const SelectedContactWidget({this.topClose = true});
 
   @override
   Widget build(BuildContext context) {
@@ -26,25 +27,25 @@ class SelectedContactWidget extends StatelessWidget {
           itemCount: provider.model!.addedList.length,
           itemBuilder: (context, index) {
             var model = provider.model!.addedList[index];
-            return SizedBox(
-              width: 55,
-              child: Column(
-                children: [
-                  Stack(
-                    children: [
-                      ClipOval(
-                        child: ViewNetworkImage(
-                          img: model.image,
-                          height: 48.8,
+            return GestureDetector(
+              onTap: () {
+                provider.unselectedContacts(model.id);
+              },
+              child: SizedBox(
+                width: 55,
+                child: Column(
+                  children: [
+                    Stack(
+                      children: [
+                        ClipOval(
+                          child: ViewNetworkImage(
+                            img: model.image,
+                            height: 48.8,
+                          ),
                         ),
-                      ),
-                      Positioned(
-                        // bottom: 0,
-                        right: 0,
-                        child: InkWell(
-                          onTap: () {
-                            provider.unselectedContacts(model.id);
-                          },
+                        Positioned(
+                          bottom: topClose ? null : 0,
+                          right: 0,
                           child: Container(
                             height: 16,
                             width: 16,
@@ -58,23 +59,23 @@ class SelectedContactWidget extends StatelessWidget {
                               size: 12,
                             ),
                           ),
-                        ),
-                      )
-                    ],
-                  ),
-                  ScreenSize.height(5),
-                  Text(
-                    model.name,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      fontSize: 11,
-                      color: AppColor.blackColor,
-                      fontWeight: FontWeight.w400,
-                      fontFamily: FontFamily.interRegular,
+                        )
+                      ],
                     ),
-                  )
-                ],
+                    ScreenSize.height(5),
+                    Text(
+                      model.name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 11,
+                        color: AppColor.blackColor,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: FontFamily.interRegular,
+                      ),
+                    )
+                  ],
+                ),
               ),
             );
           }),

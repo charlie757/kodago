@@ -7,8 +7,8 @@ import 'package:kodago/helper/custom_text.dart';
 import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/helper/view_network_image.dart';
+import 'package:kodago/presentation/dashboard/file_rack/file_rack_list_screen.dart';
 import 'package:kodago/services/provider/group/group_details_provider.dart';
-import 'package:kodago/presentation/dashboard/file_rack/no_file_racks_screen.dart';
 import 'package:kodago/presentation/dashboard/group/add_member_screen.dart';
 import 'package:kodago/presentation/dashboard/group/edit_group_profile.dart';
 import 'package:kodago/presentation/dashboard/group/hightlight_screen.dart';
@@ -59,14 +59,14 @@ class _GroupInfoScreenState extends State<GroupInfoScreen>
                     children: [
                       groupDetailsWidget(myProvider),
                       ScreenSize.height(26),
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        padding: const EdgeInsets.only(left: 18, right: 18),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             customContainer(AppImages.fileIcon, 'Form', () {
                               AppRoutes.pushCupertinoNavigation(
-                                  NoFileRacksScreen(
+                                  FileRackListScreen(
                                 groupId: widget.groupId,
                                 groupName: myProvider.model!.data != null &&
                                         myProvider.model!.data!.groupDetail !=
@@ -87,8 +87,16 @@ class _GroupInfoScreenState extends State<GroupInfoScreen>
                             customContainer(
                                 AppImages.analyticsIon, 'Analytics', () {}),
                             ScreenSize.width(10),
-                            customContainer(
-                                AppImages.addUserIcon, 'Add', () {}),
+                            customContainer(AppImages.addUserIcon, 'Add', () {
+                              AppRoutes.pushCupertinoNavigation(AddMemberScreen(
+                                groupId: widget.groupId,
+                              )).then((val) {
+                                Provider.of<GroupDetailsProvider>(context,
+                                        listen: false)
+                                    .groupDetailsApiFunction(widget.groupId,
+                                        isShowLoader: false);
+                              });
+                            }),
                           ],
                         ),
                       ),
@@ -145,7 +153,6 @@ class _GroupInfoScreenState extends State<GroupInfoScreen>
           fontSize: 19,
           fontWeight: FontWeight.w500,
           fontFamily: FontFamily.interSemiBold,
-          maxLines: 1,
           textAlign: TextAlign.center,
         ),
         ScreenSize.height(4),
@@ -407,7 +414,9 @@ class _GroupInfoScreenState extends State<GroupInfoScreen>
                             ScreenSize.width(15),
                             Expanded(
                               child: customText(
-                                title: memberModel.name ?? "",
+                                title: model.id == memberModel.id
+                                    ? "You"
+                                    : memberModel.name ?? "",
                                 fontSize: 14,
                                 color: AppColor.blackColor,
                                 fontWeight: FontWeight.w500,
@@ -519,35 +528,44 @@ class _GroupInfoScreenState extends State<GroupInfoScreen>
   }
 
   customContainer(String img, String title, Function() onTap) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        height: 70,
-        width: 70,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-            border: Border.all(
-              color: const Color(0xffD8D8D8),
-            ),
-            borderRadius: BorderRadius.circular(10)),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              img,
-              height: 25,
-              width: 25,
-              color: AppColor.appColor,
-            ),
-            ScreenSize.height(9),
-            customText(
-              title: title,
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-              color: const Color(0xff455154),
-              fontFamily: FontFamily.interMedium,
-            )
-          ],
+    return Expanded(
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 10),
+          width: double.infinity,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+              color: AppColor.whiteColor,
+              boxShadow: [
+                BoxShadow(
+                    offset: const Offset(0, 0),
+                    blurRadius: 3,
+                    color: AppColor.blackColor.withOpacity(.1))
+              ],
+              // border: Border.all(
+              //   color: const Color(0xffD8D8D8),
+              // ),
+              borderRadius: BorderRadius.circular(10)),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                img,
+                height: 22,
+                width: 22,
+                color: AppColor.appColor,
+              ),
+              ScreenSize.height(9),
+              customText(
+                title: title,
+                fontSize: 11.3,
+                fontWeight: FontWeight.w500,
+                color: const Color(0xff455154),
+                fontFamily: FontFamily.interMedium,
+              )
+            ],
+          ),
         ),
       ),
     );

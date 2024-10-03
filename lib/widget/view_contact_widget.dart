@@ -24,23 +24,14 @@ class _ViewContactWidgetState extends State<ViewContactWidget> {
     var model = widget.model.data![widget.index];
     return GestureDetector(
       onTap: () {
-        if (widget.model.addedList.isNotEmpty) {
-          if (model.isSelected) {
-            model.isSelected = false;
-            provider.removeSelectedContact(model.id);
-          } else {
-            model.isSelected = true;
-            provider.addContact(model);
-
-            setState(() {});
-          }
-        }
-        setState(() {});
-      },
-      onLongPress: () {
-        if (widget.model.addedList.isEmpty) {
+        if (model.isSelected) {
+          model.isSelected = false;
+          provider.removeSelectedContact(model.id);
+        } else {
           model.isSelected = true;
           provider.addContact(model);
+
+          setState(() {});
         }
         setState(() {});
       },

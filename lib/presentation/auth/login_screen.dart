@@ -124,7 +124,7 @@ class _LoginScreenState extends State<LoginScreen> with MediaQueryScaleFactor {
                           width: 20,
                           alignment: Alignment.center,
                           child: Image.asset(
-                            myProvider.isVisible
+                            !myProvider.isVisible
                                 ? AppImages.visibilityOffIcon
                                 : AppImages.visibilityIcon,
                             height: 20,

@@ -7,6 +7,8 @@ import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/services/provider/group/new_group_provider.dart';
 import 'package:kodago/presentation/dashboard/group/create_group_screen.dart';
+import 'package:kodago/widget/selected_contact_widget.dart';
+import 'package:kodago/widget/view_contact_widget.dart';
 import 'package:provider/provider.dart';
 
 import '../../../uitls/mixins.dart';
@@ -24,195 +26,76 @@ class _NewGroupScreenState extends State<NewGroupScreen>
   Widget build(BuildContext context) {
     return MediaQuery(
       data: mediaQuery,
-      child: Scaffold(
+      child: Consumer<NewGroupProvider>(builder: (context, myProvider, child) {
+        return Scaffold(
           appBar: appBar(),
-          body: Column(
-            children: [
-              selectedGroupWidget(),
-              groupListWidget(),
-            ],
-          ),
-          floatingActionButton: GestureDetector(
-            onTap: () {
-              AppRoutes.pushCupertinoNavigation(const CreateGroupScreen());
-            },
-            child: Container(
-              height: 45,
-              width: 45,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: AppColor.appColor,
-                  boxShadow: [
-                    BoxShadow(
-                        offset: const Offset(0, -2),
-                        blurRadius: 6,
-                        color: AppColor.blackColor.withOpacity(.2))
-                  ]),
-              child: const Icon(
-                Icons.arrow_forward,
-                color: AppColor.whiteColor,
-              ),
-            ),
-          )),
-    );
-  }
-
-  groupListWidget() {
-    return ListView.separated(
-        separatorBuilder: (context, sp) {
-          return ScreenSize.height(17);
-        },
-        padding: const EdgeInsets.only(left: 20, right: 20, top: 15),
-        itemCount: context.watch<NewGroupProvider>().groupList.length,
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        itemBuilder: (context, index) {
-          var model = context.watch<NewGroupProvider>().groupList[index];
-          return GestureDetector(
-            onLongPress: () {
-              Provider.of<NewGroupProvider>(context, listen: false).isShow =
-                  true;
-              setState(() {});
-            },
-            child: Container(
-              color: AppColor.whiteColor,
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 38,
-                    child: Stack(
-                      children: [
-                        Image.asset(
-                          model['img'],
-                          height: 33,
-                          width: 33,
+          body: myProvider.model != null && myProvider.model!.data != null
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    myProvider.model!.addedList.isNotEmpty
+                        ? const Padding(
+                            padding: EdgeInsets.only(top: 15),
+                            child: SelectedContactWidget(
+                              topClose: false,
+                            ),
+                          )
+                        : Container(),
+                    Expanded(
+                      child: groupListWidget(myProvider),
+                    )
+                  ],
+                )
+              : Container(),
+          floatingActionButton:
+              myProvider.model != null && myProvider.model!.addedList.isNotEmpty
+                  ? GestureDetector(
+                      onTap: () {
+                        AppRoutes.pushCupertinoNavigation(
+                            const CreateGroupScreen());
+                      },
+                      child: Container(
+                        height: 45,
+                        width: 45,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: AppColor.appColor,
+                            boxShadow: [
+                              BoxShadow(
+                                  offset: const Offset(0, -2),
+                                  blurRadius: 6,
+                                  color: AppColor.blackColor.withOpacity(.2))
+                            ]),
+                        child: const Icon(
+                          Icons.arrow_forward,
+                          color: AppColor.whiteColor,
                         ),
-                        context.watch<NewGroupProvider>().isShow
-                            ? Positioned(
-                                bottom: 0 + 2,
-                                right: 0,
-                                child: Container(
-                                  height: 16,
-                                  width: 16,
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: AppColor.whiteColor),
-                                      shape: BoxShape.circle,
-                                      color: AppColor.appColor),
-                                  child: const Icon(
-                                    Icons.check,
-                                    color: AppColor.whiteColor,
-                                    size: 12,
-                                  ),
-                                ),
-                              )
-                            : Container()
-                      ],
-                    ),
-                  ),
-                  ScreenSize.width(15),
-                  Expanded(
-                    child: customText(
-                      title: model['name'],
-                      fontSize: 14,
-                      color: AppColor.blackColor,
-                      fontWeight: FontWeight.w500,
-                      fontFamily: FontFamily.interSemiBold,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        });
+                      ),
+                    )
+                  : Container(),
+        );
+      }),
+    );
   }
 
-  selectedGroupWidget() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 15),
-      child: Column(
-        children: [
-          SizedBox(
-            height: 60,
-            child: ListView.separated(
-                separatorBuilder: (context, sp) {
-                  return ScreenSize.width(10);
-                },
-                itemCount: context.watch<NewGroupProvider>().groupList.length,
-                scrollDirection: Axis.horizontal,
-                shrinkWrap: true,
-                padding: const EdgeInsets.only(left: 20, right: 20),
-                itemBuilder: (context, index) {
-                  var model =
-                      context.watch<NewGroupProvider>().groupList[index];
-                  return GestureDetector(
-                    onTap: () {
-                      Provider.of<NewGroupProvider>(context, listen: false)
-                          .isShow = false;
-                      setState(() {});
-                    },
-                    child: SizedBox(
-                      width: 50,
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            width: 50,
-                            child: Stack(
-                              children: [
-                                Image.asset(
-                                  model['img'],
-                                  height: 42,
-                                  width: 42,
-                                ),
-                                Positioned(
-                                  bottom: 0,
-                                  right: 0,
-                                  child: Container(
-                                    height: 16,
-                                    width: 16,
-                                    decoration: BoxDecoration(
-                                        border: Border.all(
-                                            color: AppColor.whiteColor),
-                                        shape: BoxShape.circle,
-                                        color: const Color(0xff979797)),
-                                    child: const Icon(
-                                      Icons.close,
-                                      color: AppColor.whiteColor,
-                                      size: 12,
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                          ScreenSize.height(5),
-                          Expanded(
-                              child: Text(
-                            model['name'],
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: AppColor.blackColor,
-                              fontWeight: FontWeight.w400,
-                              fontFamily: FontFamily.interRegular,
-                            ),
-                          ))
-                        ],
-                      ),
-                    ),
-                  );
-                }),
-          ),
-          ScreenSize.height(19),
-          Container(
-            height: 1,
-            width: double.infinity,
-            color: Color(0xffEEEEEE),
-          )
-        ],
-      ),
-    );
+  groupListWidget(NewGroupProvider provider) {
+    return provider.model != null && provider.model!.data != null
+        ? ListView.separated(
+            padding:
+                const EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 30),
+            separatorBuilder: (context, sp) {
+              return ScreenSize.height(17);
+            },
+            itemCount: provider.model!.data!.length,
+            shrinkWrap: true,
+            physics: const ScrollPhysics(),
+            itemBuilder: (context, index) {
+              return ViewContactWidget(
+                model: provider.model!,
+                index: index,
+              );
+            })
+        : Container();
   }
 
   AppBar appBar() {

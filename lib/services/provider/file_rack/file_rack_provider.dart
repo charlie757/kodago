@@ -16,6 +16,7 @@ class FileRackProvider extends ChangeNotifier {
   }
 
   fileRackApiFunction(String groupId) async {
+    model = null;
     updateLoading(true);
     var body = {
       "group_id": groupId,

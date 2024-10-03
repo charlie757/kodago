@@ -17,7 +17,9 @@ class SignupProvider extends ChangeNotifier {
   final emailController = TextEditingController();
   final phoneController = TextEditingController();
   final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
   bool isVisible = false;
+  bool isConfirmVisible = false;
   bool isCheckBox = false;
   bool isLoading = false;
 
@@ -26,8 +28,10 @@ class SignupProvider extends ChangeNotifier {
     emailController.clear();
     phoneController.clear();
     passwordController.clear();
+    confirmPasswordController.clear();
     isVisible = false;
     isCheckBox = false;
+    isConfirmVisible = false;
   }
 
   checkValidation() {

@@ -10,7 +10,9 @@ import 'package:kodago/presentation/shimmer/story_shimmer.dart';
 import 'package:kodago/services/provider/home/home_provider.dart';
 import 'package:kodago/presentation/shimmer/post_shimmer.dart';
 import 'package:kodago/presentation/dashboard/home/view_story_screen.dart';
+import 'package:kodago/services/provider/profile_provider.dart';
 import 'package:kodago/widget/home_posts_widget.dart';
+import 'package:kodago/widget/no_data_found.dart';
 import 'package:provider/provider.dart';
 import '../../../uitls/mixins.dart';
 
@@ -101,7 +103,11 @@ class _HomeScreenState extends State<HomeScreen> with MediaQueryScaleFactor {
                                   );
                                 }
                               })
-                          : Container()
+                          : Container(
+                              height: 300,
+                              alignment: Alignment.center,
+                              child: noDataFound('No record found'),
+                            )
                 ],
               ),
             ),
@@ -117,7 +123,10 @@ class _HomeScreenState extends State<HomeScreen> with MediaQueryScaleFactor {
       scrollDirection: Axis.horizontal,
       child: Row(
         children: [
-          yourStoryDataWidget(),
+          context.read<ProfileProvider>().profileModel != null &&
+                  context.read<ProfileProvider>().profileModel!.data != null
+              ? yourStoryDataWidget()
+              : Container(),
           ScreenSize.width(15),
           provider.feedsModel!.data!.stories!.isNotEmpty ||
                   provider.feedsModel!.data!.stories != null
@@ -211,10 +220,10 @@ class _HomeScreenState extends State<HomeScreen> with MediaQueryScaleFactor {
         child: Column(
           children: [
             ClipOval(
-                child: Image.asset(
-              'assets/dummay/Profile Image.png',
-              height: 70,
-              width: 70,
+                child: ViewNetworkImage(
+              img:
+                  context.read<ProfileProvider>().profileModel!.data!.userImage,
+              height: 70.0,
             )),
             const Padding(
               padding: EdgeInsets.only(left: 0, top: 2),
