@@ -60,7 +60,16 @@ class _GroupScreenState extends State<GroupScreen> with MediaQueryScaleFactor {
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Column(
                 children: [
-                  const CustomSearchbar(),
+                  CustomSearchbar(
+                    controller: myProvider.searchController,
+                    onChanged: (val) {
+                      if (val.isEmpty) {
+                        myProvider.setGroupData();
+                      } else {
+                        myProvider.searchFunction(val);
+                      }
+                    },
+                  ),
                   ScreenSize.height(14),
                   Row(
                     children: [
@@ -161,6 +170,7 @@ class _GroupScreenState extends State<GroupScreen> with MediaQueryScaleFactor {
     var model = provider.model!.data![index];
     return GestureDetector(
       onTap: () {
+        // print(provider.groupList);
         AppRoutes.pushCupertinoNavigation(ChatScreen(
           groupId: model.id,
         )).then((val) {
