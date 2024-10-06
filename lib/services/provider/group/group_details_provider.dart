@@ -92,4 +92,13 @@ class GroupDetailsProvider extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  Future checkMemberId() async {
+    for (int i = 0; i < model!.data!.groupDetail!.members!.length; i++) {
+      if (model!.data!.groupDetail!.members![i] ==
+          model!.data!.groupDetail!.id) {
+        return model!.data!.groupDetail!.members![i].memberJoinId;
+      }
+    }
+  }
 }

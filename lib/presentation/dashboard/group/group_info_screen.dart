@@ -109,24 +109,33 @@ class _GroupInfoScreenState extends State<GroupInfoScreen>
                       ScreenSize.height(19),
                       membersWidget(myProvider),
                       ScreenSize.height(22),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 18),
-                        child: Row(
-                          children: [
-                            Image.asset(
-                              AppImages.logoutIcon,
-                              height: 22,
-                              width: 22,
-                            ),
-                            ScreenSize.width(12),
-                            customText(
-                              title: 'Exit group',
-                              color: AppColor.redColor,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              fontFamily: FontFamily.interMedium,
-                            )
-                          ],
+                      GestureDetector(
+                        onTap: () {
+                          myProvider.checkMemberId().then((val) {
+                            print(val);
+                          });
+                        },
+                        child: Container(
+                          width: double.infinity,
+                          color: AppColor.whiteColor,
+                          padding: const EdgeInsets.only(left: 18),
+                          child: Row(
+                            children: [
+                              Image.asset(
+                                AppImages.logoutIcon,
+                                height: 22,
+                                width: 22,
+                              ),
+                              ScreenSize.width(12),
+                              customText(
+                                title: 'Exit group',
+                                color: AppColor.redColor,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: FontFamily.interMedium,
+                              )
+                            ],
+                          ),
                         ),
                       )
                     ],

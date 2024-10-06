@@ -9,6 +9,7 @@ import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/helper/view_network_image.dart';
 import 'package:kodago/presentation/dashboard/group/chat_screen.dart';
 import 'package:kodago/presentation/dashboard/group/contact_screen.dart';
+import 'package:kodago/presentation/dashboard/group/new_group_screen.dart';
 import 'package:kodago/presentation/shimmer/gropup_shimmer.dart';
 import 'package:kodago/services/provider/group/group_provider.dart';
 import 'package:kodago/uitls/time_format.dart';
@@ -45,66 +46,76 @@ class _GroupScreenState extends State<GroupScreen> with MediaQueryScaleFactor {
         child: Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: appBar(),
-          body: NotificationListener(
-            // onNotification: (ScrollNotification scrollInfo) {
-            // if (!myProvider.isLoadingMore &&
-            //     myProvider.hasMoreData &&
-            //     scrollInfo.metrics.pixels ==
-            //         scrollInfo.metrics.maxScrollExtent) {
-            //   // User reached the bottom, load more data
-            //   myProvider.groupApiFunction(isLoadMore: true);
-            // }
-            // return true;
-            // },
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Column(
-                children: [
-                  CustomSearchbar(
-                    controller: myProvider.searchController,
-                    onChanged: (val) {
-                      if (val.isEmpty) {
-                        myProvider.setGroupData();
-                      } else {
-                        myProvider.searchFunction(val);
-                      }
-                    },
-                  ),
-                  ScreenSize.height(14),
-                  Row(
-                    children: [
-                      msgListTypesWidget('All'),
-                      ScreenSize.width(10),
-                      msgListTypesWidget('Unread'),
-                      ScreenSize.width(10),
-                      msgListTypesWidget('Groups'),
-                    ],
-                  ),
-                  Expanded(
-                    child: myProvider.isLoading
-                        ? const GropupShimmer()
-                        : myProvider.model != null &&
-                                myProvider.model!.data != null
-                            ? ListView.separated(
-                                separatorBuilder: (context, index) {
-                                  return ScreenSize.height(20);
-                                },
-                                itemCount: myProvider.model!.data!.length,
-                                shrinkWrap: true,
-                                padding:
-                                    const EdgeInsets.only(top: 20, bottom: 30),
-                                itemBuilder: (context, index) {
-                                  if (index == myProvider.model!.data!.length &&
-                                      myProvider.isLoadingMore) {
-                                    return const Center(
-                                        child: CircularProgressIndicator());
-                                  } else {
-                                    return groupWidget(index, myProvider);
-                                  }
-                                })
-                            : Container(),
-                  )
-                ],
+          body: RefreshIndicator(
+            color: AppColor.appColor,
+            backgroundColor: AppColor.whiteColor,
+            onRefresh: () async {
+              myProvider.groupApiFunction();
+            },
+            child: NotificationListener(
+              // onNotification: (ScrollNotification scrollInfo) {
+              // if (!myProvider.isLoadingMore &&
+              //     myProvider.hasMoreData &&
+              //     scrollInfo.metrics.pixels ==
+              //         scrollInfo.metrics.maxScrollExtent) {
+              //   // User reached the bottom, load more data
+              //   myProvider.groupApiFunction(isLoadMore: true);
+              // }
+              // return true;
+              // },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Column(
+                  children: [
+                    CustomSearchbar(
+                      controller: myProvider.searchController,
+                      onChanged: (val) {
+                        if (myProvider.model != null) {
+                          if (val.isEmpty) {
+                            myProvider.setGroupData();
+                          } else {
+                            myProvider.searchFunction(val);
+                          }
+                        }
+                      },
+                    ),
+                    ScreenSize.height(14),
+                    Row(
+                      children: [
+                        msgListTypesWidget('All'),
+                        ScreenSize.width(10),
+                        msgListTypesWidget('Unread'),
+                        ScreenSize.width(10),
+                        msgListTypesWidget('Groups'),
+                      ],
+                    ),
+                    Expanded(
+                      child: myProvider.isLoading
+                          ? const GropupShimmer()
+                          : myProvider.model != null &&
+                                  myProvider.model!.data != null
+                              ? ListView.separated(
+                                  separatorBuilder: (context, index) {
+                                    return ScreenSize.height(20);
+                                  },
+                                  itemCount: myProvider.model!.data!.length,
+                                  shrinkWrap: true,
+                                  padding: const EdgeInsets.only(
+                                      top: 20, bottom: 30),
+                                  itemBuilder: (context, index) {
+                                    if (index ==
+                                            myProvider.model!.data!.length &&
+                                        myProvider.isLoadingMore) {
+                                      return const Center(
+                                          child: CircularProgressIndicator());
+                                    } else {
+                                      return groupWidget(index, myProvider);
+                                    }
+                                  })
+                              : Container(),
+                    )
+                  ],
+                ),
               ),
             ),
           ),
@@ -246,9 +257,11 @@ class _GroupScreenState extends State<GroupScreen> with MediaQueryScaleFactor {
               customPopMenuItem(value: 1, title: 'Settings'),
             ],
             onSelected: (value) {
-              // if (value == 0) {
-              //   AppRoutes.pushCupertinoNavigation(const GroupInfoScreen());
-              // }
+              if (value == 0) {
+                AppRoutes.pushCupertinoNavigation(const NewGroupScreen(
+                  isCallApi: true,
+                ));
+              }
             })
       ],
     );

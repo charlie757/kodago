@@ -222,7 +222,7 @@ class _FileRackDetailsScreenState extends State<FileRackDetailsScreen>
                 ),
                 GestureDetector(
                   onTap: () {
-                    AppRoutes.pushCupertinoNavigation(const ViewPostScreen());
+                    // AppRoutes.pushCupertinoNavigation(ViewPostScreen());
                   },
                   child: customText(
                     title: 'Show more',

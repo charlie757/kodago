@@ -342,8 +342,9 @@ class _ChatScreenState extends State<ChatScreen> with MediaQueryScaleFactor {
                   groupId: widget.groupId,
                 ));
               } else if (value == 2) {
-                AppRoutes.pushCupertinoNavigation(const CreateTopicScreen(
+                AppRoutes.pushCupertinoNavigation(CreateTopicScreen(
                   route: 'chat',
+                  groupId: widget.groupId,
                 ));
               }
             })

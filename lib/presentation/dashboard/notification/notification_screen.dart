@@ -104,18 +104,18 @@ class _NotificationScreenState extends State<NotificationScreen>
         extentRatio: .2,
         motion: const ScrollMotion(),
         children: [
-          SlidableAction(
-            onPressed: (val) {},
-            autoClose: true,
-            icon: Icons.abc,
-          ),
+          // SlidableAction(
+          //   onPressed: (val) {},
+          //   autoClose: true,
+          //   icon: Icons.abc,
+          // ),
           Flexible(
             child: GestureDetector(
               onTap: () {
                 // controller.close()
                 // Slidable.of(context)?.close();
-                print('object');
-                setState(() {});
+                // print('object');
+                // setState(() {});
                 // Navigator.pop(context);
                 provider.deleteNotificationApiFunction(model.rowId).then((val) {
                   if (val != null) {

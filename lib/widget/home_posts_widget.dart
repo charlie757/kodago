@@ -10,7 +10,6 @@ import 'package:kodago/model/feeds_model.dart';
 import 'package:kodago/presentation/dashboard/home/view_post_screen.dart';
 import 'package:kodago/widget/comment_bottomsheet.dart';
 import 'package:kodago/widget/view_video.dart';
-import 'package:kodago/widget/zoom_widget.dart';
 import 'package:video_player/video_player.dart';
 
 // ignore: must_be_immutable
@@ -42,14 +41,14 @@ class _HomePostsWidgetState extends State<HomePostsWidget> {
   @override
   Widget build(BuildContext context) {
     var model = widget.feedsModel!.data!.feeds![widget.index];
-    if (model.fieldType == 'video') {
-      controller =
-          VideoPlayerController.networkUrl(Uri.parse(model.video![0].mainURL))
-            ..initialize().then((_) {
-              // controller.setVolume(0);
-              controller.pause();
-            });
-    } else {}
+    // if (model.fieldType == 'video') {
+    //   controller =
+    //       VideoPlayerController.networkUrl(Uri.parse(model.video![0].mainURL))
+    //         ..initialize().then((_) {
+    //           // controller.setVolume(0);
+    //           controller.pause();
+    //         });
+    // } else {}
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -60,7 +59,7 @@ class _HomePostsWidgetState extends State<HomePostsWidget> {
                 img: model.image[0]['thumbURL'],
                 width: double.infinity,
               )
-            : model.fieldType == 'video'
+            : model.fieldType == ''
                 ? Stack(
                     children: [
                       GestureDetector(
@@ -224,7 +223,10 @@ class _HomePostsWidgetState extends State<HomePostsWidget> {
           const Spacer(),
           GestureDetector(
             onTap: () {
-              AppRoutes.pushCupertinoNavigation(const ViewPostScreen());
+              AppRoutes.pushCupertinoNavigation(ViewPostScreen(
+                currentIndex: widget.index,
+                feedsModel: widget.feedsModel,
+              ));
             },
             child: customText(
               title: 'Show more',

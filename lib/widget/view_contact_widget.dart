@@ -11,7 +11,9 @@ import 'package:provider/provider.dart';
 class ViewContactWidget extends StatefulWidget {
   ContactModel model;
   int index;
-  ViewContactWidget({required this.model, required this.index});
+  bool isSelect;
+  ViewContactWidget(
+      {required this.model, required this.index, this.isSelect = true});
 
   @override
   State<ViewContactWidget> createState() => _ViewContactWidgetState();
@@ -24,16 +26,16 @@ class _ViewContactWidgetState extends State<ViewContactWidget> {
     var model = widget.model.data![widget.index];
     return GestureDetector(
       onTap: () {
-        if (model.isSelected) {
-          model.isSelected = false;
-          provider.removeSelectedContact(model.id);
-        } else {
-          model.isSelected = true;
-          provider.addContact(model);
-
+        if (widget.isSelect) {
+          if (model.isSelected) {
+            model.isSelected = false;
+            provider.removeSelectedContact(model.id);
+          } else {
+            model.isSelected = true;
+            provider.addContact(model);
+          }
           setState(() {});
         }
-        setState(() {});
       },
       child: Container(
         color: AppColor.whiteColor,

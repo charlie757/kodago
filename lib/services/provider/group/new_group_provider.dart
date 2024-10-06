@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'dart:io';
+import 'dart:isolate';
 
 import 'package:flutter/material.dart';
 import 'package:kodago/api/api_service.dart';
@@ -11,6 +13,26 @@ import 'package:kodago/uitls/session_manager.dart';
 import 'package:kodago/uitls/show_loader.dart';
 import 'package:kodago/uitls/utils.dart';
 import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
+
+void runContactApiIsolate(List<dynamic> args) async {
+  var sendPort = args[0] as SendPort;
+  var body = args[1];
+
+  // Simulate API call inside the isolate
+  final response = await ApiService.multiPartApiMethod(
+    url: ApiUrl.groupContactsUrl,
+    body: body,
+  );
+
+  // Pass the result back to the main thread
+  if (response != null && response['status'] == 1) {
+    sendPort.send(ContactModel.fromJson(response));
+  } else {
+    sendPort.send(null);
+  }
+  Isolate.exit(sendPort, null); // Sending null as a message if you wish
+}
 
 class NewGroupProvider extends ChangeNotifier {
   bool isShow = false;
@@ -83,10 +105,11 @@ class NewGroupProvider extends ChangeNotifier {
     }
   }
 
-  contactApiFunction(String val) async {
-    showLoader(navigatorKey.currentContext!);
+  void contactApiFunction(String val, {bool showLoading = false}) async {
     model = null;
     notifyListeners();
+    showLoading ? showLoader(navigatorKey.currentContext!) : null;
+    var receivePort = ReceivePort();
     var body = {
       'Authkey': Constants.authkey,
       'Userid': SessionManager.userId,
@@ -95,12 +118,20 @@ class NewGroupProvider extends ChangeNotifier {
       'perpage': '10',
       'start': '0',
     };
-    final response = await ApiService.multiPartApiMethod(
-        url: ApiUrl.groupContactsUrl, body: body);
-    Navigator.pop(navigatorKey.currentContext!);
-    if (response != null && response['status'] == 1) {
-      model = ContactModel.fromJson(response);
+
+    await Isolate.spawn(runContactApiIsolate, [receivePort.sendPort, body]);
+    var result = await receivePort.first;
+    showLoading ? Navigator.pop(navigatorKey.currentContext!) : null;
+
+    // Handle the response (UI Thread)
+    if (result != null) {
+      model = result as ContactModel;
+    } else {
+      // Handle failure case
+      model = null;
     }
+
+    // Notify listeners to update the UI
     notifyListeners();
   }
 
@@ -122,8 +153,9 @@ class NewGroupProvider extends ChangeNotifier {
     if (response != null && response['status'] == 1) {
       Utils.successSnackBar(response['message'], navigatorKey.currentContext!);
       Future.delayed(const Duration(seconds: 1), () {
-        AppRoutes.pushReplacementNavigation(const CreateTopicScreen(
+        AppRoutes.pushReplacementNavigation(CreateTopicScreen(
           route: 'group',
+          groupId: response['data']['id'].toString(),
         ));
       });
     }

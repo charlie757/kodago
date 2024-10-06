@@ -35,7 +35,7 @@ class _ContactScreenState extends State<ContactScreen>
   callInitFunction() async {
     final provider = Provider.of<NewGroupProvider>(context, listen: false);
     provider.clearValues();
-    provider.contactApiFunction('ravi');
+    provider.contactApiFunction('ravi', showLoading: true);
   }
 
   @override
@@ -111,9 +111,7 @@ class _ContactScreenState extends State<ContactScreen>
             physics: const NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) {
               return ViewContactWidget(
-                model: provider.model!,
-                index: index,
-              );
+                  model: provider.model!, index: index, isSelect: false);
             })
         : Container();
   }
@@ -195,7 +193,7 @@ class _ContactScreenState extends State<ContactScreen>
                 padding: const EdgeInsets.only(right: 20),
                 child: GestureDetector(
                   onTap: () {
-                    // provider.isSearchEnable = true;
+                    provider.isSearchEnable = true;
                     setState(() {});
                   },
                   child: Image.asset(
@@ -228,18 +226,18 @@ class _ContactScreenState extends State<ContactScreen>
           //   ),
           // ),
           hintText: 'Search name or number...',
-          hintStyle: const TextStyle(
+          hintStyle: TextStyle(
               fontSize: 13,
               color: Color(0xff9D9D9D),
               fontWeight: FontWeight.w400,
               fontFamily: FontFamily.interRegular),
-          enabledBorder: const UnderlineInputBorder(
+          enabledBorder: UnderlineInputBorder(
             borderSide: BorderSide(color: Color(0xffEEEEEE)),
           ),
-          focusedBorder: const UnderlineInputBorder(
+          focusedBorder: UnderlineInputBorder(
               borderSide: BorderSide(color: Color(0xffEEEEEE)))),
       onChanged: (val) {
-        provider.contactApiFunction(val);
+        // provider.contactApiFunction(val);
       },
     );
   }

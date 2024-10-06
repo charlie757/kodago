@@ -14,7 +14,8 @@ import 'package:provider/provider.dart';
 import '../../../uitls/mixins.dart';
 
 class NewGroupScreen extends StatefulWidget {
-  const NewGroupScreen({super.key});
+  final bool isCallApi;
+  const NewGroupScreen({this.isCallApi = false});
 
   @override
   State<NewGroupScreen> createState() => _NewGroupScreenState();
@@ -22,6 +23,21 @@ class NewGroupScreen extends StatefulWidget {
 
 class _NewGroupScreenState extends State<NewGroupScreen>
     with MediaQueryScaleFactor {
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((val) {
+      callInitFunction();
+    });
+    super.initState();
+  }
+
+  callInitFunction() async {
+    final provider = Provider.of<NewGroupProvider>(context, listen: false);
+    if (widget.isCallApi) {
+      provider.contactApiFunction('Ravi', showLoading: true);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MediaQuery(

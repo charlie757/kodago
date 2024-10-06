@@ -54,60 +54,73 @@ class _HomeScreenState extends State<HomeScreen> with MediaQueryScaleFactor {
               }
               return true;
             },
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.only(top: 10, bottom: 30),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            child: RefreshIndicator(
+              color: AppColor.appColor,
+              backgroundColor: AppColor.whiteColor,
+              onRefresh: () async {
+                myProvider.feedsModel = null;
+                setState(() {});
+                callInitFunction();
+              },
+              child: Stack(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16),
-                    child: Image.asset(
-                      AppImages.appLogo,
-                      height: 25,
-                      width: 94,
+                  SingleChildScrollView(
+                    padding: const EdgeInsets.only(top: 10, bottom: 30),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 16),
+                          child: Image.asset(
+                            AppImages.appLogo,
+                            height: 25,
+                            width: 94,
+                          ),
+                        ),
+                        ScreenSize.height(10),
+                        myProvider.isLoading
+                            ? const StoryShimmer()
+                            : myProvider.feedsModel != null &&
+                                    myProvider.feedsModel!.data != null
+                                ? storyWidget(myProvider)
+                                : Container(),
+                        ScreenSize.height(15),
+                        myProvider.isLoading
+                            ? const PostShimmer()
+                            : myProvider.feedsModel != null &&
+                                    myProvider.feedsModel!.data != null
+                                ? ListView.separated(
+                                    separatorBuilder: (context, sp) {
+                                      return ScreenSize.height(29);
+                                    },
+                                    itemCount: myProvider
+                                        .feedsModel!.data!.feeds!.length,
+                                    physics: const ScrollPhysics(),
+                                    shrinkWrap: true,
+                                    itemBuilder: (context, index) {
+                                      int currentIndex = index;
+                                      if (index ==
+                                              myProvider.feedsModel!.data!
+                                                  .feeds!.length &&
+                                          myProvider.isLoadingMore) {
+                                        return const Center(
+                                            child: CircularProgressIndicator());
+                                      } else {
+                                        return HomePostsWidget(
+                                          index: index,
+                                          feedsModel: myProvider.feedsModel,
+                                          currentIndex: currentIndex,
+                                        );
+                                      }
+                                    })
+                                : Container(
+                                    height: 300,
+                                    alignment: Alignment.center,
+                                    child: noDataFound('No record found'),
+                                  )
+                      ],
                     ),
                   ),
-                  ScreenSize.height(10),
-                  myProvider.isLoading
-                      ? const StoryShimmer()
-                      : myProvider.feedsModel != null &&
-                              myProvider.feedsModel!.data != null
-                          ? storyWidget(myProvider)
-                          : Container(),
-                  ScreenSize.height(15),
-                  myProvider.isLoading
-                      ? const PostShimmer()
-                      : myProvider.feedsModel != null &&
-                              myProvider.feedsModel!.data != null
-                          ? ListView.separated(
-                              separatorBuilder: (context, sp) {
-                                return ScreenSize.height(29);
-                              },
-                              itemCount:
-                                  myProvider.feedsModel!.data!.feeds!.length,
-                              physics: const ScrollPhysics(),
-                              shrinkWrap: true,
-                              itemBuilder: (context, index) {
-                                int currentIndex = index;
-                                if (index ==
-                                        myProvider
-                                            .feedsModel!.data!.feeds!.length &&
-                                    myProvider.isLoadingMore) {
-                                  return const Center(
-                                      child: CircularProgressIndicator());
-                                } else {
-                                  return HomePostsWidget(
-                                    index: index,
-                                    feedsModel: myProvider.feedsModel,
-                                    currentIndex: currentIndex,
-                                  );
-                                }
-                              })
-                          : Container(
-                              height: 300,
-                              alignment: Alignment.center,
-                              child: noDataFound('No record found'),
-                            )
                 ],
               ),
             ),

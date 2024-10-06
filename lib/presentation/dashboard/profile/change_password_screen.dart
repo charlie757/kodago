@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:kodago/helper/app_images.dart';
 import 'package:kodago/helper/custom_btn.dart';
 import 'package:kodago/helper/custom_textfield.dart';
 import 'package:kodago/helper/screen_size.dart';
@@ -56,6 +57,15 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen>
                         FilteringTextInputFormatter.deny(
                             RegExp(Utils.regexToRemoveEmoji)),
                       ],
+                      isObscureText: myProvider.isCurrentPasswordVisible,
+                      suffixWidget:
+                          suffixWidget(myProvider.isCurrentPasswordVisible, () {
+                        if (myProvider.isCurrentPasswordVisible) {
+                          myProvider.updateCurrentPasswordVisble(false);
+                        } else {
+                          myProvider.updateCurrentPasswordVisble(true);
+                        }
+                      }),
                       validator: (val) {
                         if (val.isEmpty) {
                           return "Enter your current password";
@@ -76,6 +86,15 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen>
                         FilteringTextInputFormatter.deny(
                             RegExp(Utils.regexToRemoveEmoji)),
                       ],
+                      isObscureText: myProvider.isPasswordVisible,
+                      suffixWidget:
+                          suffixWidget(myProvider.isPasswordVisible, () {
+                        if (myProvider.isPasswordVisible) {
+                          myProvider.updatePasswordVisble(false);
+                        } else {
+                          myProvider.updatePasswordVisble(true);
+                        }
+                      }),
                       validator: (val) {
                         if (val.isEmpty) {
                           return "Enter your password";
@@ -96,6 +115,15 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen>
                         FilteringTextInputFormatter.deny(
                             RegExp(Utils.regexToRemoveEmoji)),
                       ],
+                      isObscureText: myProvider.isConfirmPasswordVisible,
+                      suffixWidget:
+                          suffixWidget(myProvider.isConfirmPasswordVisible, () {
+                        if (myProvider.isConfirmPasswordVisible) {
+                          myProvider.updateConfirmPasswordVisble(false);
+                        } else {
+                          myProvider.updateConfirmPasswordVisble(true);
+                        }
+                      }),
                       validator: (val) {
                         if (val.isEmpty) {
                           return "Enter your new password";
@@ -125,5 +153,20 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen>
             )),
       );
     });
+  }
+
+  Widget suffixWidget(bool isVisible, Function() onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 20,
+        width: 20,
+        alignment: Alignment.center,
+        child: Image.asset(
+          !isVisible ? AppImages.visibilityOffIcon : AppImages.visibilityIcon,
+          height: 20,
+        ),
+      ),
+    );
   }
 }
