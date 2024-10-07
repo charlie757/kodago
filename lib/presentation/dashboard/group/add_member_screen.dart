@@ -48,41 +48,40 @@ class _AddMemberScreenState extends State<AddMemberScreen>
               ),
             )
           ]),
-          body: myProvider.model != null && myProvider.model!.data != null
+          body: myProvider.contactList.isNotEmpty
               ? Column(
                   children: [
-                    myProvider.model!.addedList.isEmpty
+                    myProvider.addedList.isEmpty
                         ? Container()
                         : selectedGroupWidget(myProvider),
                     Expanded(child: groupListWidget(myProvider))
                   ],
                 )
               : Container(),
-          floatingActionButton:
-              myProvider.model != null && myProvider.model!.addedList.isNotEmpty
-                  ? GestureDetector(
-                      onTap: () {
-                        myProvider.addMemberApiFunction(widget.groupId);
-                      },
-                      child: Container(
-                        height: 45,
-                        width: 45,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: AppColor.appColor,
-                            boxShadow: [
-                              BoxShadow(
-                                  offset: const Offset(0, -2),
-                                  blurRadius: 6,
-                                  color: AppColor.blackColor.withOpacity(.2))
-                            ]),
-                        child: const Icon(
-                          Icons.check,
-                          color: AppColor.whiteColor,
-                        ),
-                      ),
-                    )
-                  : Container(),
+          floatingActionButton: myProvider.addedList.isNotEmpty
+              ? GestureDetector(
+                  onTap: () {
+                    myProvider.addMemberApiFunction(widget.groupId);
+                  },
+                  child: Container(
+                    height: 45,
+                    width: 45,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: AppColor.appColor,
+                        boxShadow: [
+                          BoxShadow(
+                              offset: const Offset(0, -2),
+                              blurRadius: 6,
+                              color: AppColor.blackColor.withOpacity(.2))
+                        ]),
+                    child: const Icon(
+                      Icons.check,
+                      color: AppColor.whiteColor,
+                    ),
+                  ),
+                )
+              : Container(),
         );
       }),
     );
@@ -93,13 +92,13 @@ class _AddMemberScreenState extends State<AddMemberScreen>
         separatorBuilder: (context, sp) {
           return ScreenSize.height(17);
         },
-        itemCount: provider.model!.data!.length,
+        itemCount: provider.contactList.length,
         shrinkWrap: true,
         padding:
             const EdgeInsets.only(left: 21, right: 20, top: 20, bottom: 30),
         itemBuilder: (context, index) {
           return ViewContactWidget(
-            model: provider.model!,
+            contactList: provider.contactList,
             index: index,
           );
         });

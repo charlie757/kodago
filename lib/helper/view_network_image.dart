@@ -18,6 +18,8 @@ class ViewNetworkImage extends StatelessWidget {
       height: height,
       width: width,
       fit: BoxFit.fill,
+      memCacheHeight: 300,
+      memCacheWidth: 300,
       progressIndicatorBuilder: (context, url, downloadProgress) => Container(
           alignment: Alignment.center,
           child: CircularProgressIndicator(

@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:kodago/helper/app_color.dart';
 import 'package:kodago/helper/app_images.dart';
 import 'package:kodago/helper/custom_btn.dart';
 import 'package:kodago/helper/custom_text.dart';

@@ -4,29 +4,24 @@ import 'package:kodago/helper/custom_text.dart';
 import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/helper/view_network_image.dart';
-import 'package:kodago/model/group/contact_model.dart';
 import 'package:kodago/services/provider/group/new_group_provider.dart';
 import 'package:provider/provider.dart';
 
-class ViewContactWidget extends StatefulWidget {
-  ContactModel model;
+// ignore: must_be_immutable
+class ViewContactWidget extends StatelessWidget {
+  List contactList;
   int index;
   bool isSelect;
   ViewContactWidget(
-      {required this.model, required this.index, this.isSelect = true});
+      {required this.contactList, required this.index, this.isSelect = true});
 
-  @override
-  State<ViewContactWidget> createState() => _ViewContactWidgetState();
-}
-
-class _ViewContactWidgetState extends State<ViewContactWidget> {
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<NewGroupProvider>(context);
-    var model = widget.model.data![widget.index];
+    var model = contactList[index];
     return GestureDetector(
       onTap: () {
-        if (widget.isSelect) {
+        if (isSelect) {
           if (model.isSelected) {
             model.isSelected = false;
             provider.removeSelectedContact(model.id);
@@ -34,7 +29,7 @@ class _ViewContactWidgetState extends State<ViewContactWidget> {
             model.isSelected = true;
             provider.addContact(model);
           }
-          setState(() {});
+          // setState(() {});
         }
       },
       child: Container(

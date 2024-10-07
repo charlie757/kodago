@@ -43,7 +43,7 @@ class _CreateGroupScreenState extends State<CreateGroupScreen>
             floatingActionButton: GestureDetector(
               onTap: () {
                 if (formKey.currentState!.validate()) {
-                  if (myProvider.model!.addedList.isNotEmpty) {
+                  if (myProvider.addedList.isNotEmpty) {
                     myProvider.createGroupApiFunction();
                   } else {
                     Utils.showToast("Please add members");
@@ -79,7 +79,7 @@ class _CreateGroupScreenState extends State<CreateGroupScreen>
         Padding(
           padding: const EdgeInsets.only(left: 20, top: 18),
           child: customText(
-            title: 'Members: ${provider.model!.addedList.length}',
+            title: 'Members: ${provider.addedList.length}',
             fontSize: 13,
             fontWeight: FontWeight.w500,
             fontFamily: FontFamily.interMedium,
@@ -182,6 +182,7 @@ class _CreateGroupScreenState extends State<CreateGroupScreen>
               if (val!.isEmpty) {
                 return "Please enter group name";
               }
+              return null;
             },
           ))
         ],

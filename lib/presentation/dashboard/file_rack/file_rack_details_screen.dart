@@ -11,7 +11,6 @@ import 'package:kodago/presentation/dashboard/file_rack/add_data_screen.dart';
 import 'package:kodago/presentation/dashboard/file_rack/file_rack_comment_screen.dart';
 import 'package:kodago/presentation/dashboard/file_rack/file_rack_history.dart';
 import 'package:kodago/presentation/dashboard/file_rack/filter_screen.dart';
-import 'package:kodago/presentation/dashboard/home/view_post_screen.dart';
 import 'package:kodago/services/provider/file_rack/file_rack_details_provider.dart';
 import 'package:kodago/uitls/delete_file_rack_dialogbox.dart';
 import 'package:kodago/widget/appbar.dart';

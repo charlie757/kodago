@@ -1,7 +1,4 @@
-import 'dart:convert';
 import 'dart:io';
-import 'dart:isolate';
-
 import 'package:flutter/material.dart';
 import 'package:kodago/api/api_service.dart';
 import 'package:kodago/api/api_url.dart';
@@ -13,103 +10,78 @@ import 'package:kodago/uitls/session_manager.dart';
 import 'package:kodago/uitls/show_loader.dart';
 import 'package:kodago/uitls/utils.dart';
 import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' as http;
-
-void runContactApiIsolate(List<dynamic> args) async {
-  var sendPort = args[0] as SendPort;
-  var body = args[1];
-
-  // Simulate API call inside the isolate
-  final response = await ApiService.multiPartApiMethod(
-    url: ApiUrl.groupContactsUrl,
-    body: body,
-  );
-
-  // Pass the result back to the main thread
-  if (response != null && response['status'] == 1) {
-    sendPort.send(ContactModel.fromJson(response));
-  } else {
-    sendPort.send(null);
-  }
-  Isolate.exit(sendPort, null); // Sending null as a message if you wish
-}
 
 class NewGroupProvider extends ChangeNotifier {
   bool isShow = false;
-  bool isSearchEnable = false;
   final groupNameController = TextEditingController();
   File? img;
-  clearValues() {
-    isSearchEnable = false;
-  }
 
-  ContactModel? model;
-  List groupList = [
-    {
-      'img': 'assets/dummay/Oval (3).png',
-      'name': 'Manish Saini',
-      'isSelected': false
-    },
-    {
-      'img': 'assets/dummay/Oval (4).png',
-      'name': 'Sanjana Bhilwara',
-      'isSelected': false
-    },
-    {
-      'img': 'assets/dummay/Oval (5).png',
-      'name': 'Ravi Jaipur',
-      'isSelected': false
-    },
-    {
-      'img': 'assets/dummay/Oval (3).png',
-      'name': 'Manish Saini',
-      'isSelected': false
-    },
-    {
-      'img': 'assets/dummay/Oval (4).png',
-      'name': 'Sanjana Bhilwara',
-      'isSelected': false
-    },
-    {
-      'img': 'assets/dummay/Oval (5).png',
-      'name': 'Ravi Jaipur',
-      'isSelected': false
-    },
-  ];
+  final int chunkSize = 100; // Size of each chunk
+  bool isLoading = false;
+  int currentIndex = 0;
+
+  // ContactModel? model;
+  List contactList = [];
+  List addedList = [];
 
   removeSelectedContact(String id) {
-    for (int i = 0; i < model!.addedList.length; i++) {
-      if (model!.addedList[i].id == id) {
-        model!.addedList.removeAt(i);
+    for (int i = 0; i < addedList.length; i++) {
+      if (addedList[i].id == id) {
+        addedList.removeAt(i);
       }
       notifyListeners();
     }
   }
 
   addContact(var contactModel) {
-    model!.addedList.add(contactModel);
+    addedList.add(contactModel);
     notifyListeners();
   }
 
   unselectedContacts(String id) {
-    for (int i = 0; i < model!.data!.length; i++) {
-      if (model!.data![i].id == id) {
-        model!.data![i].isSelected = false;
+    for (int i = 0; i < contactList.length; i++) {
+      if (contactList[i].id == id) {
+        contactList[i].isSelected = false;
       }
     }
-    for (int i = 0; i < model!.addedList.length; i++) {
-      if (model!.addedList[i].id == id) {
-        model!.addedList.removeAt(i);
+    for (int i = 0; i < addedList.length; i++) {
+      if (addedList[i].id == id) {
+        addedList.removeAt(i);
       }
       notifyListeners();
     }
   }
 
-  void contactApiFunction(String val, {bool showLoading = false}) async {
-    model = null;
-    notifyListeners();
+  Future<void> contactApiFunction(String val,
+      {bool showLoading = false}) async {
+    contactList.clear();
+    currentIndex = 0;
     showLoading ? showLoader(navigatorKey.currentContext!) : null;
-    var receivePort = ReceivePort();
+    notifyListeners();
+    await fetchAllData(val).then((val) async {
+      if (val != null) {
+        ContactModel allData = val;
+        while (currentIndex < allData.data!.length) {
+          final end = (currentIndex + chunkSize < allData.data!.length)
+              ? currentIndex + chunkSize
+              : allData.data!.length;
+          final chunk = allData.data!.sublist(currentIndex, end);
+          // Simulate processing delay
+          await Future.delayed(const Duration(milliseconds: 100));
+
+          // Update your data list
+          contactList.addAll(chunk);
+          notifyListeners();
+          currentIndex += chunkSize;
+        }
+        showLoading ? Navigator.pop(navigatorKey.currentContext!) : null;
+        notifyListeners();
+      }
+    });
+    // Process in chunks
+  }
+
+  Future fetchAllData(String val) async {
     var body = {
       'Authkey': Constants.authkey,
       'Userid': SessionManager.userId,
@@ -119,24 +91,19 @@ class NewGroupProvider extends ChangeNotifier {
       'start': '0',
     };
 
-    await Isolate.spawn(runContactApiIsolate, [receivePort.sendPort, body]);
-    var result = await receivePort.first;
-    showLoading ? Navigator.pop(navigatorKey.currentContext!) : null;
+    final response = await ApiService.multiPartApiMethod(
+      url: ApiUrl.groupContactsUrl,
+      body: body,
+    );
 
-    // Handle the response (UI Thread)
-    if (result != null) {
-      model = result as ContactModel;
-    } else {
-      // Handle failure case
-      model = null;
+    // Pass the result back to the main thread
+    if (response != null && response['status'] == 1) {
+      return ContactModel.fromJson(response);
     }
-
-    // Notify listeners to update the UI
-    notifyListeners();
   }
 
   createGroupApiFunction() async {
-    String id = model!.addedList.map((e) => e.id).join(',');
+    String id = addedList.map((e) => e.id).join(',');
     print(id);
     showLoader(navigatorKey.currentContext!);
     notifyListeners();
@@ -163,7 +130,7 @@ class NewGroupProvider extends ChangeNotifier {
   }
 
   addMemberApiFunction(String groupId) async {
-    String id = model!.addedList.map((e) => e.id).join(',');
+    String id = addedList.map((e) => e.id).join(',');
     showLoader(navigatorKey.currentContext!);
     notifyListeners();
     var body = {

@@ -11,6 +11,7 @@ import 'package:kodago/widget/comment_bottomsheet.dart';
 import 'package:video_player/video_player.dart';
 import '../../../uitls/mixins.dart';
 
+// ignore: must_be_immutable
 class ViewPostScreen extends StatefulWidget {
   int currentIndex;
   FeedsModel? feedsModel;

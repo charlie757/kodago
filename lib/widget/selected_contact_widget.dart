@@ -24,9 +24,9 @@ class SelectedContactWidget extends StatelessWidget {
           shrinkWrap: true,
           padding: const EdgeInsets.symmetric(horizontal: 20),
           scrollDirection: Axis.horizontal,
-          itemCount: provider.model!.addedList.length,
+          itemCount: provider.addedList.length,
           itemBuilder: (context, index) {
-            var model = provider.model!.addedList[index];
+            var model = provider.addedList[index];
             return GestureDetector(
               onTap: () {
                 provider.unselectedContacts(model.id);

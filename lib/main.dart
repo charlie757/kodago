@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kodago/helper/app_color.dart';
+import 'package:kodago/services/provider/group/contact_provider.dart';
 import 'package:kodago/services/provider/group/topic_provider.dart';
 import 'package:kodago/services/provider/auth_provider/forgot_password_provider.dart';
 import 'package:kodago/services/provider/auth_provider/login_provider.dart';
@@ -56,6 +57,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ProfileProvider()),
         ChangeNotifierProvider(create: (_) => HomeProvider()),
         ChangeNotifierProvider(create: (_) => NotificationProvider()),
+        ChangeNotifierProvider(create: (_) => ContactProvider()),
         ChangeNotifierProvider(create: (_) => GroupProvider()),
         ChangeNotifierProvider(create: (_) => GroupDetailsProvider()),
         ChangeNotifierProvider(create: (_) => FileRackProvider()),
