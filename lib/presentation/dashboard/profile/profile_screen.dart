@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kodago/helper/app_color.dart';
 import 'package:kodago/helper/app_images.dart';
-import 'package:kodago/helper/custom_btn.dart';
 import 'package:kodago/helper/custom_text.dart';
 import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
@@ -10,7 +9,6 @@ import 'package:kodago/services/image_picker_service.dart';
 import 'package:kodago/services/provider/profile_provider.dart';
 import 'package:kodago/uitls/extension.dart';
 import 'package:kodago/uitls/mixins.dart';
-import 'package:kodago/uitls/utils.dart';
 import 'package:kodago/widget/image_bottomsheet.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';

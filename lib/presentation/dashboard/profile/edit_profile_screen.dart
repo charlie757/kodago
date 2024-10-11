@@ -54,7 +54,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                       hintText: 'Enter full name',
                       controller: myProvider.nameController,
                       inputFormatters: [
-                        CustomFormatter(),
+                        WhiteSpaceFormatter(),
                         FilteringTextInputFormatter.deny(
                             RegExp(Utils.regexToRemoveEmoji)),
                       ],
@@ -75,7 +75,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                       controller: myProvider.emailController,
                       textInputAction: TextInputAction.next,
                       inputFormatters: [
-                        CustomFormatter(),
+                        WhiteSpaceFormatter(),
                         FilteringTextInputFormatter.deny(
                             RegExp(Utils.regexToRemoveEmoji)),
                       ],

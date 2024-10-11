@@ -143,17 +143,22 @@ class _HomeScreenState extends State<HomeScreen> with MediaQueryScaleFactor {
               ? yourStoryDataWidget()
               : Container(),
           ScreenSize.width(15),
-          provider.feedsModel!.data!.stories!.isNotEmpty ||
-                  provider.feedsModel!.data!.stories != null
+          provider.feedsModel!.data!.story!.isNotEmpty ||
+                  provider.feedsModel!.data!.story != null
               ? Row(
                   children: List.generate(
-                      provider.feedsModel!.data!.stories!.length, (val) {
-                    var model = provider.feedsModel!.data!.stories![val];
+                      provider.feedsModel!.data!.story!.length, (val) {
+                    var model = provider.feedsModel!.data!.story![val];                                     
                     return Padding(
                       padding: const EdgeInsets.only(right: 15),
                       child: storyDataWidget(
-                        model.name,
-                        model.imageLink,
+                        model.storyName,
+                        model.storyImageLink,
+                        () {
+                          // print(model.storyName);
+                           AppRoutes.pushCupertinoNavigation( ViewStoryScreen(index: val,));
+                        // AppRoutes.pushCupertinoNavigation( StoryScreen(model1.stories));
+                      }
                       ),
                     );
                   }),
@@ -167,11 +172,10 @@ class _HomeScreenState extends State<HomeScreen> with MediaQueryScaleFactor {
   storyDataWidget(
     String title,
     String img,
+    Function()onTap
   ) {
     return GestureDetector(
-      onTap: () {
-        AppRoutes.pushCupertinoNavigation(const ViewStoryScreen());
-      },
+      onTap: onTap,
       child: SizedBox(
         width: 70,
         child: Column(
@@ -228,7 +232,7 @@ class _HomeScreenState extends State<HomeScreen> with MediaQueryScaleFactor {
   yourStoryDataWidget() {
     return GestureDetector(
       onTap: () {
-        AppRoutes.pushCupertinoNavigation(const ViewStoryScreen());
+        // AppRoutes.pushCupertinoNavigation(const ViewStoryScreen());
       },
       child: SizedBox(
         width: 70,

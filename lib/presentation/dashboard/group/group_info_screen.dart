@@ -433,6 +433,7 @@ class _GroupInfoScreenState extends State<GroupInfoScreen>
                         if(model.members![0].id==SessionManager.userIntId&&index==0){
                         }
                         else if(memberModel.id == SessionManager.userIntId){
+                          print(provider.isCurrentUserGroupAdmin);
                           //  provider.exitGroupApiFunction(
                           // widget.groupId, memberModel.memberJoinId, GroupAction.makeadmin.name);
                         }
@@ -509,12 +510,25 @@ class _GroupInfoScreenState extends State<GroupInfoScreen>
             content: Container(
               width: MediaQuery.of(context).size.width - 40,
               padding: const EdgeInsets.symmetric( horizontal: 17),
-              child: Column(
+              child:   createdGroupId==SessionManager.userIntId?adminAccessOfGroupAction(provider,
+              memberId: memberId,isAdmin: isAdmin,id: id,title: title,createdGroupId: createdGroupId
+              ):
+              !provider.isCurrentUserGroupAdmin?
+              memberAccessOfGroupAction(title):
+              provider.isCurrentUserGroupAdmin?
+              anotherAdminAccessOfGroupAction(provider,memberId: memberId,isAdmin: isAdmin,id: id,title: title,createdGroupId: createdGroupId):Container()
+            ),
+          );
+        });
+  }
+
+  adminAccessOfGroupAction(GroupDetailsProvider provider,{ String memberId = '',String isAdmin='',String id ='',String title='',String createdGroupId=''}){
+    return  Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ScreenSize.height(15),
-                   createdGroupId==SessionManager.userIntId&&isAdmin=='0' ?
+                   isAdmin=='0' ?
                   groupActionWidget("Make group admin", (){
                      provider.exitGroupApiFunction(
                           widget.groupId, memberId, GroupAction.makeadmin.name);
@@ -522,21 +536,55 @@ class _GroupInfoScreenState extends State<GroupInfoScreen>
                   createdGroupId==SessionManager.userIntId?
                   groupActionWidget("Assign a filerack's", (){}):Container(),
                   groupActionWidget('Message $title', (){}),
-                  createdGroupId==SessionManager.userIntId&&isAdmin=='1'?
+                  isAdmin=='1'?
                   groupActionWidget('Remove from group', (){
                         provider.exitGroupApiFunction(
                           widget.groupId, memberId, GroupAction.remove.name);
+                  }):Container(),
+                  isAdmin=='1'?
+                  groupActionWidget('Delete admin', (){
+                        provider.exitGroupApiFunction(
+                          widget.groupId, memberId, GroupAction.removeadmin.name);
+                  }):Container()
+                 ,ScreenSize.height(15),
+
+                ],
+              );
+  }
+
+  memberAccessOfGroupAction(String title){
+    return  Padding(
+      padding: const EdgeInsets.symmetric(vertical: 15),
+      child: groupActionWidget('Message $title', (){}),
+    );
+  }
+
+  anotherAdminAccessOfGroupAction(GroupDetailsProvider provider,{ String memberId = '',String isAdmin='',String id ='',String title='',String createdGroupId=''}){
+    return  Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ScreenSize.height(15),
+                   isAdmin=='0' ?
+                  groupActionWidget("Make group admin", (){
+                     provider.exitGroupApiFunction(
+                          widget.groupId, memberId, GroupAction.makeadmin.name);
+                  }):Container(),
+                  createdGroupId==SessionManager.userIntId?
+                  groupActionWidget("Assign a filerack's", (){}):Container(),
+                  groupActionWidget('Message $title', (){}),
+                  isAdmin=='1'?
+                  groupActionWidget('Remove from group', (){
+                        provider.exitGroupApiFunction(
+                          widget.groupId, memberId, GroupAction.removeadmin.name);
                   }):Container()
                  ,ScreenSize.height(15),
                 ],
-              ),
-            ),
-          );
-        });
+              );
   }
 
   Widget groupActionWidget(String title, Function()onTap){
-    return    InkWell(
+    return   GestureDetector(
                     onTap: onTap,
                     child: Container(
                       margin:const EdgeInsets.only(top: 10,bottom: 10),

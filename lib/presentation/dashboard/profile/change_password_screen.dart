@@ -53,7 +53,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen>
                       controller: myProvider.currentPasswordController,
                       textInputAction: TextInputAction.next,
                       inputFormatters: [
-                        CustomFormatter(),
+                        WhiteSpaceFormatter(),
                         FilteringTextInputFormatter.deny(
                             RegExp(Utils.regexToRemoveEmoji)),
                       ],
@@ -82,7 +82,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen>
                       controller: myProvider.passwordController,
                       textInputAction: TextInputAction.next,
                       inputFormatters: [
-                        CustomFormatter(),
+                        WhiteSpaceFormatter(),
                         FilteringTextInputFormatter.deny(
                             RegExp(Utils.regexToRemoveEmoji)),
                       ],
@@ -111,7 +111,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen>
                       controller: myProvider.confirmPasswordController,
                       textInputAction: TextInputAction.done,
                       inputFormatters: [
-                        CustomFormatter(),
+                        WhiteSpaceFormatter(),
                         FilteringTextInputFormatter.deny(
                             RegExp(Utils.regexToRemoveEmoji)),
                       ],

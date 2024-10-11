@@ -8,9 +8,11 @@ import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/helper/view_network_image.dart';
 import 'package:kodago/model/feeds_model.dart';
 import 'package:kodago/presentation/dashboard/home/view_post_screen.dart';
+import 'package:kodago/services/provider/home/home_provider.dart';
 import 'package:kodago/widget/comment_bottomsheet.dart';
 import 'package:kodago/widget/view_video.dart';
 import 'package:video_player/video_player.dart';
+import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class HomePostsWidget extends StatefulWidget {
@@ -194,50 +196,60 @@ class _HomePostsWidgetState extends State<HomePostsWidget> {
   }
 
   likeCommentSeeMoreWidget() {
-    return Padding(
-      padding: const EdgeInsets.only(left: 20, right: 20),
-      child: Row(
-        children: [
-          Image.asset(
-            AppImages.thumb1Icon,
-            height: 16,
-            width: 18,
+    var model = widget.feedsModel!.data!.feeds![widget.index];
+    return Consumer<HomeProvider>(
+      builder: (context,myProvider,child) {
+        return Padding(
+          padding: const EdgeInsets.only(left: 20, right: 20),
+          child: Row(
+            children: [
+              Image.asset(
+                AppImages.thumb1Icon,
+                height: 16,
+                width: 18,
+              ),
+              ScreenSize.width(13),
+              GestureDetector(
+                onTap: () {
+                  myProvider.clearController();
+                  myProvider.commentApiFunction(groupId: model.groupId, sheetId: model.sheetId, sheetDataId: model.sheetDataId);
+                  commentBottomSheet(groupId: model.groupId,sheetDataId: model.sheetDataId,sheetId: model.sheetId).then((val){
+                     myProvider.clearPages();
+                        myProvider.feedsApiFunction();
+                  });
+                },
+                child: Image.asset(
+                  AppImages.commentIcon,
+                  height: 16,
+                  width: 15,
+                ),
+              ),
+              ScreenSize.width(13),
+              Image.asset(
+                AppImages.shareIcon,
+                height: 16,
+                width: 18,
+              ),
+              const Spacer(),
+              GestureDetector(
+                onTap: () {
+                  AppRoutes.pushCupertinoNavigation(ViewPostScreen(
+                    currentIndex: widget.index,
+                    feedsModel: widget.feedsModel,
+                  ));
+                },
+                child: customText(
+                  title: 'Show more',
+                  color: AppColor.darkAppColor,
+                  fontFamily: FontFamily.interMedium,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 12,
+                ),
+              )
+            ],
           ),
-          ScreenSize.width(13),
-          GestureDetector(
-            onTap: () {
-              commentBottomSheet();
-            },
-            child: Image.asset(
-              AppImages.commentIcon,
-              height: 16,
-              width: 15,
-            ),
-          ),
-          ScreenSize.width(13),
-          Image.asset(
-            AppImages.shareIcon,
-            height: 16,
-            width: 18,
-          ),
-          const Spacer(),
-          GestureDetector(
-            onTap: () {
-              AppRoutes.pushCupertinoNavigation(ViewPostScreen(
-                currentIndex: widget.index,
-                feedsModel: widget.feedsModel,
-              ));
-            },
-            child: customText(
-              title: 'Show more',
-              color: AppColor.darkAppColor,
-              fontFamily: FontFamily.interMedium,
-              fontWeight: FontWeight.w400,
-              fontSize: 12,
-            ),
-          )
-        ],
-      ),
+        );
+      }
     );
   }
 
@@ -295,38 +307,58 @@ class _HomePostsWidgetState extends State<HomePostsWidget> {
   }
 
   commentWidget() {
-    return Padding(
-      padding: const EdgeInsets.only(left: 20, right: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text.rich(TextSpan(
-              text: 'joshua_l  ',
-              style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w500,
-                  color: AppColor.blackColor,
-                  fontFamily: FontFamily.interBold),
-              children: [
-                TextSpan(
-                    text:
-                        'The game in Japan was amazing and I want to share some photos',
-                    style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w400,
-                        color: AppColor.blackColor,
-                        fontFamily: FontFamily.interMedium))
-              ])),
-          ScreenSize.height(5),
-          customText(
-            title: 'View all 152 comments',
-            fontSize: 13,
-            color: const Color(0xff706F6F),
-            fontWeight: FontWeight.w400,
-            fontFamily: FontFamily.interMedium,
-          )
-        ],
-      ),
+    var model = widget.feedsModel!.data!.feeds![widget.index];
+    return Consumer<HomeProvider>(
+      builder: (context,myProvider,child) {
+        return Padding(
+          padding: const EdgeInsets.only(left: 20, right: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text.rich(TextSpan(
+                  text: 'joshua_l  ',
+                  style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                      color: AppColor.blackColor,
+                      fontFamily: FontFamily.interBold),
+                  children: [
+                    TextSpan(
+                        text:
+                            'The game in Japan was amazing and I want to share some photos',
+                        style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w400,
+                            color: AppColor.blackColor,
+                            fontFamily: FontFamily.interMedium))
+                  ])),
+              ScreenSize.height(5),
+              InkWell(
+                onTap: (){
+                  myProvider.clearController();
+                  myProvider.commentApiFunction(groupId: model.groupId, sheetId: model.sheetId, sheetDataId: model.sheetDataId);
+                  commentBottomSheet(groupId: model.groupId,sheetDataId: model.sheetDataId,sheetId: model.sheetId).then((val){
+                    myProvider.clearPages();
+                    myProvider.feedsApiFunction();
+                  });
+                  
+                },
+                child: SizedBox(
+                  height: 20,
+                  width: double.infinity,
+                  child: customText(
+                    title: 'View all ${model.commentCount??"0"} comments',
+                    fontSize: 13,
+                    color: const Color(0xff706F6F),
+                    fontWeight: FontWeight.w400,
+                    fontFamily: FontFamily.interMedium,
+                  ),
+                ),
+              )
+            ],
+          ),
+        );
+      }
     );
   }
 }

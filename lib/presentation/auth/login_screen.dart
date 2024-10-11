@@ -72,7 +72,7 @@ class _LoginScreenState extends State<LoginScreen> with MediaQueryScaleFactor {
                       controller: myProvider.emailController,
                       textInputAction: TextInputAction.next,
                       inputFormatters: [
-                        CustomFormatter(),
+                        WhiteSpaceFormatter(),
                         FilteringTextInputFormatter.deny(
                             RegExp(Utils.regexToRemoveEmoji)),
                       ],

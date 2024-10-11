@@ -127,6 +127,7 @@ class _NewGroupScreenState extends State<NewGroupScreen>
             isSearchEnable = false;
             setState(() {});
           } else {
+            Provider.of<NewGroupProvider>(context,listen: false).contactApiFunction('Ravi', showLoading: true);
             Navigator.pop(context);
           }
         });

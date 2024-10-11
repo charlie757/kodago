@@ -8,14 +8,11 @@ import 'package:kodago/model/profile_model.dart';
 import 'package:kodago/presentation/auth/otp_verification_screen.dart';
 import 'package:kodago/presentation/dashboard/profile/change_password_screen.dart';
 import 'package:kodago/presentation/dashboard/profile/edit_profile_screen.dart';
-import 'package:kodago/presentation/dashboard/profile/profile_screen.dart';
 import 'package:kodago/uitls/constants.dart';
 import 'package:kodago/uitls/enum.dart';
 import 'package:kodago/uitls/session_manager.dart';
 import 'package:kodago/uitls/show_loader.dart';
 import 'package:kodago/uitls/utils.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:image_cropper/image_cropper.dart';
 import 'package:kodago/widget/dialog_box.dart';
 
 class ProfileProvider extends ChangeNotifier {

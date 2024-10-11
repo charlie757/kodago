@@ -5,6 +5,7 @@ import 'package:kodago/api/api_service.dart';
 import 'package:kodago/api/api_url.dart';
 import 'package:kodago/model/group/group_details_model.dart';
 import 'package:kodago/uitls/constants.dart';
+import 'package:kodago/uitls/enum.dart';
 import 'package:kodago/uitls/session_manager.dart';
 import 'package:kodago/uitls/show_loader.dart';
 import 'package:kodago/uitls/utils.dart';
@@ -70,8 +71,8 @@ updateMemberList(){
       'Userid': SessionManager.userId,
       'Token': SessionManager.token,
       'uniqueId': uniqueId,
-      'action': type,
-      /// remove or makeadmin
+      'action': type==GroupAction.removeadmin.name?'remove-admin':type,
+      /// remove or makeadmin or remove_admin
     };
     print(body);
     final response = await ApiService.multiPartApiMethod(

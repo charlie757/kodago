@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class CustomFormatter extends TextInputFormatter {
-  CustomFormatter();
+class WhiteSpaceFormatter extends TextInputFormatter {
+  WhiteSpaceFormatter();
 
   @override
   TextEditingValue formatEditUpdate(

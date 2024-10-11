@@ -23,6 +23,10 @@ class ApiUrl {
   static String feedsUrl = '${baseUrl}groups/feeds';
   static String viewSheetDataUrl = '${baseUrl}sheets/loadForm';
 
+  /// comment
+  static String postCommentUrl = '${baseUrl}sheets/postComment';
+  static String commentUrl = '${baseUrl}sheets/loadComments';
+
   /// notification
   static String notificationUrl = '${baseUrl}groups/notifications';
   static String deleteNotificationApi = "${baseUrl}groups/read_notification";

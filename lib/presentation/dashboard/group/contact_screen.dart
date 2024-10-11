@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:kodago/config/app_routes.dart';
-import 'package:kodago/helper/app_color.dart';
 import 'package:kodago/helper/app_images.dart';
 import 'package:kodago/helper/custom_text.dart';
 import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/services/provider/group/contact_provider.dart';
-import 'package:kodago/services/provider/group/new_group_provider.dart';
 import 'package:kodago/presentation/dashboard/group/new_group_screen.dart';
 import 'package:kodago/widget/group_app_bar.dart';
 import 'package:kodago/widget/view_contact_widget.dart';

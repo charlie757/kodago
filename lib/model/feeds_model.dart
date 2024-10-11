@@ -23,19 +23,19 @@ class FeedsModel {
 }
 
 class Data {
-  List<Stories>? stories;
+  List<Story>? story;
   List<Feeds>? feeds;
   dynamic start;
   dynamic perpage;
   dynamic total;
 
-  Data({this.stories, this.feeds, this.start, this.perpage, this.total});
+  Data({this.story, this.feeds, this.start, this.perpage, this.total});
 
   Data.fromJson(Map<String, dynamic> json) {
     if (json['stories'] != null) {
-      stories = <Stories>[];
+      story = <Story>[];
       json['stories'].forEach((v) {
-        stories!.add(Stories.fromJson(v));
+        story!.add(Story.fromJson(v));
       });
     }
     if (json['feeds'] != null) {
@@ -51,8 +51,8 @@ class Data {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = Map<String, dynamic>();
-    if (stories != null) {
-      data['stories'] = stories!.map((v) => v.toJson()).toList();
+    if (story != null) {
+      data['stories'] = story!.map((v) => v.toJson()).toList();
     }
     if (feeds != null) {
       data['feeds'] = feeds!.map((v) => v.toJson()).toList();

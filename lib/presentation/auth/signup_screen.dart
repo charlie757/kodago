@@ -72,7 +72,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   controller: myProvider.nameController,
                   textInputAction: TextInputAction.next,
                   inputFormatters: [
-                    CustomFormatter(),
+                    WhiteSpaceFormatter(),
                     FilteringTextInputFormatter.deny(
                         RegExp(Utils.regexToRemoveEmoji)),
                   ],
@@ -99,7 +99,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   isReadOnly: myProvider.isLoading,
                   textInputAction: TextInputAction.next,
                   inputFormatters: [
-                    CustomFormatter(),
+                    WhiteSpaceFormatter(),
                     FilteringTextInputFormatter.deny(
                         RegExp(Utils.regexToRemoveEmoji)),
                   ],
@@ -158,7 +158,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   isReadOnly: myProvider.isLoading,
                   controller: myProvider.passwordController,
                   inputFormatters: [
-                    CustomFormatter(),
+                    WhiteSpaceFormatter(),
                     FilteringTextInputFormatter.deny(
                         RegExp(Utils.regexToRemoveEmoji)),
                   ],
@@ -210,7 +210,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   isReadOnly: myProvider.isLoading,
                   controller: myProvider.confirmPasswordController,
                   inputFormatters: [
-                    CustomFormatter(),
+                    WhiteSpaceFormatter(),
                     FilteringTextInputFormatter.deny(
                         RegExp(Utils.regexToRemoveEmoji)),
                   ],
