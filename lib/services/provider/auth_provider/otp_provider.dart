@@ -81,6 +81,7 @@ class OtpProvider extends ChangeNotifier {
       final verfiyModel = VerifyModel.fromJson(response);
       SessionManager.setToken = verfiyModel.data!.token ?? '';
       SessionManager.setUserId = verfiyModel.data!.userid;
+      SessionManager.setUserIntId = verfiyModel.data!.userId;
       AppRoutes.pushReplacementNavigation(DashboardScreen());
     }
   }

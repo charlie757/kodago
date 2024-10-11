@@ -32,8 +32,7 @@ class _DashboardScreenState extends State<DashboardScreen>
     Provider.of<ProfileProvider>(context, listen: false).profileModel = null;
     final provider = Provider.of<DashboardProvider>(context, listen: false);
     provider.updateIndex(widget.index);
-    Provider.of<ProfileProvider>(context, listen: false)
-        .getProfileApiFunction();
+    Provider.of<ProfileProvider>(context, listen: false).getProfileApiFunction();
   }
 
   @override

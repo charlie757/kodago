@@ -46,6 +46,11 @@ class SessionManager {
     sharedPrefs.setString(Constants.USER_ID, value);
   }
 
+  static String get userIntId => sharedPrefs.getString(Constants.USER_INT_ID) ?? "";
+  static set setUserIntId(String value) {
+    sharedPrefs.setString(Constants.USER_INT_ID, value);
+  }
+
   // static String get lat => sharedPrefs.getString(Constants.LAT) ?? "";
   // static set setLat(String value) {
   //   sharedPrefs.setString(Constants.LAT, value);

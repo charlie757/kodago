@@ -6,10 +6,12 @@ import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/helper/view_network_image.dart';
 import 'package:kodago/model/feeds_model.dart';
+import 'package:kodago/services/provider/home/home_provider.dart';
 import 'package:kodago/uitls/my_sperator.dart';
 import 'package:kodago/widget/comment_bottomsheet.dart';
 import 'package:video_player/video_player.dart';
 import '../../../uitls/mixins.dart';
+import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class ViewPostScreen extends StatefulWidget {
@@ -87,6 +89,7 @@ class _ViewPostScreenState extends State<ViewPostScreen>
                   ScreenSize.height(28),
                   GestureDetector(
                     onTap: () {
+                    Provider.of<HomeProvider>(context,listen: false).viewSheetFeedDataApiFunction(groupId: model.groupId, sheetId: model.sheetId, sheetDataId: model.sheetDataId);
                       commentBottomSheet();
                     },
                     child: Container(

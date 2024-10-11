@@ -21,6 +21,7 @@ class ApiUrl {
 
   /// feeds
   static String feedsUrl = '${baseUrl}groups/feeds';
+  static String viewSheetDataUrl = '${baseUrl}sheets/loadForm';
 
   /// notification
   static String notificationUrl = '${baseUrl}groups/notifications';

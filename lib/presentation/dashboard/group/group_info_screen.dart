@@ -13,8 +13,14 @@ import 'package:kodago/presentation/dashboard/group/add_member_screen.dart';
 import 'package:kodago/presentation/dashboard/group/edit_group_profile.dart';
 import 'package:kodago/presentation/dashboard/group/hightlight_screen.dart';
 import 'package:kodago/presentation/dashboard/group/view_all_group_media_screen.dart';
+import 'package:kodago/services/share_service.dart';
+import 'package:kodago/uitls/enum.dart';
+import 'package:kodago/uitls/session_manager.dart';
 import 'package:kodago/uitls/time_format.dart';
+import 'package:kodago/uitls/utils.dart';
 import 'package:kodago/widget/appbar.dart';
+import 'package:kodago/widget/dialog_box.dart';
+import 'package:kodago/widget/no_data_found.dart';
 import 'package:kodago/widget/popmenuButton.dart';
 import 'package:provider/provider.dart';
 import '../../../uitls/mixins.dart';
@@ -29,6 +35,8 @@ class GroupInfoScreen extends StatefulWidget {
 
 class _GroupInfoScreenState extends State<GroupInfoScreen>
     with MediaQueryScaleFactor {
+
+      bool isSearchEnable = false;
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((val) {
@@ -39,6 +47,7 @@ class _GroupInfoScreenState extends State<GroupInfoScreen>
 
   callInitFunction() async {
     final provider = Provider.of<GroupDetailsProvider>(context, listen: false);
+    provider.clearValues();
     provider.groupDetailsApiFunction(widget.groupId);
   }
 
@@ -46,101 +55,99 @@ class _GroupInfoScreenState extends State<GroupInfoScreen>
   Widget build(BuildContext context) {
     return Consumer<GroupDetailsProvider>(
         builder: (context, myProvider, child) {
-      return MediaQuery(
-        data: mediaQuery,
-        child: Scaffold(
-          appBar: appBar(title: '', actions: [popupMenuButton()]),
-          body: SingleChildScrollView(
-            padding: const EdgeInsets.only(bottom: 30),
-            child: myProvider.model == null
-                ? Container()
-                : Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      groupDetailsWidget(myProvider),
-                      ScreenSize.height(26),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15),
+      return Scaffold(
+        appBar: appBar(title: '', actions: [popupMenuButton()]),
+        body:myProvider.model == null
+              ? noDataFound("no data found")
+              :  SingleChildScrollView(
+          padding: const EdgeInsets.only(bottom: 30),
+          child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    groupDetailsWidget(myProvider),
+                    ScreenSize.height(26),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          customContainer(AppImages.fileIcon, 'Form', () {
+                            AppRoutes.pushCupertinoNavigation(
+                                FileRackListScreen(
+                              groupId: widget.groupId,
+                              groupName: myProvider.model!.data != null &&
+                                      myProvider.model!.data!.groupDetail !=
+                                          null
+                                  ? myProvider
+                                          .model!.data!.groupDetail!.name ??
+                                      ""
+                                  : "",
+                            ));
+                          }),
+                          ScreenSize.width(10),
+                          customContainer(
+                              AppImages.hightlightIcon, 'Highlight', () {
+                            AppRoutes.pushCupertinoNavigation(
+                                const HightlightScreen());
+                          }),
+                          ScreenSize.width(10),
+                          customContainer(
+                              AppImages.analyticsIon, 'Analytics', () {}),
+                          ScreenSize.width(10),
+                          customContainer(AppImages.addUserIcon, 'Add', () {
+                            AppRoutes.pushCupertinoNavigation(AddMemberScreen(
+                              groupId: widget.groupId,
+                            )).then((val) {
+                              Provider.of<GroupDetailsProvider>(context,
+                                      listen: false)
+                                  .groupDetailsApiFunction(widget.groupId,
+                                      isShowLoader: false);
+                            });
+                          }),
+                        ],
+                      ),
+                    ),
+                    ScreenSize.height(19),
+                    groupDescriptionWidget(myProvider),
+                    ScreenSize.height(8),
+                    invateLinkWidget(myProvider),
+                    ScreenSize.height(17),
+                    mediaLinksWidget(),
+                    ScreenSize.height(19),
+                    membersWidget(myProvider),
+                    ScreenSize.height(22),
+                    myProvider.memberId.isNotEmpty?
+                    GestureDetector(
+                      onTap: () {
+                        dialogBox(title: 'Exit Group', des: "Are you sure you want to exit the group?",yesTap:(){
+                          myProvider.exitGroupApiFunction(widget.groupId, myProvider.memberId, GroupAction.remove.name);
+                        } );
+                      },
+                      child: Container(
+                        width: double.infinity,
+                        color: AppColor.whiteColor,
+                        padding: const EdgeInsets.only(left: 18),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            customContainer(AppImages.fileIcon, 'Form', () {
-                              AppRoutes.pushCupertinoNavigation(
-                                  FileRackListScreen(
-                                groupId: widget.groupId,
-                                groupName: myProvider.model!.data != null &&
-                                        myProvider.model!.data!.groupDetail !=
-                                            null
-                                    ? myProvider
-                                            .model!.data!.groupDetail!.name ??
-                                        ""
-                                    : "",
-                              ));
-                            }),
-                            ScreenSize.width(10),
-                            customContainer(
-                                AppImages.hightlightIcon, 'Highlight', () {
-                              AppRoutes.pushCupertinoNavigation(
-                                  const HightlightScreen());
-                            }),
-                            ScreenSize.width(10),
-                            customContainer(
-                                AppImages.analyticsIon, 'Analytics', () {}),
-                            ScreenSize.width(10),
-                            customContainer(AppImages.addUserIcon, 'Add', () {
-                              AppRoutes.pushCupertinoNavigation(AddMemberScreen(
-                                groupId: widget.groupId,
-                              )).then((val) {
-                                Provider.of<GroupDetailsProvider>(context,
-                                        listen: false)
-                                    .groupDetailsApiFunction(widget.groupId,
-                                        isShowLoader: false);
-                              });
-                            }),
+                            Image.asset(
+                              AppImages.logoutIcon,
+                              height: 22,
+                              width: 22,
+                            ),
+                            ScreenSize.width(12),
+                            customText(
+                              title: 'Exit group',
+                              color: AppColor.redColor,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              fontFamily: FontFamily.interMedium,
+                            )
                           ],
                         ),
                       ),
-                      ScreenSize.height(19),
-                      groupDescriptionWidget(myProvider),
-                      ScreenSize.height(8),
-                      invateLinkWidget(myProvider),
-                      ScreenSize.height(17),
-                      mediaLinksWidget(),
-                      ScreenSize.height(19),
-                      membersWidget(myProvider),
-                      ScreenSize.height(22),
-                      GestureDetector(
-                        onTap: () {
-                          myProvider.checkMemberId().then((val) {
-                            print(val);
-                          });
-                        },
-                        child: Container(
-                          width: double.infinity,
-                          color: AppColor.whiteColor,
-                          padding: const EdgeInsets.only(left: 18),
-                          child: Row(
-                            children: [
-                              Image.asset(
-                                AppImages.logoutIcon,
-                                height: 22,
-                                width: 22,
-                              ),
-                              ScreenSize.width(12),
-                              customText(
-                                title: 'Exit group',
-                                color: AppColor.redColor,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                fontFamily: FontFamily.interMedium,
-                              )
-                            ],
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-          ),
+                    ):const SizedBox.shrink()
+                  ],
+                ),
         ),
       );
     });
@@ -185,7 +192,7 @@ class _GroupInfoScreenState extends State<GroupInfoScreen>
             ),
             ScreenSize.width(5),
             customText(
-              title: '${model.members!.length} members',
+              title: '${provider.globalGroupDetailsModel!.data!.groupDetail!.members!.length} members',
               fontSize: 13,
               color: AppColor.grey7DColor,
               fontWeight: FontWeight.w400,
@@ -220,8 +227,8 @@ class _GroupInfoScreenState extends State<GroupInfoScreen>
           ),
           ScreenSize.height(4),
           customText(
-            title:
-                "Created by ${model.name ?? ''}, ${TimeFormat.convertDate(model.createdAt)}",
+            title:model.members!.isNotEmpty?
+                "Created by ${provider.groupCreatedName}, ${TimeFormat.convertDate(model.createdAt)}":"",
             fontSize: 13,
             fontWeight: FontWeight.w400,
             color: const Color(0xff455154),
@@ -260,43 +267,49 @@ class _GroupInfoScreenState extends State<GroupInfoScreen>
           ),
           ScreenSize.width(11),
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    customText(
-                      title: 'Invite via link',
-                      fontSize: 14,
-                      color: AppColor.appColor,
-                      fontWeight: FontWeight.w500,
-                      fontFamily: FontFamily.interMedium,
-                    ),
-                    InkWell(
-                      onTap: () async {
-                        await Clipboard.setData(
-                            ClipboardData(text: model.shareLink));
-                      },
-                      child: customText(
-                        title: 'Copy',
-                        fontSize: 12,
-                        color: AppColor.darkAppColor,
+            child: GestureDetector(
+              onTap: (){
+                ShareService().share("Please join the group using below link:\n${model.shareLink}");
+              },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      customText(
+                        title: 'Invite via link',
+                        fontSize: 14,
+                        color: AppColor.appColor,
                         fontWeight: FontWeight.w500,
                         fontFamily: FontFamily.interMedium,
                       ),
-                    ),
-                  ],
-                ),
-                ScreenSize.height(4),
-                customText(
-                  title: "People who follow this link can join this group",
-                  fontSize: 13,
-                  fontWeight: FontWeight.w400,
-                  color: const Color(0xff455154),
-                  fontFamily: FontFamily.interMedium,
-                )
-              ],
+                      InkWell(
+                        onTap: () async {
+                          await Clipboard.setData(
+                              ClipboardData(text: model.shareLink));
+                              Utils.showToast('Copied');
+                        },
+                        child: customText(
+                          title: 'Copy',
+                          fontSize: 12,
+                          color: AppColor.darkAppColor,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: FontFamily.interMedium,
+                        ),
+                      ),
+                    ],
+                  ),
+                  ScreenSize.height(4),
+                  customText(
+                    title: "People who follow this link can join this group",
+                    fontSize: 13,
+                    fontWeight: FontWeight.w400,
+                    color: const Color(0xff455154),
+                    fontFamily: FontFamily.interMedium,
+                  )
+                ],
+              ),
             ),
           ),
         ],
@@ -377,6 +390,8 @@ class _GroupInfoScreenState extends State<GroupInfoScreen>
       padding: const EdgeInsets.only(left: 19, top: 16, right: 18, bottom: 15),
       child: Column(
         children: [
+          isSearchEnable?
+          textField():
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -387,10 +402,17 @@ class _GroupInfoScreenState extends State<GroupInfoScreen>
                 fontWeight: FontWeight.w500,
                 color: const Color(0xff455154),
               ),
-              Image.asset(
-                AppImages.searchIcon,
-                height: 15,
-                width: 15,
+              InkWell(
+                onTap: (){
+                  isSearchEnable = true;
+                  setState(() {
+                  });
+                },
+                child: Image.asset(
+                  AppImages.searchIcon,
+                  height: 15,
+                  width: 15,
+                ),
               )
             ],
           ),
@@ -408,7 +430,15 @@ class _GroupInfoScreenState extends State<GroupInfoScreen>
                     var memberModel = model.members![index];
                     return GestureDetector(
                       onTap: () {
-                        showDialogBox(provider, memberModel.memberJoinId);
+                        if(model.members![0].id==SessionManager.userIntId&&index==0){
+                        }
+                        else if(memberModel.id == SessionManager.userIntId){
+                          //  provider.exitGroupApiFunction(
+                          // widget.groupId, memberModel.memberJoinId, GroupAction.makeadmin.name);
+                        }
+                        else{
+                          showDialogBox(provider,memberId:  memberModel.memberJoinId,isAdmin: memberModel.isAdmin,id: memberModel.id,title: memberModel.name,createdGroupId: model.members![0].id);
+                        }
                       },
                       child: Container(
                         color: AppColor.whiteColor,
@@ -423,7 +453,7 @@ class _GroupInfoScreenState extends State<GroupInfoScreen>
                             ScreenSize.width(15),
                             Expanded(
                               child: customText(
-                                title: model.id == memberModel.id
+                                title: memberModel.id == SessionManager.userIntId
                                     ? "You"
                                     : memberModel.name ?? "",
                                 fontSize: 14,
@@ -464,7 +494,8 @@ class _GroupInfoScreenState extends State<GroupInfoScreen>
     );
   }
 
-  showDialogBox(GroupDetailsProvider provider, String id) {
+  showDialogBox(GroupDetailsProvider provider,{ String memberId = '',String isAdmin='',String id ='',String title='',String createdGroupId=''}) {
+    print(id);
     showDialog(
         context: context,
         builder: (context) {
@@ -477,63 +508,78 @@ class _GroupInfoScreenState extends State<GroupInfoScreen>
                 borderRadius: BorderRadius.circular(10)),
             content: Container(
               width: MediaQuery.of(context).size.width - 40,
-              padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 17),
+              padding: const EdgeInsets.symmetric( horizontal: 17),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  InkWell(
-                    onTap: () {
-                      provider.exitGroupApiFunction(
-                          widget.groupId, id, 'makeadmin');
-                    },
-                    child: Container(
-                      color: AppColor.whiteColor,
-                      width: double.infinity,
-                      child: customText(
-                        title: 'Make group admin',
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        fontFamily: FontFamily.interMedium,
-                      ),
-                    ),
-                  ),
-                  ScreenSize.height(20),
-                  customText(
-                    title: "Assign a filerack's",
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: FontFamily.interMedium,
-                  ),
-                  ScreenSize.height(20),
-                  customText(
-                    title: 'Message Manish',
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: FontFamily.interMedium,
-                  ),
-                  ScreenSize.height(20),
-                  InkWell(
-                    onTap: () {
-                      provider.exitGroupApiFunction(
-                          widget.groupId, id, 'remove');
-                    },
-                    child: Container(
-                      width: double.infinity,
-                      color: AppColor.whiteColor,
-                      child: customText(
-                        title: 'Remove from group',
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        fontFamily: FontFamily.interMedium,
-                      ),
-                    ),
-                  ),
+                  ScreenSize.height(15),
+                   createdGroupId==SessionManager.userIntId&&isAdmin=='0' ?
+                  groupActionWidget("Make group admin", (){
+                     provider.exitGroupApiFunction(
+                          widget.groupId, memberId, GroupAction.makeadmin.name);
+                  }):Container(),
+                  createdGroupId==SessionManager.userIntId?
+                  groupActionWidget("Assign a filerack's", (){}):Container(),
+                  groupActionWidget('Message $title', (){}),
+                  createdGroupId==SessionManager.userIntId&&isAdmin=='1'?
+                  groupActionWidget('Remove from group', (){
+                        provider.exitGroupApiFunction(
+                          widget.groupId, memberId, GroupAction.remove.name);
+                  }):Container()
+                 ,ScreenSize.height(15),
                 ],
               ),
             ),
           );
         });
+  }
+
+  Widget groupActionWidget(String title, Function()onTap){
+    return    InkWell(
+                    onTap: onTap,
+                    child: Container(
+                      margin:const EdgeInsets.only(top: 10,bottom: 10),
+                      width: double.infinity,
+                      color: AppColor.whiteColor,
+                      child: customText(
+                        title: title,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: FontFamily.interMedium,
+                      ),
+                    ),
+                  );
+  }
+
+  textField(){
+    return TextFormField(
+      cursorHeight: 20,
+    decoration:  InputDecoration(
+        isDense: false,
+        hintText: 'Search by name...',
+        hintStyle:const TextStyle(
+            fontSize: 13,
+            color: Color(0xff9D9D9D),
+            fontWeight: FontWeight.w400,
+            fontFamily: FontFamily.interRegular),
+        enabledBorder:const UnderlineInputBorder(
+          borderSide: BorderSide(color: Color(0xffEEEEEE)),
+        ),
+        suffixIcon: InkWell(
+          onTap: (){
+            isSearchEnable=false;
+            setState(() {
+            });
+            Provider.of<GroupDetailsProvider>(context,listen: false).updateMemberList();
+          },
+          child:const Icon(Icons.close,size: 15,)),
+        focusedBorder:const UnderlineInputBorder(
+            borderSide: BorderSide(color: Color(0xffEEEEEE)))),
+    onChanged: (val) {
+      Provider.of<GroupDetailsProvider>(context,listen: false).searchFunction(val);
+    },
+    );
   }
 
   customContainer(String img, String title, Function() onTap) {

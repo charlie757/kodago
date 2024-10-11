@@ -8,5 +8,6 @@ class Constants {
 
   static String TOKEN = 'TOKEN';
   static String USER_ID = 'USER_ID';
+  static String USER_INT_ID = 'USER_INT_ID';
   static String FIRST_TIME_OPEN_APP = 'FIRST_TIME_OPEN_APP';
 }

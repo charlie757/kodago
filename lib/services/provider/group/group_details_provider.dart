@@ -11,10 +11,32 @@ import 'package:kodago/uitls/utils.dart';
 
 class GroupDetailsProvider extends ChangeNotifier {
   GroupDetailsModel? model;
+  GroupDetailsModel? globalGroupDetailsModel;
   final nameController = TextEditingController();
+  String memberId = '';
+  String groupCreatedName = '';
+  bool isCurrentUserGroupAdmin = false;
+
+updateGroupCreatedName(String val){
+  groupCreatedName = val;
+  notifyListeners();
+}
+
+clearValues(){
+  memberId='';
+  groupCreatedName='';
+}
+
+updateMemberList(){
+  model!.data!.groupDetail!.members = globalGroupDetailsModel!.data!.groupDetail!.members;
+  notifyListeners();
+}
+
   groupDetailsApiFunction(String groupId, {bool isShowLoader = true}) async {
+    memberId = '';
     if (isShowLoader) {
       model = null;
+      globalGroupDetailsModel= null;
       notifyListeners();
       showLoader(navigatorKey.currentContext!);
     }
@@ -24,11 +46,18 @@ class GroupDetailsProvider extends ChangeNotifier {
       'Userid': SessionManager.userId,
       'Token': SessionManager.token,
     };
+    print(body);
     final response = await ApiService.multiPartApiMethod(
         url: ApiUrl.groupDetailsUrl, body: body);
     isShowLoader ? Navigator.pop(navigatorKey.currentContext!) : null;
     if (response != null && response['status'] == 1) {
       model = GroupDetailsModel.fromJson(response);
+      globalGroupDetailsModel = GroupDetailsModel.fromJson(response);
+      getMemberId();
+      if(model!.data!.groupDetail!.members!.isNotEmpty&&model!.data!.groupDetail!.members!=null){
+     updateGroupCreatedName(model!.data!.groupDetail!.members![0].name);
+      }
+    
     }
     notifyListeners();
   }
@@ -42,9 +71,9 @@ class GroupDetailsProvider extends ChangeNotifier {
       'Token': SessionManager.token,
       'uniqueId': uniqueId,
       'action': type,
-
       /// remove or makeadmin
     };
+    print(body);
     final response = await ApiService.multiPartApiMethod(
         url: ApiUrl.exitGroupUrl, body: body);
     Navigator.pop(navigatorKey.currentContext!);
@@ -93,12 +122,51 @@ class GroupDetailsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future checkMemberId() async {
+   getMemberId() async {
+    isCurrentUserGroupAdmin=false;
     for (int i = 0; i < model!.data!.groupDetail!.members!.length; i++) {
-      if (model!.data!.groupDetail!.members![i] ==
-          model!.data!.groupDetail!.id) {
-        return model!.data!.groupDetail!.members![i].memberJoinId;
+      var membermodel = model!.data!.groupDetail!.members![i];
+      if (membermodel.id.toString() ==
+          SessionManager.userIntId) {
+            memberId = membermodel.memberJoinId;
+            if(membermodel.id.toString() ==
+          SessionManager.userIntId&&membermodel.isAdmin.toString()=='1'){
+              isCurrentUserGroupAdmin=true;
+            }
+            break;
       }
+    
+    }}
+      searchFunction(String val) async {
+    model!.data!.groupDetail!.members = [];
+    if (!globalGroupDetailsModel!.data!.groupDetail!.members
+        .toString()
+        .toLowerCase()
+        .contains(val.toLowerCase())) {
+      model!.data!.groupDetail!.members!.clear();
+      print('No data found');
+      // noDataFound = true;
     }
-  }
+
+    globalGroupDetailsModel!.data!.groupDetail!.members!.forEach((element) {
+      String lowerCaseVal = val.toLowerCase();
+      String lowerCaseName =
+          element.name.isNotEmpty ? element.name.toLowerCase() : "";
+
+      if (val.isEmpty) {
+        model!.data!.groupDetail!.members!.clear();
+        // noDataFound = false;
+        notifyListeners();
+      } else if (lowerCaseName.contains(lowerCaseVal)) {
+        // noDataFound = false;
+        print("element...${element.name}");
+        model!.data!.groupDetail!.members!.add(element);
+      }
+    });
+
+    notifyListeners();
+  } 
+
+
+
 }

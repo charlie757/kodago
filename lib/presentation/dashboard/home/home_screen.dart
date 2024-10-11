@@ -88,7 +88,9 @@ class _HomeScreenState extends State<HomeScreen> with MediaQueryScaleFactor {
                         myProvider.isLoading
                             ? const PostShimmer()
                             : myProvider.feedsModel != null &&
-                                    myProvider.feedsModel!.data != null
+                                    myProvider.feedsModel!.data != null&&
+                                    myProvider.feedsModel!.data!.feeds!=null&&
+                                    myProvider.feedsModel!.data!.feeds!.isNotEmpty
                                 ? ListView.separated(
                                     separatorBuilder: (context, sp) {
                                       return ScreenSize.height(29);
@@ -114,7 +116,7 @@ class _HomeScreenState extends State<HomeScreen> with MediaQueryScaleFactor {
                                       }
                                     })
                                 : Container(
-                                    height: 300,
+                                    height: 400,
                                     alignment: Alignment.center,
                                     child: noDataFound('No record found'),
                                   )

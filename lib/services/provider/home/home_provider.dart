@@ -78,4 +78,20 @@ class HomeProvider extends ChangeNotifier {
 
     notifyListeners();
   }
+
+  viewSheetFeedDataApiFunction({required String groupId,required String sheetId, required String sheetDataId})async{
+    var body = {
+      'Authkey': Constants.authkey,
+      'Userid': SessionManager.userId,
+      'Token': SessionManager.token,
+      'group_id': groupId,
+      'sheet_id': sheetId,
+      'sheet_data_id':sheetDataId,
+      // 'app_version': Constants.appVersion,
+    };
+    print(body);
+     final response =
+        await ApiService.multiPartApiMethod(url: ApiUrl.viewSheetDataUrl, body: body);
+   
+  }
 }

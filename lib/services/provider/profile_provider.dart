@@ -16,6 +16,7 @@ import 'package:kodago/uitls/show_loader.dart';
 import 'package:kodago/uitls/utils.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image_cropper/image_cropper.dart';
+import 'package:kodago/widget/dialog_box.dart';
 
 class ProfileProvider extends ChangeNotifier {
   final nameController = TextEditingController();
@@ -63,7 +64,9 @@ class ProfileProvider extends ChangeNotifier {
         AppRoutes.pushCupertinoNavigation(const ChangePasswordScreen());
         break;
       case 2:
-        logoutDialog();
+        dialogBox(title: 'Log Out?',des: 'You are about to logout of your account',yesTap: (){
+          Utils.logout();
+        });
         break;
       default:
     }
@@ -76,7 +79,7 @@ class ProfileProvider extends ChangeNotifier {
   }
 
   getProfileApiFunction() async {
-    profileModel == null ? showLoader(navigatorKey.currentContext!) : null;
+    // profileModel == null ? showLoader(navigatorKey.currentContext!) : null;
     var body = {
       "Authkey": Constants.authkey,
       "Userid": SessionManager.userId,
@@ -85,7 +88,7 @@ class ProfileProvider extends ChangeNotifier {
     print(body);
     final response = await ApiService.multiPartApiMethod(
         url: ApiUrl.getProfileUrl, body: body);
-    profileModel == null ? Navigator.pop(navigatorKey.currentContext!) : null;
+    // profileModel == null ? Navigator.pop(navigatorKey.currentContext!) : null;
     if (response != null) {
       profileModel = ProfileModel.fromJson(response);
       setControllersValues();
