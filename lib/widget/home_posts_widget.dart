@@ -234,8 +234,12 @@ class _HomePostsWidgetState extends State<HomePostsWidget> {
               GestureDetector(
                 onTap: () {
                   AppRoutes.pushCupertinoNavigation(ViewPostScreen(
-                    currentIndex: widget.index,
-                    feedsModel: widget.feedsModel,
+                    groupId: model.groupId,
+                    sheetDataId: model.sheetDataId,
+                    sheetId: model.sheetId,
+                    sheetName: model.sheetName??"",
+                    // currentIndex: widget.index,
+                    // feedsModel: widget.feedsModel,
                   ));
                 },
                 child: customText(

@@ -23,9 +23,9 @@ class ProfileProvider extends ChangeNotifier {
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
   bool isLoading = false;
-  bool isCurrentPasswordVisible = false;
-  bool isPasswordVisible = false;
-  bool isConfirmPasswordVisible = false;
+  bool isCurrentPasswordVisible = true;
+  bool isPasswordVisible = true;
+  bool isConfirmPasswordVisible = true;
   ProfileModel? profileModel;
   File? img;
 

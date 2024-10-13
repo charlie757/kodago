@@ -109,6 +109,7 @@ class _FileRackListScreenState extends State<FileRackListScreen>
                                   groupId: widget.groupId,
                                   sheetId: model.id,
                                   sheetDataId: '',
+                                  sheetName: model.name,
                                 ));
                               },
                               child: Row(

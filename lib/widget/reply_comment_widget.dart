@@ -5,7 +5,6 @@ import 'package:kodago/helper/custom_horizontal_line.dart';
 import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/helper/view_network_image.dart';
-import 'package:kodago/uitls/utils.dart';
 import 'package:kodago/uitls/white_space_formatter.dart';
 
 replyCommentWidget({required String img, TextEditingController? controller, Function()?onTap, bool isDefault=true}) {

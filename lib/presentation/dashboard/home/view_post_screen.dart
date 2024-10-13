@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kodago/config/app_routes.dart';
 import 'package:kodago/helper/app_color.dart';
 import 'package:kodago/helper/app_images.dart';
 import 'package:kodago/helper/custom_text.dart';
@@ -6,17 +7,30 @@ import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/helper/view_network_image.dart';
 import 'package:kodago/model/feeds_model.dart';
+import 'package:kodago/services/open_url_service.dart';
+import 'package:kodago/services/provider/file_rack/file_rack_details_provider.dart';
 import 'package:kodago/services/provider/home/home_provider.dart';
 import 'package:kodago/uitls/my_sperator.dart';
+import 'package:kodago/uitls/time_format.dart';
+import 'package:kodago/widget/comment_bottomsheet.dart';
+import 'package:kodago/widget/fle_rack_image_widget.dart';
+import 'package:kodago/widget/view_image.dart';
+import 'package:kodago/widget/view_video.dart';
 import 'package:video_player/video_player.dart';
 import '../../../uitls/mixins.dart';
 import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class ViewPostScreen extends StatefulWidget {
-  int currentIndex;
-  FeedsModel? feedsModel;
-  ViewPostScreen({required this.feedsModel, required this.currentIndex});
+  final String groupId;
+  final String sheetId;
+  final String sheetDataId;
+  final String sheetName;
+  ViewPostScreen(
+      {required this.groupId,
+      required this.sheetDataId,
+      required this.sheetId,
+      required this.sheetName});
 
   @override
   State<ViewPostScreen> createState() => _ViewPostScreenState();
@@ -27,6 +41,22 @@ class _ViewPostScreenState extends State<ViewPostScreen>
   late VideoPlayerController controller;
 
   @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((val) {
+      callInitFunction();
+    });
+    super.initState();
+  }
+
+  callInitFunction() {
+    final provider = Provider.of<HomeProvider>(context, listen: false);
+    provider.viewSheetFeedDataApiFunction(
+        groupId: widget.groupId,
+        sheetId: widget.sheetId,
+        sheetDataId: widget.sheetDataId);
+  }
+
+  @override
   void dispose() {
     // controller.dispose();
     super.dispose();
@@ -34,115 +64,151 @@ class _ViewPostScreenState extends State<ViewPostScreen>
 
   @override
   Widget build(BuildContext context) {
-    var model = widget.feedsModel!.data!.feeds![widget.currentIndex];
-    // if (model.fieldType == 'video') {
-    //   controller =
-    //       VideoPlayerController.networkUrl(Uri.parse(model.video![0].mainURL))
-    //         ..initialize().then((_) {
-    //           // controller.setVolume(0);
-    //           controller.pause();
-    //         });
-    // } else {}
     return MediaQuery(
       data: mediaQuery,
       child: Scaffold(
           appBar: appBar(),
-          body: SingleChildScrollView(
-            padding: const EdgeInsets.all(20),
-            child: Container(
-              padding: const EdgeInsets.only(top: 15),
-              decoration: BoxDecoration(
-                  color: AppColor.whiteColor,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                        offset: const Offset(0, -1),
-                        color: AppColor.blackColor.withOpacity(.1),
-                        blurRadius: 1)
-                  ]),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  userInfoHeaderWidget(),
-                  ScreenSize.height(10),
-                  model.fieldType == 'image'
-                      ? Padding(
-                          padding: const EdgeInsets.only(left: 18, right: 18),
-                          child: ViewNetworkImage(
-                            img: model.image[0]['thumbURL'],
-                            height: 200.0,
-                            width: double.infinity,
-                          ))
-                      : Container(),
-                  ScreenSize.height(18),
-                  userInfoWidget('Group Name', model.groupName ?? ''),
-                  model.fieldType.toString().toLowerCase() != 'image' &&
-                          model.fieldType.toString().toLowerCase() != 'video' &&
-                          model.fieldType.toString().toLowerCase() != 'document'
-                      ? userInfoWidget(model.fieldName, model.text ?? "")
-                      : Container(),
-                  model.fieldType.toString().toLowerCase() == 'document'
-                      ? documentWidget()
-                      : Container(),
-                  model.fieldType == 'image' ? imagesWidget() : Container(),
-                  ScreenSize.height(28),
-                  GestureDetector(
-                    onTap: () {
-                    Provider.of<HomeProvider>(context,listen: false).commentApiFunction(groupId: model.groupId, sheetId: model.sheetId, sheetDataId: model.sheetDataId);
-                      // commentBottomSheet();
-                    },
-                    child: Container(
-                      height: 40,
-                      decoration: BoxDecoration(
-                          color: const Color(0xffF0F5F9),
-                          borderRadius: const BorderRadius.only(
-                              bottomLeft: Radius.circular(20),
-                              bottomRight: Radius.circular(20)),
-                          boxShadow: [
-                            BoxShadow(
-                                offset: const Offset(0, 10),
-                                blurRadius: 35,
-                                spreadRadius: -10,
-                                color: AppColor.blackColor.withOpacity(.2))
-                          ]),
-                      padding: const EdgeInsets.only(left: 19),
-                      alignment: Alignment.center,
-                      child: Row(
+          body: Consumer<HomeProvider>(builder: (context, myProvider, child) {
+            return SingleChildScrollView(
+              padding: const EdgeInsets.all(20),
+              child: Container(
+                padding: const EdgeInsets.only(top: 15),
+                decoration: BoxDecoration(
+                    color: AppColor.whiteColor,
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                          offset: const Offset(0, -1),
+                          color: AppColor.blackColor.withOpacity(.1),
+                          blurRadius: 1)
+                    ]),
+                child: myProvider.fileRackDetailsModel != null &&
+                        myProvider.fileRackDetailsModel!.data != null &&
+                        myProvider.fileRackDetailsModel!.data!.sheetData !=
+                            null &&
+                        myProvider.fileRackDetailsModel!.data!.sheetData!
+                                .dbdata !=
+                            null
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Image.asset(
-                            AppImages.comment1Icon,
-                            height: 18,
-                            width: 18,
-                          ),
-                          ScreenSize.width(6),
-                          customText(
-                            title: '10 comments',
-                            fontSize: 11,
-                            fontWeight: FontWeight.w400,
-                            fontFamily: FontFamily.interMedium,
-                            color: AppColor.blackColor,
+                          userInfoHeaderWidget(myProvider),
+                          ScreenSize.height(20),
+                          ListView.builder(
+                              itemCount: myProvider.fileRackDetailsModel!.data!
+                                  .sheetData!.dbdata![0].data!.length,
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                var fileModel = myProvider.fileRackDetailsModel!
+                                    .data!.sheetData!.dbdata![0].data![index];
+                                return fileModel.fieldType
+                                                .toString()
+                                                .toLowerCase() ==
+                                            'image' ||
+                                        fileModel.fieldType
+                                                .toString()
+                                                .toLowerCase() ==
+                                            'document' ||
+                                        fileModel.fieldType
+                                                .toString()
+                                                .toLowerCase() ==
+                                            'signature' ||
+                                        fileModel.fieldType
+                                                .toString()
+                                                .toLowerCase() ==
+                                            'video'
+                                    ? fileRackImagesWidget(
+                                        index, myProvider.fileRackDetailsModel!)
+                                    : fileModel.fieldType
+                                                .toString()
+                                                .toLowerCase() !=
+                                            'document'
+                                        ? fileRackWidget(
+                                            title: fileModel.fieldName,
+                                            des: fileModel.dValue ??
+                                                fileModel.fieldValue,
+                                            isRequired: false)
+                                        : Container();
+                              }),
+                          ScreenSize.height(28),
+                          GestureDetector(
+                            onTap: () {
+                              final homeProvider = Provider.of<HomeProvider>(
+                                  context,
+                                  listen: false);
+                              homeProvider.clearController();
+                              homeProvider.commentApiFunction(
+                                  groupId: widget.groupId,
+                                  sheetId: widget.sheetId,
+                                  sheetDataId: widget.sheetDataId);
+                              commentBottomSheet(
+                                      groupId: widget.groupId,
+                                      sheetId: widget.sheetId,
+                                      sheetDataId: widget.sheetDataId)
+                                  .then((val) {
+                                    print(val);
+                                myProvider.viewSheetFeedDataApiFunction(
+                                    groupId: widget.groupId,
+                                    sheetId: widget.sheetId,
+                                    sheetDataId: widget.sheetDataId,isLoader: false);
+                              });
+                            },
+                            child: Container(
+                              height: 40,
+                              decoration: BoxDecoration(
+                                  color: const Color(0xffF0F5F9),
+                                  borderRadius: const BorderRadius.only(
+                                      bottomLeft: Radius.circular(20),
+                                      bottomRight: Radius.circular(20)),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        offset: const Offset(0, 10),
+                                        blurRadius: 35,
+                                        spreadRadius: -10,
+                                        color:
+                                            AppColor.blackColor.withOpacity(.2))
+                                  ]),
+                              padding: const EdgeInsets.only(left: 19),
+                              alignment: Alignment.center,
+                              child: Row(
+                                children: [
+                                  Image.asset(
+                                    AppImages.comment1Icon,
+                                    height: 18,
+                                    width: 18,
+                                  ),
+                                  ScreenSize.width(6),
+                                  customText(
+                                    title:
+                                        '${myProvider.fileRackDetailsModel != null && myProvider.fileRackDetailsModel!.data != null && myProvider.fileRackDetailsModel!.data!.sheetData != null && myProvider.fileRackDetailsModel!.data!.sheetData!.dbdata != null && myProvider.fileRackDetailsModel!.data!.sheetData!.dbdata![0].comments != null ? myProvider.fileRackDetailsModel!.data!.sheetData!.dbdata![0].comments!.total ?? '' : ''} comments',
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: FontFamily.interMedium,
+                                    color: AppColor.blackColor,
+                                  )
+                                ],
+                              ),
+                            ),
                           )
                         ],
-                      ),
-                    ),
-                  )
-                ],
+                      )
+                    : Container(),
               ),
-            ),
-          )),
+            );
+          })),
     );
   }
 
-  userInfoHeaderWidget() {
-    var model = widget.feedsModel!.data!.feeds![widget.currentIndex];
-
+  userInfoHeaderWidget(HomeProvider provider) {
+    var feedModel = provider.fileRackDetailsModel!.data!.sheetData!.dbdata![0];
     return Padding(
       padding: const EdgeInsets.only(left: 18, right: 18),
       child: Row(
         children: [
           ClipOval(
               child: ViewNetworkImage(
-            img: model.imageLink,
+            img: feedModel.imageLink,
             height: 42.0,
             width: 42.0,
           )),
@@ -151,7 +217,7 @@ class _ViewPostScreenState extends State<ViewPostScreen>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               customText(
-                title: model.name ?? '',
+                title: feedModel.username ?? '',
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
                 color: AppColor.blackColor,
@@ -159,8 +225,8 @@ class _ViewPostScreenState extends State<ViewPostScreen>
               ),
               ScreenSize.height(2),
               customText(
-                title: model.dateText != null
-                    ? model.dateText.toString().replaceAll('Added on ', '')
+                title: feedModel.createdAt != null
+                    ? "Added on ${TimeFormat.formatDateWithoutOfT(feedModel.createdAt!)}"
                     : '',
                 fontSize: 11,
                 fontWeight: FontWeight.w400,
@@ -174,101 +240,8 @@ class _ViewPostScreenState extends State<ViewPostScreen>
     );
   }
 
-  imagesWidget() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // ScreenSize.height(13),
-        // const Padding(
-        //   padding: EdgeInsets.symmetric(horizontal: 18),
-        //   child: MySeparator(
-        //     color: Color(0xffC0D0D9),
-        //   ),
-        // ),
-        ScreenSize.height(13),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 18),
-          child: customText(
-            title: 'Images',
-            fontSize: 12,
-            fontWeight: FontWeight.w400,
-            color: AppColor.grey6AColor,
-            fontFamily: FontFamily.interMedium,
-          ),
-        ),
-        ScreenSize.height(9),
-        Container(
-            height: 50,
-            padding: const EdgeInsets.symmetric(horizontal: 18),
-            child: ListView.separated(
-                separatorBuilder: (context, sp) {
-                  return ScreenSize.width(15);
-                },
-                shrinkWrap: true,
-                itemCount: widget
-                    .feedsModel!.data!.feeds![widget.currentIndex].image.length,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) {
-                  return ViewNetworkImage(
-                    img: widget.feedsModel!.data!.feeds![widget.currentIndex]
-                        .image[index]['thumbURL'],
-                    height: 50.0,
-                    width: 50.0,
-                  );
-                })),
-      ],
-    );
-  }
-
-  documentWidget() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 18),
-          child: customText(
-            title: 'Document',
-            fontSize: 12,
-            fontWeight: FontWeight.w400,
-            color: AppColor.grey6AColor,
-            fontFamily: FontFamily.interMedium,
-          ),
-        ),
-        ScreenSize.height(5),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 18),
-          child: Row(
-            children: [
-              documentContainer(AppImages.pdfIcon),
-              ScreenSize.width(8),
-              documentContainer(AppImages.msWordIcon),
-              ScreenSize.width(8),
-              documentContainer(AppImages.excelIcon),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  documentContainer(String img) {
-    return Container(
-      height: 34,
-      width: 34,
-      transformAlignment: Alignment.center,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5),
-          border: Border.all(color: const Color(0xffC3CDD8))),
-      alignment: Alignment.center,
-      child: Image.asset(
-        img,
-        height: 18,
-        width: 18,
-      ),
-    );
-  }
-
-  userInfoWidget(String title, String des) {
+  fileRackWidget(
+      {required String title, required String des, required isRequired}) {
     return Padding(
       padding: const EdgeInsets.only(left: 18, right: 18),
       child: Column(
@@ -283,7 +256,7 @@ class _ViewPostScreenState extends State<ViewPostScreen>
           ),
           ScreenSize.height(7),
           customText(
-            title: des,
+            title: des.isEmpty ? '---' : des,
             fontSize: 13,
             fontWeight: FontWeight.w400,
             color: AppColor.blackColor,
@@ -323,13 +296,7 @@ class _ViewPostScreenState extends State<ViewPostScreen>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               customText(
-                title: widget.feedsModel != null &&
-                        widget.feedsModel!.data != null &&
-                        widget.feedsModel!.data!.feeds != null
-                    ? widget.feedsModel!.data!.feeds![widget.currentIndex]
-                            .sheetName ??
-                        ""
-                    : "",
+                title: widget.sheetName,
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
                 color: AppColor.blackColor,
@@ -348,5 +315,19 @@ class _ViewPostScreenState extends State<ViewPostScreen>
         ],
       ),
     );
+  }
+
+  String extractLatLng(String fieldValue) {
+    final latLngPattern =
+        RegExp(r'latitude";s:\d+:"([^"]+)";s:9:"longitude";s:\d+:"([^"]+)"');
+    final match = latLngPattern.firstMatch(fieldValue);
+
+    if (match != null) {
+      final latitude = match.group(1);
+      final longitude = match.group(2);
+      return 'Lat: $latitude, Lng: $longitude'; // Format the output as desired
+    } else {
+      return 'Coordinates not found'; // Return a default message if not found
+    }
   }
 }

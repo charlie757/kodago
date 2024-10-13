@@ -33,9 +33,9 @@ class _NewGroupScreenState extends State<NewGroupScreen>
   callInitFunction() async {
     final provider = Provider.of<NewGroupProvider>(context, listen: false);
     provider.addedList.clear();
-    if (widget.isCallApi) {
+    // if (widget.isCallApi) {
       provider.contactApiFunction('Ravi', showLoading: true);
-    }
+    // }
   }
 
   @override
@@ -119,17 +119,17 @@ class _NewGroupScreenState extends State<NewGroupScreen>
         title: 'New group',
         isSearchEnable: isSearchEnable,
         searchTap: () {
-          isSearchEnable = true;
+          // isSearchEnable = true;
           setState(() {});
         },
         backOnTap: () {
-          if (isSearchEnable) {
-            isSearchEnable = false;
-            setState(() {});
-          } else {
-            Provider.of<NewGroupProvider>(context,listen: false).contactApiFunction('Ravi', showLoading: true);
+          // if (isSearchEnable) {
+          //   isSearchEnable = false;
+          //   setState(() {});
+          // } else {
+            // Provider.of<NewGroupProvider>(context,listen: false).contactApiFunction('Ravi', showLoading: true);
             Navigator.pop(context);
-          }
+          // }
         });
   }
 }

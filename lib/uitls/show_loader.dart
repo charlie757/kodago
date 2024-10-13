@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import '../helper/app_color.dart';
 
 showLoader(BuildContext context) async {

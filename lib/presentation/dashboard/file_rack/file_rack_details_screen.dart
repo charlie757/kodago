@@ -7,13 +7,18 @@ import 'package:kodago/helper/custom_horizontal_line.dart';
 import 'package:kodago/helper/custom_text.dart';
 import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
+import 'package:kodago/helper/view_network_image.dart';
 import 'package:kodago/presentation/dashboard/file_rack/add_data_screen.dart';
 import 'package:kodago/presentation/dashboard/file_rack/file_rack_comment_screen.dart';
 import 'package:kodago/presentation/dashboard/file_rack/file_rack_history.dart';
 import 'package:kodago/presentation/dashboard/file_rack/filter_screen.dart';
+import 'package:kodago/presentation/dashboard/home/view_post_screen.dart';
 import 'package:kodago/services/provider/file_rack/file_rack_details_provider.dart';
 import 'package:kodago/uitls/delete_file_rack_dialogbox.dart';
+import 'package:kodago/uitls/extension.dart';
+import 'package:kodago/uitls/time_format.dart';
 import 'package:kodago/widget/appbar.dart';
+import 'package:kodago/widget/fle_rack_image_widget.dart';
 import 'package:kodago/widget/popmenuButton.dart';
 import 'package:provider/provider.dart';
 import '../../../uitls/mixins.dart';
@@ -22,10 +27,11 @@ class FileRackDetailsScreen extends StatefulWidget {
   final String groupId;
   final String sheetId;
   final String sheetDataId;
+  final String sheetName;
   const FileRackDetailsScreen(
       {required this.groupId,
       required this.sheetDataId,
-      required this.sheetId});
+      required this.sheetId, required this.sheetName});
 
   @override
   State<FileRackDetailsScreen> createState() => _FileRackDetailsScreenState();
@@ -35,7 +41,9 @@ class _FileRackDetailsScreenState extends State<FileRackDetailsScreen>
     with MediaQueryScaleFactor {
   @override
   void initState() {
-    callInitFunction();
+    WidgetsBinding.instance.addPostFrameCallback((val) {
+      callInitFunction();
+    });
     // TODO: implement initState
     super.initState();
   }
@@ -44,7 +52,7 @@ class _FileRackDetailsScreenState extends State<FileRackDetailsScreen>
     final provider =
         Provider.of<FileRackDetailsProvider>(context, listen: false);
     provider.fileRackDetailsApiFunction(
-        groupId: widget.groupId, sheetId: widget.sheetId, sheetDataId: '');
+        groupId: widget.groupId, sheetId: widget.sheetId, sheetDataId: widget.sheetDataId);
   }
 
   @override
@@ -52,7 +60,7 @@ class _FileRackDetailsScreenState extends State<FileRackDetailsScreen>
     return MediaQuery(
       data: mediaQuery,
       child: Scaffold(
-        appBar: appBar(title: 'Test', actions: [
+        appBar: appBar(title: widget.sheetName, actions: [
           GestureDetector(
             onTap: () {
               AppRoutes.pushCupertinoNavigation(const AddDataScreen());
@@ -104,22 +112,34 @@ class _FileRackDetailsScreenState extends State<FileRackDetailsScreen>
             ),
           ),
         ]),
-        body: ListView.separated(
-            separatorBuilder: (context, sp) {
-              return ScreenSize.height(20);
-            },
-            itemCount: 6,
-            padding:
-                const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 20),
-            shrinkWrap: true,
-            itemBuilder: (context, index) {
-              return detailsViewWidget();
-            }),
+        body: Consumer<FileRackDetailsProvider>(
+            builder: (context, myProvider, child) {
+          return myProvider.fileRackDetailsModel != null &&
+                  myProvider.fileRackDetailsModel!.data != null &&
+                  myProvider.fileRackDetailsModel!.data!.sheetData != null &&
+                  myProvider.fileRackDetailsModel!.data!.sheetData!.dbdata !=
+                      null
+              ? ListView.separated(
+                  separatorBuilder: (context, sp) {
+                    return ScreenSize.height(20);
+                  },
+                  itemCount: myProvider
+                      .fileRackDetailsModel!.data!.sheetData!.dbdata!.length,
+                  padding: const EdgeInsets.only(
+                      left: 20, right: 20, top: 10, bottom: 20),
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return detailsViewWidget(index, myProvider);
+                  })
+              : Container();
+        }),
       ),
     );
   }
 
-  detailsViewWidget() {
+  detailsViewWidget(int fileIndex, FileRackDetailsProvider provider) {
+    var model =
+        provider.fileRackDetailsModel!.data!.sheetData!.dbdata![fileIndex];
     return Container(
       padding: const EdgeInsets.only(top: 11, bottom: 11),
       decoration: BoxDecoration(
@@ -129,73 +149,97 @@ class _FileRackDetailsScreenState extends State<FileRackDetailsScreen>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          profileWidget(),
+          profileWidget(fileIndex, provider),
           ScreenSize.height(10),
           customHorizontalDivider(),
           ScreenSize.height(11),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 11),
-            child: customText(
-              title: 'Scheme Name',
-              fontSize: 12.5,
-              fontWeight: FontWeight.w400,
-              fontFamily: FontFamily.interRegular,
-            ),
-          ),
-          ScreenSize.height(4),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 11),
-            child: customText(
-              title:
-                  'Work for Retrofitting of Bungi Rajgarh Water Supply Project to provide FHTC including 10 years O&M under JJM District Churu.',
-              fontSize: 12,
-              fontWeight: FontWeight.w400,
-              color: AppColor.grey6AColor,
-              fontFamily: FontFamily.interRegular,
-            ),
-          ),
-          ScreenSize.height(12),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 11),
-            child: customText(
-              title: 'Type of Progress Report',
-              fontSize: 12.5,
-              fontWeight: FontWeight.w400,
-              fontFamily: FontFamily.interRegular,
-            ),
-          ),
-          ScreenSize.height(4),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 11),
-            child: customText(
-              title: 'Daily',
-              fontSize: 12,
-              fontWeight: FontWeight.w400,
-              color: AppColor.grey6AColor,
-              fontFamily: FontFamily.interRegular,
-            ),
-          ),
-          ScreenSize.height(12),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 11),
-            child: customText(
-              title: 'Date of Inspection',
-              fontSize: 12.5,
-              fontWeight: FontWeight.w400,
-              fontFamily: FontFamily.interRegular,
-            ),
-          ),
-          ScreenSize.height(4),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 11),
-            child: customText(
-              title: '12-06-2024',
-              fontSize: 12,
-              fontWeight: FontWeight.w400,
-              color: AppColor.grey6AColor,
-              fontFamily: FontFamily.interRegular,
-            ),
-          ),
+          ListView.separated(
+            separatorBuilder: (context,sp){
+              return ScreenSize.height(14);
+            },
+              itemCount: model.data!.length>3?3:model.data!.length,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemBuilder: (context, index) {
+                final fileModel = model.data![index];
+                return fileModel.fieldType.toString().toLowerCase() == 'image' ||
+                            fileModel.fieldType.toString().toLowerCase() ==
+                                'document' ||
+                            fileModel.fieldType.toString().toLowerCase() ==
+                                'signature'||
+                                fileModel.fieldType.toString().toLowerCase() == 'video'
+                        ? fileRackImagesWidget(index, provider.fileRackDetailsModel!,isFileRack: true)
+                        : fileModel.fieldType.toString().toLowerCase() !=
+                                'document'
+                            ? viewFileWidget(
+                                title: fileModel.fieldName,
+                                des: fileModel.dValue ?? fileModel.fieldValue,
+                              )
+                            : Container();
+              }),
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(horizontal: 11),
+          //   child: customText(
+          //     title: 'Scheme Name',
+          //     fontSize: 12.5,
+          //     fontWeight: FontWeight.w400,
+          //     fontFamily: FontFamily.interRegular,
+          //   ),
+          // ),
+          // ScreenSize.height(4),
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(horizontal: 11),
+          //   child: customText(
+          //     title:
+          //         'Work for Retrofitting of Bungi Rajgarh Water Supply Project to provide FHTC including 10 years O&M under JJM District Churu.',
+          //     fontSize: 12,
+          //     fontWeight: FontWeight.w400,
+          //     color: AppColor.grey6AColor,
+          //     fontFamily: FontFamily.interRegular,
+          //   ),
+          // ),
+          // ScreenSize.height(12),
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(horizontal: 11),
+          //   child: customText(
+          //     title: 'Type of Progress Report',
+          //     fontSize: 12.5,
+          //     fontWeight: FontWeight.w400,
+          //     fontFamily: FontFamily.interRegular,
+          //   ),
+          // ),
+          // ScreenSize.height(4),
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(horizontal: 11),
+          //   child: customText(
+          //     title: 'Daily',
+          //     fontSize: 12,
+          //     fontWeight: FontWeight.w400,
+          //     color: AppColor.grey6AColor,
+          //     fontFamily: FontFamily.interRegular,
+          //   ),
+          // ),
+          // ScreenSize.height(12),
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(horizontal: 11),
+          //   child: customText(
+          //     title: 'Date of Inspection',
+          //     fontSize: 12.5,
+          //     fontWeight: FontWeight.w400,
+          //     fontFamily: FontFamily.interRegular,
+          //   ),
+          // ),
+          // ScreenSize.height(4),
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(horizontal: 11),
+          //   child: customText(
+          //     title: '12-06-2024',
+          //     fontSize: 12,
+          //     fontWeight: FontWeight.w400,
+          //     color: AppColor.grey6AColor,
+          //     fontFamily: FontFamily.interRegular,
+          //   ),
+          // ),
           ScreenSize.height(14),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 11),
@@ -210,7 +254,11 @@ class _FileRackDetailsScreenState extends State<FileRackDetailsScreen>
                 InkWell(
                   onTap: () {
                     AppRoutes.pushCupertinoNavigation(
-                        const FileRackCommentScreen());
+                         FileRackCommentScreen(
+                           groupId: widget.groupId,
+                      sheetId: model.sheetId,
+                      sheetDataId: model.id,
+                        ));
                   },
                   child: customText(
                     title: 'Show Comments',
@@ -221,7 +269,12 @@ class _FileRackDetailsScreenState extends State<FileRackDetailsScreen>
                 ),
                 GestureDetector(
                   onTap: () {
-                    // AppRoutes.pushCupertinoNavigation(ViewPostScreen());
+                    AppRoutes.pushCupertinoNavigation(ViewPostScreen(
+                      groupId: widget.groupId,
+                      sheetId: model.sheetId,
+                      sheetDataId: model.id,
+                      sheetName: widget.sheetName,
+                    ));
                   },
                   child: customText(
                     title: 'Show more',
@@ -239,15 +292,43 @@ class _FileRackDetailsScreenState extends State<FileRackDetailsScreen>
     );
   }
 
-  profileWidget() {
+  viewFileWidget({required String title, required String des}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 11),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          customText(
+            title: title,
+            fontSize: 12.5,
+            fontWeight: FontWeight.w400,
+            fontFamily: FontFamily.interRegular,
+          ),
+          ScreenSize.height(4),
+          customText(
+            title:des.isEmpty?'---':des,
+            fontSize: 12,
+            fontWeight: FontWeight.w400,
+            color: AppColor.grey6AColor,
+            fontFamily: FontFamily.interRegular,
+          ),
+        ],
+      ),
+    );
+  }
+
+  profileWidget(int index, FileRackDetailsProvider provider) {
+    var model = provider.fileRackDetailsModel!.data!.sheetData!.dbdata![index];
     return Padding(
       padding: const EdgeInsets.only(left: 11),
       child: Row(
         children: [
-          Image.asset(
-            'assets/dummay/Oval (4).png',
-            height: 32,
-            width: 32,
+          ClipOval(
+            child: ViewNetworkImage(
+              img: model.imageLink,
+              height: 32.0,
+              width: 32.0,
+            ),
           ),
           ScreenSize.width(10),
           Expanded(
@@ -255,13 +336,14 @@ class _FileRackDetailsScreenState extends State<FileRackDetailsScreen>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               customText(
-                title: 'Simran',
+                title: model.username.toString().capitalize(),
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
                 fontFamily: FontFamily.interMedium,
               ),
               customText(
-                title: 'added on 12, Jun 2024 01:34 PM',
+                title:
+                    'added on ${TimeFormat.formatDateWithoutOfT(model.createdAt)}',
                 fontSize: 11,
                 fontWeight: FontWeight.w400,
                 fontFamily: FontFamily.interRegular,

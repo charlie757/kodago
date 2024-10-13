@@ -570,11 +570,15 @@ class _GroupInfoScreenState extends State<GroupInfoScreen>
                      provider.exitGroupApiFunction(
                           widget.groupId, memberId, GroupAction.makeadmin.name);
                   }):Container(),
-                  createdGroupId==SessionManager.userIntId?
-                  groupActionWidget("Assign a filerack's", (){}):Container(),
+                  groupActionWidget("Assign a filerack's", (){}),
                   groupActionWidget('Message $title', (){}),
                   isAdmin=='1'?
                   groupActionWidget('Remove from group', (){
+                        provider.exitGroupApiFunction(
+                          widget.groupId, memberId, GroupAction.removeadmin.name);
+                  }):Container(),
+                   isAdmin=='1'?
+                  groupActionWidget('Delete admin', (){
                         provider.exitGroupApiFunction(
                           widget.groupId, memberId, GroupAction.removeadmin.name);
                   }):Container()

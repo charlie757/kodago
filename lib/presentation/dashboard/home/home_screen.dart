@@ -155,7 +155,6 @@ class _HomeScreenState extends State<HomeScreen> with MediaQueryScaleFactor {
                         model.storyName,
                         model.storyImageLink,
                         () {
-                          // print(model.storyName);
                            AppRoutes.pushCupertinoNavigation( ViewStoryScreen(index: val,));
                         // AppRoutes.pushCupertinoNavigation( StoryScreen(model1.stories));
                       }
@@ -232,6 +231,7 @@ class _HomeScreenState extends State<HomeScreen> with MediaQueryScaleFactor {
   yourStoryDataWidget() {
     return GestureDetector(
       onTap: () {
+        
         // AppRoutes.pushCupertinoNavigation(const ViewStoryScreen());
       },
       child: SizedBox(

@@ -10,6 +10,12 @@ class TimeFormat {
     return DateFormat('jm').format(dateTime);
   }
 
+ static String formatDateWithoutOfT(String dateString) {
+  DateTime dateTime = DateTime.parse(dateString);
+  DateFormat formatter = DateFormat('dd, MMM yyyy hh:mm a');
+  return formatter.format(dateTime);
+}
+
   static String convertDate(String date) {
     var dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss.SSS");
     var utcDate = dateFormat.format(DateTime.parse(date));
@@ -49,6 +55,34 @@ class TimeFormat {
     }
     if (difference.years<=0&&difference.months<=0&&difference.days<=0&&difference.hours<=0&&difference.minutes<=0&&difference.seconds > 0) {
       parts.add("${difference.seconds} second${difference.seconds > 1 ? 's ago' : ''}");
+    }
+
+    // Join the parts into a single string, handling the case where there are no differences.
+    return parts.isNotEmpty ? parts.join(', ') : "just now";
+  }
+
+    static String storyDate(String isoDateString) {
+    DurationDifference difference = calculateDetailedDifference(isoDateString);
+
+    List<String> parts = [];
+
+    if (difference.years > 0) {
+      parts.add("${difference.years} year${difference.years > 1 ? 's' : ''}");
+    }
+    if (difference.years<=0&&difference.months > 0) {
+      parts.add("${difference.months} month${difference.months > 1 ? 's' : ''}");
+    }
+    if (difference.years<=0&&difference.months<=0&& difference.days > 0) {
+      parts.add("${difference.days} day${difference.days > 1 ? 's' : ''}");
+    }
+    if (difference.years<=0&&difference.months<=0&&difference.days<=0&&difference.hours > 0) {
+      parts.add("${difference.hours} hour${difference.hours > 1 ? 's' : ''}");
+    }
+    if (difference.years<=0&&difference.months<=0&&difference.days<=0&&difference.hours<=0&&difference.minutes > 0) {
+      parts.add("${difference.minutes} minute${difference.minutes > 1 ? 's' : ''}");
+    }
+    if (difference.years<=0&&difference.months<=0&&difference.days<=0&&difference.hours<=0&&difference.minutes<=0&&difference.seconds > 0) {
+      parts.add("${difference.seconds} second${difference.seconds > 1 ? 's' : ''}");
     }
 
     // Join the parts into a single string, handling the case where there are no differences.
