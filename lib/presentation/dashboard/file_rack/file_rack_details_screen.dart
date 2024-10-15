@@ -8,12 +8,13 @@ import 'package:kodago/helper/custom_text.dart';
 import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/helper/view_network_image.dart';
-import 'package:kodago/presentation/dashboard/file_rack/add_data_screen.dart';
+import 'package:kodago/presentation/dashboard/file_rack/add_record_screen.dart';
 import 'package:kodago/presentation/dashboard/file_rack/file_rack_comment_screen.dart';
 import 'package:kodago/presentation/dashboard/file_rack/file_rack_history.dart';
 import 'package:kodago/presentation/dashboard/file_rack/filter_screen.dart';
-import 'package:kodago/presentation/dashboard/home/view_post_screen.dart';
+import 'package:kodago/presentation/dashboard/home/view_feeds_screen.dart';
 import 'package:kodago/services/provider/file_rack/file_rack_details_provider.dart';
+import 'package:kodago/services/provider/view_feeds_provider.dart';
 import 'package:kodago/uitls/delete_file_rack_dialogbox.dart';
 import 'package:kodago/uitls/extension.dart';
 import 'package:kodago/uitls/time_format.dart';
@@ -59,80 +60,85 @@ class _FileRackDetailsScreenState extends State<FileRackDetailsScreen>
   Widget build(BuildContext context) {
     return MediaQuery(
       data: mediaQuery,
-      child: Scaffold(
-        appBar: appBar(title: widget.sheetName, actions: [
-          GestureDetector(
-            onTap: () {
-              AppRoutes.pushCupertinoNavigation(const AddDataScreen());
-            },
-            child: Container(
-              margin: const EdgeInsets.only(right: 10),
-              padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 6),
-              decoration: BoxDecoration(
-                  color: AppColor.appColor,
-                  borderRadius: BorderRadius.circular(50)),
-              child: customText(
-                title: 'Add Record',
-                color: AppColor.whiteColor,
-                fontSize: 13,
-                fontWeight: FontWeight.w400,
-                fontFamily: FontFamily.interRegular,
-              ),
-            ),
-          ),
-          InkWell(
-            onTap: () {
-              AppRoutes.pushCupertinoNavigation(const FilterScreen());
-            },
-            child: Container(
-              margin: const EdgeInsets.only(right: 20),
-              height: 33,
-              width: 75,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(50),
-                  color: const Color(0xffEDEDED)),
-              alignment: Alignment.center,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    AppImages.filterIcon,
-                    height: 17,
-                  ),
-                  ScreenSize.width(6),
-                  customText(
-                    title: 'Filter',
+      child: Consumer<FileRackDetailsProvider>(
+        builder: (context,myProvider,child) {
+          return Scaffold(
+            appBar: appBar(title: widget.sheetName, actions: [
+              GestureDetector(
+                onTap: () {
+                  AppRoutes.pushCupertinoNavigation( AddRecordScreen(
+                    groupId: widget.groupId, sheetId: widget.sheetId, sheetDataId: widget.sheetDataId,
+                    route: 'add',
+                    fileRackDetailsModel: myProvider.fileRackDetailsModel!,
+                  ));
+                },
+                child: Container(
+                  margin: const EdgeInsets.only(right: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 6),
+                  decoration: BoxDecoration(
+                      color: AppColor.appColor,
+                      borderRadius: BorderRadius.circular(50)),
+                  child: customText(
+                    title: 'Add Record',
+                    color: AppColor.whiteColor,
                     fontSize: 13,
                     fontWeight: FontWeight.w400,
-                    color: const Color(0xff455154),
-                    fontFamily: FontFamily.interMedium,
-                  )
-                ],
+                    fontFamily: FontFamily.interRegular,
+                  ),
+                ),
               ),
-            ),
-          ),
-        ]),
-        body: Consumer<FileRackDetailsProvider>(
-            builder: (context, myProvider, child) {
-          return myProvider.fileRackDetailsModel != null &&
-                  myProvider.fileRackDetailsModel!.data != null &&
-                  myProvider.fileRackDetailsModel!.data!.sheetData != null &&
-                  myProvider.fileRackDetailsModel!.data!.sheetData!.dbdata !=
-                      null
-              ? ListView.separated(
-                  separatorBuilder: (context, sp) {
-                    return ScreenSize.height(20);
-                  },
-                  itemCount: myProvider
-                      .fileRackDetailsModel!.data!.sheetData!.dbdata!.length,
-                  padding: const EdgeInsets.only(
-                      left: 20, right: 20, top: 10, bottom: 20),
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    return detailsViewWidget(index, myProvider);
-                  })
-              : Container();
-        }),
+              InkWell(
+                onTap: () {
+                  AppRoutes.pushCupertinoNavigation(const FilterScreen());
+                },
+                child: Container(
+                  margin: const EdgeInsets.only(right: 20),
+                  height: 33,
+                  width: 75,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50),
+                      color: const Color(0xffEDEDED)),
+                  alignment: Alignment.center,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        AppImages.filterIcon,
+                        height: 17,
+                      ),
+                      ScreenSize.width(6),
+                      customText(
+                        title: 'Filter',
+                        fontSize: 13,
+                        fontWeight: FontWeight.w400,
+                        color: const Color(0xff455154),
+                        fontFamily: FontFamily.interMedium,
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ]),
+            body: myProvider.fileRackDetailsModel != null &&
+                    myProvider.fileRackDetailsModel!.data != null &&
+                    myProvider.fileRackDetailsModel!.data!.sheetData != null &&
+                    myProvider.fileRackDetailsModel!.data!.sheetData!.dbdata !=
+                        null
+                ? ListView.separated(
+                    separatorBuilder: (context, sp) {
+                      return ScreenSize.height(20);
+                    },
+                    itemCount: myProvider
+                        .fileRackDetailsModel!.data!.sheetData!.dbdata!.length,
+                    padding: const EdgeInsets.only(
+                        left: 20, right: 20, top: 10, bottom: 20),
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      return detailsViewWidget(index, myProvider);
+                    })
+                : Container(),
+          );
+        }
       ),
     );
   }
@@ -269,7 +275,7 @@ class _FileRackDetailsScreenState extends State<FileRackDetailsScreen>
                 ),
                 GestureDetector(
                   onTap: () {
-                    AppRoutes.pushCupertinoNavigation(ViewPostScreen(
+                    AppRoutes.pushCupertinoNavigation(ViewFeedsScreen(
                       groupId: widget.groupId,
                       sheetId: model.sheetId,
                       sheetDataId: model.id,
@@ -367,7 +373,11 @@ class _FileRackDetailsScreenState extends State<FileRackDetailsScreen>
         ],
         onSelected: (value) {
           if (value == 0) {
-            // AppRoutes.pushCupertinoNavigation(const AddMemberScreen());
+              AppRoutes.pushCupertinoNavigation( AddRecordScreen(
+                    groupId: widget.groupId, sheetId: widget.sheetId, sheetDataId: widget.sheetDataId,
+                    route: 'edit',
+                    fileRackDetailsModel: Provider.of<FileRackDetailsProvider>(context,listen: false).fileRackDetailsModel!,
+                  ));
           } else if (value == 1) {
             AppRoutes.pushCupertinoNavigation(const FileRackHistory());
           } else if (value == 2) {

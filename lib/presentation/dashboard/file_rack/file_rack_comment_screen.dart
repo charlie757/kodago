@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/presentation/shimmer/comment_shimmer.dart';
-import 'package:kodago/services/provider/home/home_provider.dart';
+import 'package:kodago/services/provider/common/common_provider.dart';
 import 'package:kodago/services/provider/profile_provider.dart';
 import 'package:kodago/widget/appbar.dart';
 import 'package:kodago/widget/comment_message_widget.dart';
-import 'package:kodago/widget/comment_widget.dart';
 import 'package:kodago/widget/no_data_found.dart';
 import 'package:kodago/widget/reply_comment_widget.dart';
 import 'package:provider/provider.dart';
@@ -35,7 +34,7 @@ class _FileRackCommentScreenState extends State<FileRackCommentScreen>
   }
 
   callInitFunction() {
-    final provider = Provider.of<HomeProvider>(context, listen: false);
+    final provider = Provider.of<CommonProvider>(context, listen: false);
     provider.commentApiFunction(
         groupId: widget.groupId,
         sheetId: widget.sheetId,
@@ -46,7 +45,7 @@ class _FileRackCommentScreenState extends State<FileRackCommentScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar(title: 'Comments'),
-      body: Consumer<HomeProvider>(builder: (context, myProvider, child) {
+      body: Consumer<CommonProvider>(builder: (context, myProvider, child) {
         return Column(
           children: [
             Expanded(

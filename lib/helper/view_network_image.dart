@@ -9,7 +9,8 @@ class ViewNetworkImage extends StatelessWidget {
   final img;
   final height;
   final width;
-  const ViewNetworkImage({super.key, this.img, this.height, this.width});
+  BoxFit? fit;
+   ViewNetworkImage({super.key, this.img, this.height, this.width, this.fit=BoxFit.fill});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,7 @@ class ViewNetworkImage extends StatelessWidget {
       imageUrl: img,
       height: height,
       width: width,
-      fit: BoxFit.fill,
+      fit: fit,
       memCacheHeight: 300,
       memCacheWidth: 300,
       progressIndicatorBuilder: (context, url, downloadProgress) => Container(

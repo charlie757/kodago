@@ -1,42 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:kodago/config/app_routes.dart';
 import 'package:kodago/helper/app_color.dart';
 import 'package:kodago/helper/app_images.dart';
 import 'package:kodago/helper/custom_text.dart';
 import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/helper/view_network_image.dart';
-import 'package:kodago/model/feeds_model.dart';
-import 'package:kodago/services/open_url_service.dart';
-import 'package:kodago/services/provider/file_rack/file_rack_details_provider.dart';
+import 'package:kodago/services/provider/common/common_provider.dart';
 import 'package:kodago/services/provider/home/home_provider.dart';
+import 'package:kodago/services/provider/view_feeds_provider.dart';
 import 'package:kodago/uitls/my_sperator.dart';
 import 'package:kodago/uitls/time_format.dart';
 import 'package:kodago/widget/comment_bottomsheet.dart';
 import 'package:kodago/widget/fle_rack_image_widget.dart';
-import 'package:kodago/widget/view_image.dart';
-import 'package:kodago/widget/view_video.dart';
 import 'package:video_player/video_player.dart';
 import '../../../uitls/mixins.dart';
 import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
-class ViewPostScreen extends StatefulWidget {
+class ViewFeedsScreen extends StatefulWidget {
   final String groupId;
   final String sheetId;
   final String sheetDataId;
   final String sheetName;
-  ViewPostScreen(
+  ViewFeedsScreen(
       {required this.groupId,
       required this.sheetDataId,
       required this.sheetId,
       required this.sheetName});
 
   @override
-  State<ViewPostScreen> createState() => _ViewPostScreenState();
+  State<ViewFeedsScreen> createState() => _ViewFeedsScreenState();
 }
 
-class _ViewPostScreenState extends State<ViewPostScreen>
+class _ViewFeedsScreenState extends State<ViewFeedsScreen>
     with MediaQueryScaleFactor {
   late VideoPlayerController controller;
 
@@ -49,7 +45,7 @@ class _ViewPostScreenState extends State<ViewPostScreen>
   }
 
   callInitFunction() {
-    final provider = Provider.of<HomeProvider>(context, listen: false);
+    final provider = Provider.of<ViewFeedsProvider>(context, listen: false);
     provider.viewSheetFeedDataApiFunction(
         groupId: widget.groupId,
         sheetId: widget.sheetId,
@@ -68,7 +64,7 @@ class _ViewPostScreenState extends State<ViewPostScreen>
       data: mediaQuery,
       child: Scaffold(
           appBar: appBar(),
-          body: Consumer<HomeProvider>(builder: (context, myProvider, child) {
+          body: Consumer<ViewFeedsProvider>(builder: (context, myProvider, child) {
             return SingleChildScrollView(
               padding: const EdgeInsets.all(20),
               child: Container(
@@ -120,21 +116,16 @@ class _ViewPostScreenState extends State<ViewPostScreen>
                                             'video'
                                     ? fileRackImagesWidget(
                                         index, myProvider.fileRackDetailsModel!)
-                                    : fileModel.fieldType
-                                                .toString()
-                                                .toLowerCase() !=
-                                            'document'
-                                        ? fileRackWidget(
+                                    : fileRackWidget(
                                             title: fileModel.fieldName,
-                                            des: fileModel.dValue ??
-                                                fileModel.fieldValue,
-                                            isRequired: false)
-                                        : Container();
+                                            des: fileModel.dValue.toString().isEmpty? 
+                                                fileModel.fieldValue:fileModel.dValue.toString(),
+                                            isRequired: false);
                               }),
                           ScreenSize.height(28),
                           GestureDetector(
                             onTap: () {
-                              final homeProvider = Provider.of<HomeProvider>(
+                              final homeProvider = Provider.of<CommonProvider>(
                                   context,
                                   listen: false);
                               homeProvider.clearController();
@@ -200,7 +191,7 @@ class _ViewPostScreenState extends State<ViewPostScreen>
     );
   }
 
-  userInfoHeaderWidget(HomeProvider provider) {
+  userInfoHeaderWidget(ViewFeedsProvider provider) {
     var feedModel = provider.fileRackDetailsModel!.data!.sheetData!.dbdata![0];
     return Padding(
       padding: const EdgeInsets.only(left: 18, right: 18),
@@ -242,6 +233,9 @@ class _ViewPostScreenState extends State<ViewPostScreen>
 
   fileRackWidget(
       {required String title, required String des, required isRequired}) {
+        print(des);
+        if(title.toLowerCase()=='list')
+        print(des.toString().unserialize());
     return Padding(
       padding: const EdgeInsets.only(left: 18, right: 18),
       child: Column(
@@ -256,7 +250,8 @@ class _ViewPostScreenState extends State<ViewPostScreen>
           ),
           ScreenSize.height(7),
           customText(
-            title: des.isEmpty ? '---' : des,
+            title: des.isEmpty ? '---' : 
+             des,
             fontSize: 13,
             fontWeight: FontWeight.w400,
             color: AppColor.blackColor,
@@ -329,5 +324,36 @@ class _ViewPostScreenState extends State<ViewPostScreen>
     } else {
       return 'Coordinates not found'; // Return a default message if not found
     }
+  }
+}
+extension PHPSerialization on String {
+  Map<String, String> unserialize() {
+    if (!this.startsWith('a:')) {
+      throw FormatException('Invalid PHP serialized string');
+    }
+
+    // Remove the outer array indicators
+    String cleaned = this.replaceFirst(RegExp(r'a:\d+:\{i:\d+;'), '');
+    cleaned = cleaned.replaceFirst(RegExp(r'\}$'), '');
+
+    // Split by ';' to get each key-value pair
+    List<String> pairs = cleaned.split(';');
+
+    Map<String, String> dataMap = {};
+
+    // Process each pair
+    for (String pair in pairs) {
+      if (pair.isNotEmpty) {
+        // Split by ':' to get key and value
+        List<String> keyValue = pair.split(':');
+        if (keyValue.length == 2) {
+          String key = keyValue[0].replaceAll(RegExp(r's:\d+:|"'), '').trim();
+          String value = keyValue[1].replaceAll(RegExp(r's:\d+:|"'), '').trim();
+          dataMap[key] = value;
+        }
+      }
+    }
+
+    return dataMap;
   }
 }

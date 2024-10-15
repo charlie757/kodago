@@ -5,7 +5,7 @@ import 'package:kodago/helper/custom_text.dart';
 import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/services/provider/home/home_provider.dart';
-import 'package:kodago/widget/home_posts_widget.dart';
+import 'package:kodago/widget/feeds_widget.dart';
 import 'package:provider/provider.dart';
 import '../../../uitls/mixins.dart';
 
@@ -36,7 +36,7 @@ class _HightlightScreenState extends State<HightlightScreen>
                   physics: const ScrollPhysics(),
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
-                    return HomePostsWidget(
+                    return FeedsWidget(
                       index: index,
                       feedsModel: myProvider.feedsModel,
                     );

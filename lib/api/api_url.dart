@@ -23,9 +23,12 @@ class ApiUrl {
   static String feedsUrl = '${baseUrl}groups/feeds';
   static String viewSheetDataUrl = '${baseUrl}sheets/loadForm';
 
+ /// like
+  static String likeDislikeUrl = '${baseUrl}sheets/postLikeDislike';
   /// comment
   static String postCommentUrl = '${baseUrl}sheets/postComment';
   static String commentUrl = '${baseUrl}sheets/loadComments';
+  static String postSubCommentUrl = "${baseUrl}sheets/postCommentOnComment";
 
   /// notification
   static String notificationUrl = '${baseUrl}groups/notifications';

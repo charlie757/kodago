@@ -10,12 +10,11 @@ import 'package:kodago/uitls/show_loader.dart';
 import 'package:kodago/uitls/utils.dart';
 
 class HomeProvider extends ChangeNotifier {
-  final commentController = TextEditingController();
+  
   int page = 0;
   int perPage = 10;
   FeedsModel? feedsModel;
-  CommentModel? commentModel;
-  FileRackDetailsModel? fileRackDetailsModel;
+ 
   bool isLoading = false;
   bool isCommentLoading = false;
   // final allStory = [];
@@ -36,10 +35,6 @@ class HomeProvider extends ChangeNotifier {
 updateCommentLoading(value)async{
   isCommentLoading=value;
   notifyListeners();
-}
-
-clearController(){
-  commentController.clear();
 }
   clearvalues() {
     isCommentLoading=false;
@@ -103,68 +98,5 @@ clearController(){
     notifyListeners();
   }
 
-  viewSheetFeedDataApiFunction({required String groupId,required String sheetId, required String sheetDataId,
-  bool isLoader =true
-  })async{
-    if(isLoader){
-   fileRackDetailsModel=null;
-   showLoader(navigatorKey.currentContext!);
-    }
-   notifyListeners();
-    var body = {
-      'Authkey': Constants.authkey,
-      'Userid': SessionManager.userId,
-      'Token': SessionManager.token,
-      'group_id': groupId,
-      'sheet_id': sheetId,
-      'sheet_data_id':sheetDataId,
-      // 'app_version': Constants.appVersion,
-    };
-    print(body);
-     final response =
-        await ApiService.multiPartApiMethod(url: ApiUrl.fileRackDetailsUrl, body: body);
-       isLoader? Navigator.pop(navigatorKey.currentContext!):null;
-        if(response!=null&&response['status']==1){
-          fileRackDetailsModel = FileRackDetailsModel.fromJson(response);
-        }
-        notifyListeners();
-  }
 
-  postCommentApiFunction({required String groupId,required String sheetId,required String sheetDataId,})async{
-    Utils.hideTextField();
-    var body ={
-       'Authkey': Constants.authkey,
-      'Userid': SessionManager.userId,
-      'Token': SessionManager.token,
-      'group_id': groupId,
-      'sheet_id': sheetId,
-      'sheet_data_id':sheetDataId,
-      'comment':commentController.text,
-      // 'tag_users':SessionManager.userIntId
-    };
-    final response = await ApiService.multiPartApiMethod(url: ApiUrl.postCommentUrl, body: body);
-    if(response!=null&&response['status']==1){
-      clearController();
-      commentApiFunction(groupId: groupId, sheetId: sheetId, sheetDataId: sheetDataId);
-    }
-  }
-
-  commentApiFunction({required String groupId,required String sheetId,required String sheetDataId,})async{
-    commentModel = null;
-    updateCommentLoading(true);
-    notifyListeners();
-    var body ={
-         'Authkey': Constants.authkey,
-        'Userid': SessionManager.userId,
-        'Token': SessionManager.token,
-        'group_id': groupId,
-       'sheet_data_id':sheetDataId,
-    };
-    final response = await ApiService.multiPartApiMethod(url: ApiUrl.commentUrl, body: body);
-    updateCommentLoading(false);
-    if(response!=null&&response['status']==1){
-      commentModel = CommentModel.fromJson(response);
-      notifyListeners();
-    }
-  }
 }

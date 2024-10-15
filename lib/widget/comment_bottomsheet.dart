@@ -4,6 +4,7 @@ import 'package:kodago/helper/custom_text.dart';
 import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/presentation/shimmer/comment_shimmer.dart';
+import 'package:kodago/services/provider/common/common_provider.dart';
 import 'package:kodago/services/provider/home/home_provider.dart';
 import 'package:kodago/services/provider/profile_provider.dart';
 import 'package:kodago/uitls/utils.dart';
@@ -22,7 +23,7 @@ Future commentBottomSheet({required String groupId, required String sheetId, req
               topLeft: Radius.circular(10), topRight: Radius.circular(10))),
       context: navigatorKey.currentContext!,
       builder: (context) {
-        return Consumer<HomeProvider>(
+        return Consumer<CommonProvider>(
           builder: (context,provider,child) {
             return Container(
               height: MediaQuery.of(context).size.height * 0.9,
@@ -61,7 +62,8 @@ Future commentBottomSheet({required String groupId, required String sheetId, req
                    Provider.of<ProfileProvider>(navigatorKey.currentContext!,listen: false).profileModel!.data!.userImage ,controller: provider.commentController,
                    onTap: (){
                     if(provider.commentController.text.isNotEmpty){
-                      provider.postCommentApiFunction(groupId: groupId, sheetId: sheetId, sheetDataId: sheetDataId);
+                      provider.postSubCommentApiFunction(groupId: groupId, sheetId: sheetId, sheetDataId: sheetDataId, commentId: '4153');
+                      // provider.postCommentApiFunction(groupId: groupId, sheetId: sheetId, sheetDataId: sheetDataId);
                     }
                    }
                    )

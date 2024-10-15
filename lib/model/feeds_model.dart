@@ -213,6 +213,7 @@ class Feeds {
   dynamic text;
   dynamic dateText;
   dynamic commentCount;
+  dynamic likeStatus;
   List<Video>? video;
   dynamic image;
 
@@ -229,6 +230,7 @@ class Feeds {
       this.text,
       this.dateText,
       this.commentCount,
+      this.likeStatus,
       this.video,
       this.image});
 
@@ -245,6 +247,7 @@ class Feeds {
     text = json['text'];
     dateText = json['date_text'];
     commentCount = json['commentCount'];
+    likeStatus = json['like_status'];
     if (json['video'] != null) {
       video = <Video>[];
       json['video'].forEach((v) {
@@ -270,6 +273,7 @@ class Feeds {
     data['text'] = text;
     data['date_text'] = dateText;
     data['commentCount'] = commentCount;
+    data['like_status'] = likeStatus;
     if (video != null) {
       data['video'] = video!.map((v) => v.toJson()).toList();
     }

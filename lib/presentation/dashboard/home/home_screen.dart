@@ -11,7 +11,7 @@ import 'package:kodago/services/provider/home/home_provider.dart';
 import 'package:kodago/presentation/shimmer/post_shimmer.dart';
 import 'package:kodago/presentation/dashboard/home/view_story_screen.dart';
 import 'package:kodago/services/provider/profile_provider.dart';
-import 'package:kodago/widget/home_posts_widget.dart';
+import 'package:kodago/widget/feeds_widget.dart';
 import 'package:kodago/widget/no_data_found.dart';
 import 'package:provider/provider.dart';
 import '../../../uitls/mixins.dart';
@@ -108,7 +108,7 @@ class _HomeScreenState extends State<HomeScreen> with MediaQueryScaleFactor {
                                         return const Center(
                                             child: CircularProgressIndicator());
                                       } else {
-                                        return HomePostsWidget(
+                                        return FeedsWidget(
                                           index: index,
                                           feedsModel: myProvider.feedsModel,
                                           currentIndex: currentIndex,

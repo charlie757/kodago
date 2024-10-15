@@ -7,42 +7,34 @@ import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/helper/view_network_image.dart';
 import 'package:kodago/model/feeds_model.dart';
-import 'package:kodago/presentation/dashboard/home/view_post_screen.dart';
+import 'package:kodago/presentation/dashboard/home/view_feeds_screen.dart';
+import 'package:kodago/services/provider/common/common_provider.dart';
 import 'package:kodago/services/provider/home/home_provider.dart';
+import 'package:kodago/uitls/utils.dart';
 import 'package:kodago/widget/comment_bottomsheet.dart';
 import 'package:kodago/widget/view_video.dart';
 import 'package:video_player/video_player.dart';
 import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
-class HomePostsWidget extends StatefulWidget {
+class FeedsWidget extends StatelessWidget {
   int index;
   int currentIndex;
   FeedsModel? feedsModel;
-  HomePostsWidget({
+  FeedsWidget({
     required this.index,
     this.currentIndex = 0,
     this.feedsModel,
   });
 
-  @override
-  State<HomePostsWidget> createState() => _HomePostsWidgetState();
-}
-
-class _HomePostsWidgetState extends State<HomePostsWidget> {
   ValueNotifier<bool> isSound = ValueNotifier(false);
+
   // Use ValueNotifier for sound control
   late VideoPlayerController controller;
 
   @override
-  void dispose() {
-    // controller.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    var model = widget.feedsModel!.data!.feeds![widget.index];
+    var model = feedsModel!.data!.feeds![index];
     // if (model.fieldType == 'video') {
     //   controller =
     //       VideoPlayerController.networkUrl(Uri.parse(model.video![0].mainURL))
@@ -60,6 +52,7 @@ class _HomePostsWidgetState extends State<HomePostsWidget> {
             ? ViewNetworkImage(
                 img: model.image[0]['thumbURL'],
                 width: double.infinity,
+                fit: BoxFit.cover,
               )
             : model.fieldType == ''
                 ? Stack(
@@ -150,7 +143,7 @@ class _HomePostsWidgetState extends State<HomePostsWidget> {
   }
 
   userInfoHeaderWidget() {
-    var model = widget.feedsModel!.data!.feeds![widget.index];
+    var model = feedsModel!.data!.feeds![index];
     return Padding(
       padding: const EdgeInsets.only(left: 20, right: 25),
       child: Row(
@@ -196,23 +189,29 @@ class _HomePostsWidgetState extends State<HomePostsWidget> {
   }
 
   likeCommentSeeMoreWidget() {
-    var model = widget.feedsModel!.data!.feeds![widget.index];
+    var model = feedsModel!.data!.feeds![index];
+      final commonProvider = Provider.of<CommonProvider>(navigatorKey.currentContext!,listen: false);
     return Consumer<HomeProvider>(
       builder: (context,myProvider,child) {
         return Padding(
           padding: const EdgeInsets.only(left: 20, right: 20),
           child: Row(
             children: [
-              Image.asset(
-                AppImages.thumb1Icon,
-                height: 16,
-                width: 18,
+              InkWell(
+                onTap: (){
+                  commonProvider.likeDislikeApiFunction(groupId: model.groupId, sheetId: model.sheetId, sheetDataId: model.sheetDataId);
+                },
+                child: Image.asset(
+                  AppImages.thumb1Icon,
+                  height: 16,
+                  width: 18,
+                ),
               ),
               ScreenSize.width(13),
               GestureDetector(
                 onTap: () {
-                  myProvider.clearController();
-                  myProvider.commentApiFunction(groupId: model.groupId, sheetId: model.sheetId, sheetDataId: model.sheetDataId);
+                  commonProvider.clearController();
+                  commonProvider.commentApiFunction(groupId: model.groupId, sheetId: model.sheetId, sheetDataId: model.sheetDataId);
                   commentBottomSheet(groupId: model.groupId,sheetDataId: model.sheetDataId,sheetId: model.sheetId).then((val){
                      myProvider.clearPages();
                         myProvider.feedsApiFunction();
@@ -233,7 +232,7 @@ class _HomePostsWidgetState extends State<HomePostsWidget> {
               const Spacer(),
               GestureDetector(
                 onTap: () {
-                  AppRoutes.pushCupertinoNavigation(ViewPostScreen(
+                  AppRoutes.pushCupertinoNavigation(ViewFeedsScreen(
                     groupId: model.groupId,
                     sheetDataId: model.sheetDataId,
                     sheetId: model.sheetId,
@@ -311,7 +310,7 @@ class _HomePostsWidgetState extends State<HomePostsWidget> {
   }
 
   commentWidget() {
-    var model = widget.feedsModel!.data!.feeds![widget.index];
+    var model = feedsModel!.data!.feeds![index];
     return Consumer<HomeProvider>(
       builder: (context,myProvider,child) {
         return Padding(
@@ -339,8 +338,9 @@ class _HomePostsWidgetState extends State<HomePostsWidget> {
               ScreenSize.height(5),
               InkWell(
                 onTap: (){
-                  myProvider.clearController();
-                  myProvider.commentApiFunction(groupId: model.groupId, sheetId: model.sheetId, sheetDataId: model.sheetDataId);
+                  final commonProvider = Provider.of<CommonProvider>(context,listen: false);
+                  commonProvider.clearController();
+                  commonProvider.commentApiFunction(groupId: model.groupId, sheetId: model.sheetId, sheetDataId: model.sheetDataId);
                   commentBottomSheet(groupId: model.groupId,sheetDataId: model.sheetDataId,sheetId: model.sheetId).then((val){
                     myProvider.clearPages();
                     myProvider.feedsApiFunction();

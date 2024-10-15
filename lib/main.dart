@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kodago/helper/app_color.dart';
+import 'package:kodago/services/provider/common/common_provider.dart';
+import 'package:kodago/services/provider/file_rack/add_record_provider.dart';
 import 'package:kodago/services/provider/group/contact_provider.dart';
 import 'package:kodago/services/provider/group/topic_provider.dart';
 import 'package:kodago/services/provider/auth_provider/forgot_password_provider.dart';
@@ -20,6 +22,7 @@ import 'package:kodago/services/provider/onboarding_provider.dart';
 import 'package:kodago/services/provider/profile_provider.dart';
 import 'package:kodago/services/provider/splash_provider.dart';
 import 'package:kodago/presentation/splash_screen.dart';
+import 'package:kodago/services/provider/view_feeds_provider.dart';
 import 'package:kodago/uitls/session_manager.dart';
 import 'package:kodago/uitls/utils.dart';
 import 'package:provider/provider.dart';
@@ -63,6 +66,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => FileRackProvider()),
         ChangeNotifierProvider(create: (_) => FileRackDetailsProvider()),
         ChangeNotifierProvider(create: (_) => TopicProvider()),
+        ChangeNotifierProvider(create: (_) => CommonProvider()),
+        ChangeNotifierProvider(create: (_) => AddRecordProvider()),
+        ChangeNotifierProvider(create: (_) => ViewFeedsProvider()),
         ChangeNotifierProvider(
           create: (_) => NewGroupProvider(),
         ),

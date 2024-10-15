@@ -84,87 +84,14 @@ class _ViewImagesScreenState extends State<ViewImagesScreen> {
                           },
                           child: ViewNetworkImage(
                               img: widget.imgList[index].mainUrl,
-                              height: double.infinity,
-                              width: double.infinity),
+                               fit: BoxFit.contain,
+                              // height: double.infinity,
+                              // width: double.infinity,
+                              ),
                         ),
                 );
               })),
-      // SafeArea(
-      //   child: Column(
-      //     children: [
-      //       Expanded(
-      //         child:
-      //         // imgUrl.toString().endsWith('mp4')
-      //         //     ? PageView.builder(
-      //         //         itemCount: widget.imgList.length,
-      //         //         clipBehavior: Clip.none,
-      //         //         controller: PageController(viewportFraction: 1,initialPage: currentCount),
-      //         //         onPageChanged: (val) {
-      //         //           print('currentCount..rwee..$val');
-      //         //            currentCount = val + 1;
-
-      //         //           imgUrl =
-      //         //               "${ApiUrl.imgBaseUrl}${widget.imgList[val].image}";
-      //         //           controller = PodPlayerController(
-      //         //             podPlayerConfig:
-      //         //                 const PodPlayerConfig(autoPlay: true),
-      //         //             playVideoFrom: PlayVideoFrom.network(imgUrl),
-      //         //           )..initialise();
-      //         //           setState(() {
-      //         //           });
-      //         //         },
-      //         //         itemBuilder: (context, index) {
-      //         //           return Padding(
-      //         //             padding: const EdgeInsets.all(8.0),
-      //         //             child: PodVideoPlayer(controller: controller!),
-      //         //           );
-      //         //         })
-      //              PhotoViewGallery.builder(
-      //                 enableRotation: false,
-      //                 gaplessPlayback: true,
-      //                 scrollPhysics: const BouncingScrollPhysics(),
-      //                 builder: (BuildContext context, int index) {
-      //                   return PhotoViewGalleryPageOptions(
-      //                     imageProvider: NetworkImage(widget
-      //                             .imgList[index].image
-      //                             .toString()
-      //                             .endsWith('mp4')
-      //                         ? "${ApiUrl.thumbnailUrl}${widget.imgList[index].thumbnails}"
-      //                         : "${ApiUrl.imgBaseUrl}${widget.imgList[index].image}",),
-      //                     initialScale: PhotoViewComputedScale.contained * 1,
-      //                     filterQuality: FilterQuality.high,
-      //                     minScale: PhotoViewComputedScale.contained * 1.0,
-      //                   );
-      //                 },
-      //                 itemCount: widget.imgList.length,
-      //                 backgroundDecoration: const BoxDecoration(
-      //                     // color: Colors
-      //                     ),
-      //                 customSize: const Size(double.infinity, 400),
-      //                 // backgroundDecoration: BoxDecoration(color: AppColor.whiteColor),
-      //                 pageController: PageController(
-      //                     initialPage: widget.imgCount, viewportFraction: 1),
-      //                 onPageChanged: (val) {
-      //                   currentCount = val + 1;
-      //                   print("currentCount....$currentCount");
-      //                   imgUrl =
-      //                       "${ApiUrl.imgBaseUrl}${widget.imgList[val].image}";
-      //                   // controller = PodPlayerController(
-      //                   //   podPlayerConfig:
-      //                   //       const PodPlayerConfig(autoPlay: true),
-      //                   //   playVideoFrom: PlayVideoFrom.network(imgUrl),
-      //                   // )..initialise();
-      //                   // imgType = widget.imgList[val].image
-      //                   //           .toString()
-      //                   //           .endsWith('mp4')?'video':'img';
-      //                   setState(() {});
-      //                 },
-      //               ),
-      //       ),
-      //     ],
-      //   ),
-      // ),
-
+   
       bottomNavigationBar: Container(
         height: 40,
         alignment: Alignment.center,
