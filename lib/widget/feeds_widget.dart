@@ -17,7 +17,7 @@ import 'package:video_player/video_player.dart';
 import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
-class FeedsWidget extends StatelessWidget {
+class FeedsWidget extends StatefulWidget {
   int index;
   int currentIndex;
   FeedsModel? feedsModel;
@@ -27,6 +27,11 @@ class FeedsWidget extends StatelessWidget {
     this.feedsModel,
   });
 
+  @override
+  State<FeedsWidget> createState() => _FeedsWidgetState();
+}
+
+class _FeedsWidgetState extends State<FeedsWidget> {
   ValueNotifier<bool> isSound = ValueNotifier(false);
 
   // Use ValueNotifier for sound control
@@ -34,7 +39,7 @@ class FeedsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var model = feedsModel!.data!.feeds![index];
+    var model = widget.feedsModel!.data!.feeds![widget.index];
     // if (model.fieldType == 'video') {
     //   controller =
     //       VideoPlayerController.networkUrl(Uri.parse(model.video![0].mainURL))
@@ -143,7 +148,7 @@ class FeedsWidget extends StatelessWidget {
   }
 
   userInfoHeaderWidget() {
-    var model = feedsModel!.data!.feeds![index];
+    var model = widget.feedsModel!.data!.feeds![widget.index];
     return Padding(
       padding: const EdgeInsets.only(left: 20, right: 25),
       child: Row(
@@ -189,7 +194,7 @@ class FeedsWidget extends StatelessWidget {
   }
 
   likeCommentSeeMoreWidget() {
-    var model = feedsModel!.data!.feeds![index];
+    var model = widget.feedsModel!.data!.feeds![widget.index];
       final commonProvider = Provider.of<CommonProvider>(navigatorKey.currentContext!,listen: false);
     return Consumer<HomeProvider>(
       builder: (context,myProvider,child) {
@@ -199,13 +204,19 @@ class FeedsWidget extends StatelessWidget {
             children: [
               InkWell(
                 onTap: (){
-                  commonProvider.likeDislikeApiFunction(groupId: model.groupId, sheetId: model.sheetId, sheetDataId: model.sheetDataId);
+                  commonProvider.likeDislikeApiFunction(groupId: model.groupId, sheetId: model.sheetId, sheetDataId: model.sheetDataId).then((val){
+                    if(val!=null){
+                      model.isLike = val['like_status']=='0'?false:true;
+                      setState(() {
+                      });
+                    }
+                  });
                 },
-                child: Image.asset(
+                child:!model.isLike? Image.asset(
                   AppImages.thumb1Icon,
                   height: 16,
                   width: 18,
-                ),
+                ):const Icon(Icons.thumb_up,size: 20,color: AppColor.storyGradientColor1,),
               ),
               ScreenSize.width(13),
               GestureDetector(
@@ -310,7 +321,7 @@ class FeedsWidget extends StatelessWidget {
   }
 
   commentWidget() {
-    var model = feedsModel!.data!.feeds![index];
+    var model = widget.feedsModel!.data!.feeds![widget.index];
     return Consumer<HomeProvider>(
       builder: (context,myProvider,child) {
         return Padding(

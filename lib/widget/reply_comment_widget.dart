@@ -7,7 +7,7 @@ import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/helper/view_network_image.dart';
 import 'package:kodago/uitls/white_space_formatter.dart';
 
-replyCommentWidget({required String img, TextEditingController? controller, Function()?onTap, bool isDefault=true}) {
+replyCommentWidget({required String img, TextEditingController? controller, Function()?onTap, bool isDefault=true,FocusNode? focusNode}) {
   return Column(
     children: [
       customHorizontalDivider(
@@ -30,6 +30,7 @@ replyCommentWidget({required String img, TextEditingController? controller, Func
             ScreenSize.width(11),
             Expanded(
               child: TextFormField(
+                focusNode: focusNode,
                 cursorHeight: 20,
                 controller: controller,
                 inputFormatters: [

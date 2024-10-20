@@ -14,6 +14,7 @@ import 'package:kodago/widget/reply_comment_widget.dart';
 import 'package:provider/provider.dart';
  
 Future commentBottomSheet({required String groupId, required String sheetId, required String sheetDataId}) {
+  final FocusNode focusNode = FocusNode();
  return showModalBottomSheet(
       isScrollControlled: true,
       backgroundColor: AppColor.whiteColor,
@@ -56,14 +57,38 @@ Future commentBottomSheet({required String groupId, required String sheetId, req
                     padding:const EdgeInsets.only(left: 20,right: 20,bottom: 15),
                     itemBuilder: (context,index){
                       var model = provider.commentModel!.data!.comments!.dbdata![index];
-                      return commentMessageWidget(img:model.imageLink,title: model.username,msg: model.comment,date: model.createdAt,isDefault: false);
+                      return commentMessageWidget(img:model.imageLink,title: model.username,msg: model.comment,date: model.createdAt,isDefault: false,onTap: (){
+                        provider.commentController.clear();
+                        focusNode.requestFocus();
+                        provider.replyToCommentData(model);
+                      });
                    }):noDataFound('No Comments')),
+                   provider.userCommentName.isNotEmpty?
+                   Container(
+                    color: AppColor.greyD8Color.withOpacity(.3),
+                    padding:const EdgeInsets.symmetric(horizontal: 15,vertical: 3),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        customText(title: "Reply to @${provider.userCommentName}",
+                        fontSize: 13,fontWeight: FontWeight.w400,fontFamily: FontFamily.interMedium,
+                        ),
+                       InkWell(
+                        onTap: (){
+                          Utils.hideTextField();
+                          provider.clearController();
+                        },
+                        child: const Icon(Icons.close,size: 15,))
+                      ],
+                    ),
+                   ):const SizedBox.shrink(),
                    replyCommentWidget(isDefault: false,img: 
-                   Provider.of<ProfileProvider>(navigatorKey.currentContext!,listen: false).profileModel!.data!.userImage ,controller: provider.commentController,
+                   Provider.of<ProfileProvider>(navigatorKey.currentContext!,listen: false).profileModel!.data!.userImage ,controller: provider.commentController,focusNode: focusNode,
                    onTap: (){
                     if(provider.commentController.text.isNotEmpty){
-                      provider.postSubCommentApiFunction(groupId: groupId, sheetId: sheetId, sheetDataId: sheetDataId, commentId: '4153');
-                      // provider.postCommentApiFunction(groupId: groupId, sheetId: sheetId, sheetDataId: sheetDataId);
+                      provider.userCommentName.isNotEmpty?
+                      provider.postSubCommentApiFunction(groupId: groupId, sheetId: sheetId, sheetDataId: sheetDataId, commentId: provider.commentId):
+                      provider.postCommentApiFunction(groupId: groupId, sheetId: sheetId, sheetDataId: sheetDataId);
                     }
                    }
                    )

@@ -108,6 +108,8 @@ class _HomeScreenState extends State<HomeScreen> with MediaQueryScaleFactor {
                                         return const Center(
                                             child: CircularProgressIndicator());
                                       } else {
+                                        var model = myProvider.feedsModel!.data!.feeds![index];
+                                           model.isLike = model.likeStatus.toString()=='0'?false:true;
                                         return FeedsWidget(
                                           index: index,
                                           feedsModel: myProvider.feedsModel,

@@ -6,7 +6,7 @@ import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/helper/view_network_image.dart';
 import 'package:kodago/uitls/time_format.dart';
 
-commentMessageWidget({required String img, required String title, required String msg, required String date, bool isDefault = true}) {
+commentMessageWidget({required String img, required String title, required String msg, required String date, bool isDefault = true, Function()?onTap}) {
   return Row(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -50,12 +50,15 @@ commentMessageWidget({required String img, required String title, required Strin
             fontWeight: FontWeight.w500,
           ),
           ScreenSize.height(4),
-          customText(
-            title: 'Reply',
-            fontSize: 11,
-            fontWeight: FontWeight.w500,
-            fontFamily: FontFamily.interSemiBold,
-            color: const Color(0xff6F6F6F),
+          GestureDetector(
+            onTap: onTap,
+            child: customText(
+              title: 'Reply',
+              fontSize: 11,
+              fontWeight: FontWeight.w500,
+              fontFamily: FontFamily.interSemiBold,
+              color: const Color(0xff6F6F6F),
+            ),
           )
         ],
       )

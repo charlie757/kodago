@@ -214,6 +214,7 @@ class Feeds {
   dynamic dateText;
   dynamic commentCount;
   dynamic likeStatus;
+  dynamic isLike = false;
   List<Video>? video;
   dynamic image;
 

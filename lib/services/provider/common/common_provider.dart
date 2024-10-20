@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kodago/api/api_service.dart';
 import 'package:kodago/api/api_url.dart';
 import 'package:kodago/model/comment_model.dart';
+import 'package:kodago/model/feeds_model.dart';
 import 'package:kodago/uitls/constants.dart';
 import 'package:kodago/uitls/session_manager.dart';
 import 'package:kodago/uitls/utils.dart';
@@ -11,16 +12,44 @@ class CommonProvider extends ChangeNotifier{
 final commentController = TextEditingController();
  CommentModel? commentModel;
  bool isCommentLoading = false;
+
 updateCommentLoading(value)async{
   isCommentLoading=value;
   notifyListeners();
 }
 
-clearController(){
-  commentController.clear();
+String commentId = '';
+String userCommentName = '';
+replyToCommentData(commentMap){
+  if(commentMap!=null){
+    commentId = commentMap.id.toString();
+    userCommentName =commentMap.username;
+    notifyListeners();
+  }
 }
 
-likeDislikeApiFunction({required String groupId,required String sheetId,required String sheetDataId,})async{
+clearController(){
+  commentController.clear();
+  commentId = '';
+  userCommentName='';
+  notifyListeners();
+}
+
+updateLikeDislike({FeedsModel? feedsModel,required int index, required likeStatus}){
+  var model = feedsModel!.data!.feeds![index];
+  model.isLike = likeStatus;
+  print(likeStatus);
+  notifyListeners();  
+    
+}
+
+String test = 'r';
+
+testFunction(){
+  return notifyListeners();
+}
+
+Future likeDislikeApiFunction({required String groupId,required String sheetId,required String sheetDataId,})async{
   var body = {
        'Authkey': Constants.authkey,
       'Userid': SessionManager.userId,
@@ -32,6 +61,7 @@ likeDislikeApiFunction({required String groupId,required String sheetId,required
   print(body);
   final response = await ApiService.multiPartApiMethod(url: ApiUrl.likeDislikeUrl, body: body);
   if(response!=null&&response['status']==1){
+    return response;
   }
 }
 
