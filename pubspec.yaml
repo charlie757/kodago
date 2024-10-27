@@ -65,6 +65,8 @@ dev_dependencies:
   # open_file: ^3.5.8
   # permission_handler: ^11.3.1
   file_picker: ^8.1.2
+  signature: ^5.5.0
+  path_provider: ^2.1.4
 
   # wakelock_plus: ^1.2.8
   # share_plus: ^10.0.2

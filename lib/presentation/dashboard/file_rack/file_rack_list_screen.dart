@@ -5,7 +5,6 @@ import 'package:kodago/helper/app_images.dart';
 import 'package:kodago/helper/custom_text.dart';
 import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
-import 'package:kodago/presentation/dashboard/file_rack/add_record_screen.dart';
 import 'package:kodago/presentation/dashboard/file_rack/assign_members_screen.dart';
 import 'package:kodago/presentation/dashboard/file_rack/create_form_screen.dart';
 import 'package:kodago/presentation/dashboard/file_rack/file_rack_details_screen.dart';

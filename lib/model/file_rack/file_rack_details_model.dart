@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class FileRackDetailsModel {
   dynamic status;
   dynamic message;
@@ -114,7 +116,11 @@ class SheetFields {
   dynamic dependentFieldId;
   dynamic dependentFileRackFid;
   dynamic dependentFileRackFname;
-
+  TextEditingController controller = TextEditingController();
+  List list = [];
+  DateTime? selectedDate;
+  TimeOfDay?selectedTime;
+  dynamic image;
   SheetFields(
       {this.id,
       this.name,

@@ -12,6 +12,23 @@ class ImagePickerService {
     } else {}
   }
 
+static Future imagePickerWithoutCrop(ImageSource imageSource)async{
+ final pickedFile = await ImagePicker().pickImage(source: imageSource);
+    if (pickedFile != null) {
+      // final response = _cropImage(File(pickedFile.path));
+      return File(pickedFile.path);
+    } else {}
+}
+
+static Future videoPicker(ImageSource imageSource)async{
+ final pickedFile = await ImagePicker().pickVideo(source: imageSource);
+    if (pickedFile != null) {
+      // final response = _cropImage(File(pickedFile.path));
+      return File(pickedFile.path);
+    } else {}
+
+}
+
   static Future _cropImage(File imgFile) async {
     final croppedFile =
         await ImageCropper().cropImage(sourcePath: imgFile.path, uiSettings: [

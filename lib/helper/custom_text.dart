@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kodago/helper/app_color.dart';
 import 'package:kodago/helper/font_family.dart';
 
 // ignore: must_be_immutable
@@ -10,6 +11,7 @@ class customText extends StatelessWidget {
   String fontFamily;
   TextAlign textAlign;
   int? maxLines;
+  TextDecoration? decoration;
   customText({
     required this.title,
     this.fontSize = 14,
@@ -18,6 +20,7 @@ class customText extends StatelessWidget {
     this.fontFamily = FontFamily.interRegular,
     this.textAlign = TextAlign.start,
     this.maxLines,
+    this.decoration = TextDecoration.none
   });
 
   @override
@@ -28,7 +31,8 @@ class customText extends StatelessWidget {
       maxLines: maxLines,
       overflow: maxLines != null ? TextOverflow.ellipsis : null,
       style: TextStyle(
-          decoration: TextDecoration.none,
+          decoration: decoration,
+          decorationColor: AppColor.appColor,
           fontSize: fontSize,
           color: color,
           fontWeight: fontWeight,

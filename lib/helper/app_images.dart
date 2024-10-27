@@ -64,4 +64,6 @@ class AppImages {
   static String newGroupIcon = 'assets/icons/new_group_icon.png';
   static String shareInviteIcon = 'assets/icons/shareInvite.png';
   static String topicMenuIcon = 'assets/icons/topic_menu.png';
+  static String videoIcon = 'assets/icons/video_icon.png';
+  static String folderIcon = 'assets/icons/folder_icon.png';
 }

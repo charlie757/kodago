@@ -65,7 +65,9 @@ class ApiService {
       {required String url,
       required var body,
       bool isErrorMessageShow = true,
-      File? imgFile}) async {
+      File? imgFile,
+      String imgFieldName = 'image'
+      }) async {
     try {
       final result = await InternetAddress.lookup('example.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
@@ -79,7 +81,7 @@ class ApiService {
           var request = http.MultipartRequest('POST', Uri.parse(url));
           if (imgFile != null) {
             final file =
-                await http.MultipartFile.fromPath('image', imgFile.path);
+                await http.MultipartFile.fromPath(imgFieldName, imgFile.path);
             request.files.add(file);
           }
           request.fields.addAll(body);

@@ -52,4 +52,7 @@ class ApiUrl {
   static String fileRackListUrl = '${baseUrl}sheets/index';
   static String deleteFileRackUrl = '${baseUrl}sheets/deleteSheet';
   static String fileRackDetailsUrl = '${baseUrl}sheets/viewData_v1';
+  static String getDependentMasterFileRack  = "${baseUrl}sheets/GetDependentFileRackMasterFieldValuesAPI";
+  static String getDependentFileRack  = '${baseUrl}sheets/GetDependentFileRackFieldValueAPI';
+  static String uploadMediaUrl =  "${baseUrl}sheets/upload?";
 }

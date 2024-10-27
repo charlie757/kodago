@@ -6,7 +6,6 @@ import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/helper/view_network_image.dart';
 import 'package:kodago/services/provider/common/common_provider.dart';
-import 'package:kodago/services/provider/home/home_provider.dart';
 import 'package:kodago/services/provider/view_feeds_provider.dart';
 import 'package:kodago/uitls/my_sperator.dart';
 import 'package:kodago/uitls/time_format.dart';
