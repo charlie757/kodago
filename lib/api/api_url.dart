@@ -55,4 +55,5 @@ class ApiUrl {
   static String getDependentMasterFileRack  = "${baseUrl}sheets/GetDependentFileRackMasterFieldValuesAPI";
   static String getDependentFileRack  = '${baseUrl}sheets/GetDependentFileRackFieldValueAPI';
   static String uploadMediaUrl =  "${baseUrl}sheets/upload?";
+  static String saveRecordUrl = "${baseUrl}sheets/saveData";
 }

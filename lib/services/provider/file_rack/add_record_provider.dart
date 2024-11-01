@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -21,6 +23,135 @@ class AddRecordProvider extends ChangeNotifier {
   String groupId = '';
   String sheetId = '';
   String sheetDataId = '';
+  Map jsonObject = {};
+
+  List<CustomModel> allData = [];
+  setData(FileRackDetailsModel? fileRackDetailsModel) {
+    allData.clear();
+    var model = fileRackDetailsModel!.data!.sheetFields!;
+    allData = model.map<CustomModel>((item) {
+      return CustomModel(
+        id: item.id,
+        fieldId: '',
+        fieldValue: '',
+        depdntFieldIdValue: '',
+        fieldName: item.name,
+        fieldType: item.type,
+        nonEditable: item.nonEditable,
+        isRequired: item.isRequired,
+        dropdownValues: item.dropdownValues,
+        listColsValues: '',
+        geoTagging: item.geoTagging,
+        fileRackId: item.fileRackId,
+        isMultiple: item.isMultiple,
+        dFOFRFields: item.dFOFRFields,
+        isDependent: item.isDependent,
+        valuePrefix: item.valuePrefix,
+        isDefaultValue: item.isDefaultValue,
+        isDateAllow: item.isDateAllow,
+        dValue: '',
+        fieldPermission: '',
+      );
+    }).toList();
+    notifyListeners();
+  }
+
+  setEditData(FileRackDetailsModel? fileRackDetailsModel, int index) {
+    var model = fileRackDetailsModel!.data!.sheetData!.dbdata![index];
+    
+    allData = model.data!.map<CustomModel>((item) {
+      if(item.fieldType=='DFOFR'){
+        print("vb  ..${item.fieldType}");
+      }
+      return CustomModel(
+        id: item.fieldId, /// this id will field id 
+        fieldId: item.fieldId,
+        fieldValue: item.fieldValue,
+        depdntFieldIdValue: item.depdntFieldIdValue,
+        fieldName: item.fieldName,
+        fieldType: item.fieldType,
+        nonEditable: item.nonEditable,
+        isRequired: '',
+        dropdownValues: item.dropdownValues,
+        listColsValues: item.listColsValues,
+        geoTagging: item.geoTagging,
+        fileRackId: item.fileRackId,
+        isMultiple: item.isMultiple,
+        dFOFRFields: item.dFOFRFields,
+        isDependent: item.isDependent,
+        valuePrefix: item.valuePrefix,
+        isDefaultValue: item.isDefaultValue,
+        isDateAllow: item.isDateAllow,
+        dValue: item.dValue,
+        fieldPermission: item.fieldPermission,
+        fullURL: item.fullURL,
+        sheetmembers: item.sheetmembers,
+        dofValue: item.dofValue,
+        filesData: item.filesData
+      );
+    }).toList();
+
+    for (int i = 0; i < allData.length; i++) {
+      if (allData[i].fieldType == 'text' ||
+          allData[i].fieldType == 'date' ||
+          allData[i].fieldType == 'number' ||
+          allData[i].fieldType == 'time' ||
+          allData[i].fieldType=='Heading') {
+        allData[i].controller.text = allData[i].fieldValue;
+      } 
+      else if (allData[i].fieldType == 'dropdown') {
+        //// check for multiple dropdown values
+        if (allData[i].isMultiple.toString() == '1'&&allData[i].dValue.toString().isNotEmpty&&
+        !allData[i].dValue.toString().contains('-')) {
+          allData[i].list = allData[i]
+              .dValue
+              .toString()
+              .split(',')
+              .map((value) => value.trim())
+              .toList();
+        } else {
+          allData[i].selectedDropDownValue = allData[i].dValue.toString().isEmpty||
+          allData[i].dValue=='null'||allData[i].dValue.toString().contains('-')
+          ?null:allData[i].dValue;
+        }
+      }
+      else if(allData[i].fieldType=='signature'){
+        allData[i].image = allData[i].fullURL;
+      }
+      else if(allData[i].fieldType=='userlist'){
+        allData[i].selectedDropDownValue = allData[i].fieldValue.toString().isEmpty||
+        allData[i].fieldValue=='null'||allData[i].fieldValue.toString().contains('-')
+        ?null:allData[i].fieldValue;
+        for(int j=0;j<allData[i].sheetmembers!.length;j++){
+          allData[i].list.add(allData[i].sheetmembers![j].name);
+        }
+      } 
+      else if(allData[i].fieldType=='list'){
+        allData[i].selectedDropDownValue = allData[i].dValue.toString().isEmpty||
+        allData[i].dValue=='null'||allData[i].dValue.toString().contains('-')?null:allData[i].dValue;
+      }
+      else if(allData[i].fieldType=='DFOFR'){
+        allData[i].selectedDropDownValue = allData[i].dValue.toString().isEmpty||
+        allData[i].dValue.toString()=='null'||allData[i].dValue.toString().contains('-')?null:allData[i].dValue;
+           if(allData[i].dofValue!=null&&allData[i].dofValue.toString().isNotEmpty||allData[i].dValue!='null'){
+       for(int j=0;j<allData[i].dofValue!.length;j++){
+          allData[i].list.add(allData[i].dofValue![j]['field_value']);
+        }
+        }
+      }
+      else if(allData[i].fieldType=='image'||allData[i].fieldType=='video'||allData[i].fieldType=='document'){
+        if(allData[i].filesData!.isNotEmpty){
+          for(int j=0;j<allData[i].filesData!.length;j++){
+            allData[i].list.add({
+              'file_name':allData[i].filesData![j].fileName,
+              'path':allData[i].filesData![j].mainUrl
+            });
+        }
+        }
+      }
+    }
+    notifyListeners();
+  }
 
   viewSheetFeedDataApiFunction(
       {required String groupId,
@@ -101,15 +232,19 @@ class AddRecordProvider extends ChangeNotifier {
       }
     }
   }
- ///Select Time Method
-  Future chooseTime({required BuildContext context,TimeOfDay?selectedTime}) async {
-     selectedTime ??= TimeOfDay.now();
+
+  ///Select Time Method
+  Future chooseTime(
+      {required BuildContext context, TimeOfDay? selectedTime}) async {
+    selectedTime ??= TimeOfDay.now();
     TimeOfDay? pickedTime = await showTimePicker(
         context: context,
         initialTime: selectedTime,
         builder: (context, Widget? child) {
           return MediaQuery(
-            data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false,),
+            data: MediaQuery.of(context).copyWith(
+              alwaysUse24HourFormat: false,
+            ),
             child: child!,
           );
         },
@@ -122,10 +257,10 @@ class AddRecordProvider extends ChangeNotifier {
         minuteLabelText: 'Select Minute');
     return pickedTime;
   }
- 
+
   DateTime selectedDate = DateTime.now();
   DateTime now = DateTime.now();
-  Future datePicker({ DateTime? selectedDate}) async {
+  Future datePicker({DateTime? selectedDate}) async {
     selectedDate ??= DateTime.now();
     DateTime? picked = await showDatePicker(
         builder: (context, child) {
@@ -145,7 +280,7 @@ class AddRecordProvider extends ChangeNotifier {
     }
   }
 
- Future uploadMediaApiFunction(
+  Future uploadMediaApiFunction(
       {required File? filename, required String fileType}) async {
     showLoader(navigatorKey.currentContext!);
     var body = {
@@ -165,6 +300,102 @@ class AddRecordProvider extends ChangeNotifier {
     }
   }
 
+  checkValidation(){
+    for(int i=0;i<allData.length;i++){
+
+    }
+  }
+
+  sendRackDetailsFunction(
+      {required String groupId,
+      required String sheetId,
+      required String sheetDataId,}) async {
+    convertDataInJson();
+    var body = {
+      'Userid': SessionManager.userId,
+      'Token': SessionManager.token,
+      'Authkey': Constants.authkey,
+      'group_id': groupId,
+      'sheet_id': sheetId,
+      'field': jsonObject.toString(),
+      'geo_tagging': "",
+      'extra_field_value': '',
+      'sheet_data_id': sheetDataId,
+    };
+    log(jsonEncode(body));
+    final response = await ApiService.multiPartApiMethod(
+        body: body, url: ApiUrl.saveRecordUrl);
+    if (response != null) {}
+  }
+
+
+  convertDataInJson() {
+    // var model = fileRachModel!.data!.sheetFields!;
+    for (int i = 0; i < allData.length; i++) {
+      var model = allData[i];
+      if (model.fieldType == 'text'||model.fieldType=='Heading'||model.fieldType == 'time'
+      ||model.fieldType == 'date'||model.fieldType == 'number') {
+        jsonObject[jsonEncode(model.id)] =
+            jsonEncode(model.controller.text.toString());
+      }
+      if (model.fieldType == 'location') {
+        jsonObject[jsonEncode(model.id)] = {
+          jsonEncode('latitude'): model.latList.toString(),
+          jsonEncode('longitude'): model.lngList.toString(),
+        };
+      }
+      if (model.fieldType == 'document'||model.fieldType == 'video'||model.fieldType == 'image') {
+        List list = [];
+        for (int j = 0; j < model.list.length; j++) {
+          list.add(model.list[j]['file_name']);
+        }
+        jsonObject[jsonEncode(model.id)] = list.toString();
+      }
+      
+      if (model.fieldType == 'signature') {
+        if(model.image!=null){
+        jsonObject[jsonEncode(model.id)] =
+            jsonEncode(model.image.toString());
+        }
+      }
+
+      if (model.fieldType == 'dropdown') {
+        if (model.isMultiple == '1') {
+          List list = [];
+          for (int j = 0; j < model.list.length; j++) {
+            list.add(jsonEncode(model.list[j]));
+          }
+          jsonObject[jsonEncode(model.id)] = list;
+        } else {
+          if(model.selectedDropDownValue!=null){
+          model.list
+              .add(jsonEncode(model.selectedDropDownValue.toString()));
+          jsonObject[jsonEncode(model.id)] = model.list.toString();
+          }
+        }
+      }
+      if (model.fieldType == 'DFOFR') {
+        List list = [];
+        if(model.selectedDropDownValue!=null){
+          list.add(jsonEncode(model.selectedDropDownValue.toString()));
+        }
+        jsonObject[jsonEncode(model.id)] = list;
+      }
+      if (model.fieldType == 'autoId') {
+        jsonObject[jsonEncode(model.id)] =
+            jsonEncode(model.valuePrefix.toString());
+      }
+      
+      if (model.fieldType == 'userlist') {
+        if(model.selectedDropDownValue!=null){
+          jsonObject[jsonEncode(model.id)] =
+            jsonEncode(model.selectedDropDownValue.toString());
+        }
+      }
+    }
+    log(jsonEncode(jsonObject));
+  }
+
   Future pickFiles() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom, // Specify the file types you want to allow
@@ -180,13 +411,12 @@ class AddRecordProvider extends ChangeNotifier {
     }
   }
 
-    Future saveImageToDevice(Uint8List imageBytes, String fileName) async {
+  Future saveImageToDevice(Uint8List imageBytes, String fileName) async {
     final appDir = await getApplicationDocumentsDirectory();
     final file = File('${appDir.path}/$fileName');
     await file.writeAsBytes(imageBytes);
     return File(file.path);
   }
-
 
   bool isReadOnly(String type) {
     if (type == 'date') {
@@ -202,17 +432,19 @@ class AddRecordProvider extends ChangeNotifier {
     }
   }
 
-  addImageBottomSheet({required int index,FileRackDetailsModel?fileRackDetailsModel}) {
-     var model = fileRackDetailsModel!.data!.sheetFields!;
+  addImageBottomSheet(
+      {required int index, FileRackDetailsModel? fileRackDetailsModel}) {
+    var model = allData[index];
     imageBottomSheet(
       cameraTap: () {
         ImagePickerService.imagePickerWithoutCrop(ImageSource.camera)
             .then((val) {
-              Navigator.pop(navigatorKey.currentContext!);
+          Navigator.pop(navigatorKey.currentContext!);
           if (val != null) {
-            uploadMediaApiFunction(filename: val, fileType: 'image').then((val){
-              if(val!=null){
-                model[index].list = model[index].list+val['data'];
+            uploadMediaApiFunction(filename: val, fileType: 'image')
+                .then((val) {
+              if (val != null) {
+                model.list = model.list + val['data'];
                 notifyListeners();
               }
             });
@@ -222,11 +454,12 @@ class AddRecordProvider extends ChangeNotifier {
       galleryTap: () {
         ImagePickerService.imagePickerWithoutCrop(ImageSource.gallery)
             .then((val) {
-              Navigator.pop(navigatorKey.currentContext!);
+          Navigator.pop(navigatorKey.currentContext!);
           if (val != null) {
-            uploadMediaApiFunction(filename: val, fileType: 'image').then((val){
-              if(val!=null){
-                model[index].list = model[index].list+val['data'];
+            uploadMediaApiFunction(filename: val, fileType: 'image')
+                .then((val) {
+              if (val != null) {
+                model.list = model.list + val['data'];
                 notifyListeners();
               }
             });
@@ -236,17 +469,18 @@ class AddRecordProvider extends ChangeNotifier {
     );
   }
 
-  addVideoBottomSheet({required int index,FileRackDetailsModel?fileRackDetailsModel}) {
-      var model = fileRackDetailsModel!.data!.sheetFields!;
+  addVideoBottomSheet(
+      {required int index, FileRackDetailsModel? fileRackDetailsModel}) {
+    var model = allData[index];
     imageBottomSheet(
       cameraTap: () {
-        ImagePickerService.videoPicker(ImageSource.camera)
-            .then((val) {
-              Navigator.pop(navigatorKey.currentContext!);
+        ImagePickerService.videoPicker(ImageSource.camera).then((val) {
+          Navigator.pop(navigatorKey.currentContext!);
           if (val != null) {
-            uploadMediaApiFunction(filename: val, fileType: 'video').then((val){
-              if(val!=null){
-                model[index].list = model[index].list+val['data'];
+            uploadMediaApiFunction(filename: val, fileType: 'video')
+                .then((val) {
+              if (val != null) {
+                model.list = model.list + val['data'];
                 notifyListeners();
               }
             });
@@ -254,13 +488,13 @@ class AddRecordProvider extends ChangeNotifier {
         });
       },
       galleryTap: () {
-        ImagePickerService.videoPicker(ImageSource.gallery)
-            .then((val) {
-              Navigator.pop(navigatorKey.currentContext!);
+        ImagePickerService.videoPicker(ImageSource.gallery).then((val) {
+          Navigator.pop(navigatorKey.currentContext!);
           if (val != null) {
-            uploadMediaApiFunction(filename: val, fileType: 'video').then((val){
-                 if(val!=null){
-                model[index].list = model[index].list+val['data'];
+            uploadMediaApiFunction(filename: val, fileType: 'video')
+                .then((val) {
+              if (val != null) {
+                model.list = model.list + val['data'];
                 notifyListeners();
               }
             });
@@ -270,68 +504,96 @@ class AddRecordProvider extends ChangeNotifier {
     );
   }
 
+  geoTagingCameraPicker(
+      {required int index,
+      FileRackDetailsModel? fileRackDetailsModel,
+      required String type}) {
+    var model = allData[index];
+    if (type == 'video') {
+      ImagePickerService.videoPicker(ImageSource.camera).then((val) {
+        Navigator.pop(navigatorKey.currentContext!);
+        if (val != null) {
+          uploadMediaApiFunction(filename: val, fileType: 'video').then((val) {
+            if (val != null) {
+              model.list = model.list + val['data'];
+              notifyListeners();
+            }
+          });
+        }
+      });
+    } else {
+      ImagePickerService.imagePickerWithoutCrop(ImageSource.camera).then((val) {
+        Navigator.pop(navigatorKey.currentContext!);
+        if (val != null) {
+          uploadMediaApiFunction(filename: val, fileType: 'image').then((val) {
+            if (val != null) {
+              model.list = model.list + val['data'];
+              notifyListeners();
+            }
+          });
+        }
+      });
+    }
+  }
 }
-
-class FileRModel {
-  dynamic name;
+class CustomModel {
   dynamic id;
-  dynamic type;
+  dynamic fieldId;
+  dynamic fieldValue;
+  dynamic depdntFieldIdValue;
+  dynamic fieldName;
+  dynamic fieldType;
   dynamic nonEditable;
-  dynamic fieldPermission;
   dynamic isRequired;
-  dynamic value = '';
-  dynamic valueList = [];
-  dynamic pathList = [];
-  dynamic fileNameList = [];
-  dynamic latList = [];
-  dynamic longList = [];
-  dynamic numberValue = '';
-  dynamic signatureImage = Uint8List(0);
-  dynamic isDependent;
+  dynamic dropdownValues;
+  dynamic listColsValues;
   dynamic geoTagging;
+  dynamic fileRackId;
+  dynamic isMultiple;
+  dynamic dFOFRFields;
+  dynamic isDependent;
+  dynamic valuePrefix;
   dynamic isDefaultValue;
   dynamic isDateAllow;
-  dynamic isMultiple;
-  dynamic fileRackId;
-  dynamic fieldId;
-  dynamic formFieldName;
-  dynamic dependentFileRackFid;
-  dynamic valuePrefix;
-  dynamic userList;
-  dynamic dropdownValues;
-  dynamic multiDropDownList;
-  dynamic dfoFRList;
-  dynamic apiValue;
-  dynamic apiValueList;
-  dynamic apiImgVidDocList;
-  dynamic apiMapList;
-  dynamic apiDValue;
-  TextEditingController controller = TextEditingController();
-  FileRModel(
-    this.name,
-    this.id,
-    this.type,
-    this.nonEditable,
-    this.fieldPermission,
-    this.isRequired,
-    this.isDependent,
-    this.geoTagging,
-    this.isDefaultValue,
-    this.isDateAllow,
-    this.isMultiple,
-    this.fileRackId,
-    this.fieldId,
-    this.formFieldName,
-    this.dependentFileRackFid,
-    this.valuePrefix,
-    this.userList,
-    this.dropdownValues,
-    this.multiDropDownList,
-    this.dfoFRList,
-    this.apiValue,
-    this.apiValueList,
-    this.apiImgVidDocList,
-    this.apiMapList,
-    this.apiDValue,
-  );
+  dynamic dValue;
+  dynamic fieldPermission;
+  dynamic extraFieldValueArray;
+  List<FilesData>? filesData;
+  dynamic fullURL;
+  dynamic dofValue;
+  List<Sheetmembers>? sheetmembers;
+   TextEditingController controller = TextEditingController();/// for add record
+  List list = []; /// for add record
+  List latList = []; /// for add record
+  List lngList = [];/// for add record
+  DateTime? selectedDate; /// for add record
+  TimeOfDay?selectedTime; /// for add record
+  dynamic image;/// for add record
+  String? selectedDropDownValue; /// for add record 
+  CustomModel(
+      {required this.id,
+      required this.fieldId,
+      required this.fieldValue,
+      required this.depdntFieldIdValue,
+      required this.fieldName,
+      required this.fieldType,
+      required this.nonEditable,
+      required this.isRequired,
+      required this.dropdownValues,
+      required this.listColsValues,
+      required this.geoTagging,
+      required this.fileRackId,
+      required this.isMultiple,
+      required this.dFOFRFields,
+      required this.isDependent,
+      required this.valuePrefix,
+      required this.isDefaultValue,
+      required this.isDateAllow,
+      required this.dValue,
+      required this.fieldPermission,
+      this.extraFieldValueArray,
+      this.filesData,
+      this.fullURL,
+      this.dofValue,
+      this.sheetmembers});
 }

@@ -13,10 +13,12 @@ FileRackDetailsModel? fileRackDetailsModel;
   fileRackDetailsApiFunction(
       {required String groupId,
       required String sheetId,
-      required String sheetDataId}) async {
-        fileRackDetailsModel = null;
+      required String sheetDataId, bool isLoader = true}) async {
+        if(isLoader==true){
+       fileRackDetailsModel = null;
         notifyListeners();
-    showLoader(navigatorKey.currentContext!);
+   showLoader(navigatorKey.currentContext!);
+        }
     var body = {
       'Authkey': Constants.authkey,
       'Userid': SessionManager.userId,
@@ -29,7 +31,7 @@ FileRackDetailsModel? fileRackDetailsModel;
     print("bodu...$body");
     final response = await ApiService.multiPartApiMethod(
         url: ApiUrl.fileRackDetailsUrl, body: body);
-    Navigator.pop(navigatorKey.currentContext!);
+   isLoader? Navigator.pop(navigatorKey.currentContext!):null;
     if (response != null && response['status'] == 1) {
       fileRackDetailsModel =FileRackDetailsModel.fromJson(response);
     } else {}

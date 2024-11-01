@@ -67,6 +67,7 @@ dev_dependencies:
   file_picker: ^8.1.2
   signature: ^5.5.0
   path_provider: ^2.1.4
+  dropdown_button2: ^2.3.9
 
   # wakelock_plus: ^1.2.8
   # share_plus: ^10.0.2

@@ -116,11 +116,16 @@ class SheetFields {
   dynamic dependentFieldId;
   dynamic dependentFileRackFid;
   dynamic dependentFileRackFname;
-  TextEditingController controller = TextEditingController();
-  List list = [];
-  DateTime? selectedDate;
-  TimeOfDay?selectedTime;
-  dynamic image;
+  // TextEditingController controller = TextEditingController();/// for add record
+  // List list = []; /// for add record
+  // List latList = []; /// for add record
+  // List lngList = [];/// for add record
+  // DateTime? selectedDate; /// for add record
+  // TimeOfDay?selectedTime; /// for add record
+  // dynamic image;/// for add record
+  // String? selectedDropDownValue; /// for add record 
+//  dynamic field_permission;
+
   SheetFields(
       {this.id,
       this.name,
@@ -421,7 +426,7 @@ class SheetFieldData {
       });
     }
     fullURL = json['full_URL'];
-    json['dof_value'] = dofValue;
+    dofValue = json['dof_value'];
     // if (json['dof_value'] != null) {
     //   dofValue = <Null>[];
     //   json['dof_value'].forEach((v) {

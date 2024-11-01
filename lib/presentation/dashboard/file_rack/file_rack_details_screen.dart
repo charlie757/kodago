@@ -42,17 +42,18 @@ class _FileRackDetailsScreenState extends State<FileRackDetailsScreen>
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((val) {
-      callInitFunction();
+      callInitFunction(true);
     });
     // TODO: implement initState
     super.initState();
   }
 
-  callInitFunction() async {
+  callInitFunction(bool isLoader) async {
     final provider =
         Provider.of<FileRackDetailsProvider>(context, listen: false);
+        print("isLoader....$isLoader");
     provider.fileRackDetailsApiFunction(
-        groupId: widget.groupId, sheetId: widget.sheetId, sheetDataId: widget.sheetDataId);
+        groupId: widget.groupId, sheetId: widget.sheetId, sheetDataId: widget.sheetDataId,isLoader: isLoader);
   }
 
   @override
@@ -69,7 +70,9 @@ class _FileRackDetailsScreenState extends State<FileRackDetailsScreen>
                     groupId: widget.groupId, sheetId: widget.sheetId, sheetDataId: widget.sheetDataId,
                     route: 'add',
                     fileRackDetailsModel: myProvider.fileRackDetailsModel!,
-                  ));
+                  )).then((val){
+                    callInitFunction(false);
+                  });
                 },
                 child: Container(
                   margin: const EdgeInsets.only(right: 10),
@@ -356,13 +359,13 @@ class _FileRackDetailsScreenState extends State<FileRackDetailsScreen>
               ),
             ],
           )),
-          popupMenuButton()
+          popupMenuButton(index)
         ],
       ),
     );
   }
 
-  PopupMenuButton popupMenuButton() {
+  PopupMenuButton popupMenuButton(int index) {
     return customPopupMenuButton(
         list: [
           customPopMenuItem(value: 0, title: 'Edit'),
@@ -375,8 +378,10 @@ class _FileRackDetailsScreenState extends State<FileRackDetailsScreen>
               AppRoutes.pushCupertinoNavigation( AddRecordScreen(
                     groupId: widget.groupId, sheetId: widget.sheetId, sheetDataId: widget.sheetDataId,
                     route: 'edit',
-                    fileRackDetailsModel: Provider.of<FileRackDetailsProvider>(context,listen: false).fileRackDetailsModel!,
-                  ));
+                    fileRackDetailsModel: Provider.of<FileRackDetailsProvider>(context,listen: false).fileRackDetailsModel!,index: index,
+                  )).then((val){
+                  callInitFunction(false);
+                  });
           } else if (value == 1) {
             AppRoutes.pushCupertinoNavigation(const FileRackHistory());
           } else if (value == 2) {

@@ -232,9 +232,9 @@ class _ViewFeedsScreenState extends State<ViewFeedsScreen>
 
   fileRackWidget(
       {required String title, required String des, required isRequired}) {
-        print(des);
-        if(title.toLowerCase()=='list')
-        print(des.toString().unserialize());
+        // print(des);
+        // if(title.toLowerCase()=='list')
+        // print(des.toString().unserialize());
     return Padding(
       padding: const EdgeInsets.only(left: 18, right: 18),
       child: Column(
