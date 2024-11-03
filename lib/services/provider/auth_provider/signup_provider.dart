@@ -41,7 +41,7 @@ class SignupProvider extends ChangeNotifier {
       } else {
         Utils.errorSnackBar(
             'Please accept the Terms and Conditions to proceed.',
-            navigatorKey.currentContext!);
+            );
       }
     }
   }

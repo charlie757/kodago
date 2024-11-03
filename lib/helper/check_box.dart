@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:kodago/helper/app_color.dart';
 
 customCheckBox({required int index, required int selectedIndex}) {
-  return Container(
+  return AnimatedContainer(
+    duration:const Duration(milliseconds: 400),
     height: 18,
     width: 18,
     alignment: Alignment.center,

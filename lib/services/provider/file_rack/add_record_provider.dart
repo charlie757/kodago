@@ -299,17 +299,22 @@ class AddRecordProvider extends ChangeNotifier {
       return response;
     }
   }
-
+   bool isValidation = false;
   checkValidation(){
     for(int i=0;i<allData.length;i++){
-
+      if(allData[i].isRequired.toString()=='1'){
+        isValidation=true;
+      }
     }
+    
   }
 
   sendRackDetailsFunction(
       {required String groupId,
       required String sheetId,
       required String sheetDataId,}) async {
+        Utils.hideTextField();
+        showLoader(navigatorKey.currentContext!);
     convertDataInJson();
     var body = {
       'Userid': SessionManager.userId,
@@ -325,7 +330,10 @@ class AddRecordProvider extends ChangeNotifier {
     log(jsonEncode(body));
     final response = await ApiService.multiPartApiMethod(
         body: body, url: ApiUrl.saveRecordUrl);
-    if (response != null) {}
+        Navigator.pop(navigatorKey.currentContext!);
+    if (response != null&&response['status']==1) {
+      Navigator.pop(navigatorKey.currentContext!);
+    }
   }
 
 
@@ -511,7 +519,6 @@ class AddRecordProvider extends ChangeNotifier {
     var model = allData[index];
     if (type == 'video') {
       ImagePickerService.videoPicker(ImageSource.camera).then((val) {
-        Navigator.pop(navigatorKey.currentContext!);
         if (val != null) {
           uploadMediaApiFunction(filename: val, fileType: 'video').then((val) {
             if (val != null) {
@@ -523,7 +530,6 @@ class AddRecordProvider extends ChangeNotifier {
       });
     } else {
       ImagePickerService.imagePickerWithoutCrop(ImageSource.camera).then((val) {
-        Navigator.pop(navigatorKey.currentContext!);
         if (val != null) {
           uploadMediaApiFunction(filename: val, fileType: 'image').then((val) {
             if (val != null) {

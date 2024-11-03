@@ -18,7 +18,6 @@ import 'package:dotted_border/dotted_border.dart';
 import '../../../uitls/mixins.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 
-
 // ignore: must_be_immutable
 class AddRecordScreen extends StatefulWidget {
   final String groupId;
@@ -47,198 +46,230 @@ class _AddRecordScreenState extends State<AddRecordScreen>
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((val) {
       callInitFunction();
-      // widget.fileRackDetailsModel == null ? callInitFunction() : null;
     });
     super.initState();
   }
 
   callInitFunction() {
     final provider = Provider.of<AddRecordProvider>(context, listen: false);
-    if(widget.route=='edit'){
+    if (widget.route == 'edit') {
       provider.setEditData(widget.fileRackDetailsModel, widget.index);
-    }
-    else{
+    } else {
       provider.setData(widget.fileRackDetailsModel);
     }
-    // provider.viewSheetFeedDataApiFunction(
-    //     groupId: widget.groupId,
-    //     sheetId: widget.sheetId,
-    //     sheetDataId: widget.sheetDataId);
   }
 
+  final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     // var model = widget.fileRackDetailsModel!.data!.sheetFields!;
     return Scaffold(
       appBar: appBar(
-          title: "Add Data",
-          onTap: () {
-            // setData();
-            // print(allData[0].id);
-          }),
+          title: "Add Data",),
       body: Consumer<AddRecordProvider>(builder: (context, myProvider, child) {
-        return SingleChildScrollView(
-          padding: const EdgeInsets.only(left: 17, right: 20, bottom: 20),
-          child: Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-                color: AppColor.whiteColor,
-                borderRadius: BorderRadius.circular(6),
-                border: Border.all(color: AppColor.borderColor)),
-            padding: const EdgeInsets.symmetric(vertical: 17, horizontal: 12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ListView.separated(
-                    separatorBuilder: (context, sp) {
-                      return ScreenSize.height(15);
-                    },
-                    itemCount: myProvider.allData.length,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      var model = myProvider.allData[index];
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text.rich(TextSpan(
-                              text: model.fieldName,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w400,
-                                fontSize: 12.5,
-                                fontFamily: FontFamily.interRegular,
-                              ),
-                              children: [
-                                TextSpan(
-                                  text:
-                                      model.isRequired.toString() == '1'
-                                          ? '*'
-                                          : '',
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 12.5,
-                                    color: AppColor.redColor,
-                                    fontFamily: FontFamily.interRegular,
-                                  ),
-                                )
-                              ])),
-                          ScreenSize.height(8),
-                          model.fieldType == 'image' ||
-                                  model.fieldType == 'video' ||
-                                  model.fieldType == 'document'
-                              ? fileWidget(index, myProvider)
-                              : model.fieldType == 'signature'
-                                  ? signatureWidget(index, myProvider)
-                                  :model.fieldType == 'autoId'
-                                      ? autoIdWidget(index, myProvider)
-                                      :model.fieldType == 'dropdown' &&
-                                              model
-                                                      .isMultiple
-                                                      .toString() ==
-                                                  '1'
-                                          ? multipleDropdownWidget(
-                                              index, myProvider)
-                                          : model.fieldType == 'dropdown'
-                                              ? dropdownWidget(
-                                                  index, myProvider)
-                                              :model.fieldType=='list'?
-                                              listWidget(index, myProvider):
-                                              model.fieldType=='userlist'||model.fieldType=='DFOFR'?
-                                              userAndDofValuesListWidget(index, myProvider):
-                                               CustomTextField(
-                                                  controller:
-                                                      model.controller,
-                                                  onTap: () {
-                                                    if (model.fieldType ==
-                                                        'date') {
-                                                      myProvider
-                                                          .datePicker(
-                                                              selectedDate: model
-                                                                  .selectedDate)
-                                                          .then((value) {
-                                                        if (value != null) {
-                                                          var day, month, year;
-                                                          day = value.day < 10
-                                                              ? '0${value.day}'
-                                                              : value.day;
-                                                          month = value.month <
-                                                                  10
-                                                              ? '0${value.month}'
-                                                              : value.month;
-                                                          year = value.year;
-                                                          model
-                                                                  .selectedDate =
-                                                              value;
-                                                          model
-                                                                  .controller
-                                                                  .text =
-                                                              "${value.year}-$month-$day";
-                                                          setState(() {});
-                                                        }
-                                                      });
-                                                    } else if (model.fieldType ==
-                                                        'time') {
-                                                      myProvider
-                                                          .chooseTime(
-                                                              context: context,
-                                                              selectedTime: model
-                                                                  .selectedTime)
-                                                          .then((val) {
-                                                        if (val != null) {
-                                                          TimeOfDay periodTime =
-                                                              val;
-                                                          model
-                                                                  .controller
-                                                                  .text =
-                                                              "${periodTime.hourOfPeriod.toString().padLeft(2, '0')}:${periodTime.minute.toString().padLeft(2, '0')} ${periodTime.period.name.toString().toUpperCase()}";
-                                                          model
-                                                                  .selectedTime =
-                                                              periodTime;
-                                                          setState(() {});
-                                                        }
-                                                      });
-                                                    }
-                                                  },
-                                                  hintText: myProvider
-                                                              .isReadOnly(
-                                                                  model.fieldType) ==
-                                                          false
-                                                      ? 'Enter ${model.fieldName}'
-                                                      : "Select ${model.fieldName}",
-                                                  isReadOnly:
-                                                      myProvider.isReadOnly(
-                                                          model.fieldType),
-                                                  suffixWidget: model.fieldType ==
-                                                              'date' ||
-                                                          model.fieldType ==
-                                                              'time'
-                                                      ? Container(
-                                                          height: 20,
-                                                          width: 20,
-                                                          alignment:
-                                                              Alignment.center,
-                                                          child: Image.asset(
-                                                            AppImages.dateIcon,
-                                                            height: 15,
+        return Form(
+          key: formKey,
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.only(left: 17, right: 20, bottom: 20),
+            child: Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                  color: AppColor.whiteColor,
+                  borderRadius: BorderRadius.circular(6),
+                  border: Border.all(color: AppColor.borderColor)),
+              padding: const EdgeInsets.symmetric(vertical: 17, horizontal: 12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ListView.separated(
+                      separatorBuilder: (context, sp) {
+                        return ScreenSize.height(15);
+                      },
+                      itemCount: myProvider.allData.length,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        var model = myProvider.allData[index];
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text.rich(TextSpan(
+                                text: model.fieldName,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 12.5,
+                                  fontFamily: FontFamily.interRegular,
+                                ),
+                                children: [
+                                  TextSpan(
+                                    text: model.isRequired.toString() == '1'
+                                        ? '*'
+                                        : '',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 12.5,
+                                      color: AppColor.redColor,
+                                      fontFamily: FontFamily.interRegular,
+                                    ),
+                                  )
+                                ])),
+                            ScreenSize.height(8),
+                            model.fieldType == 'image' ||
+                                    model.fieldType == 'video' ||
+                                    model.fieldType == 'document'
+                                ? fileWidget(index, myProvider)
+                                : model.fieldType == 'signature'
+                                    ? signatureWidget(index, myProvider)
+                                    : model.fieldType == 'autoId'
+                                        ? autoIdWidget(index, myProvider)
+                                        : model.fieldType == 'dropdown' &&
+                                                model.isMultiple.toString() ==
+                                                    '1'
+                                            ? multipleDropdownWidget(
+                                                index, myProvider)
+                                            : model.fieldType == 'dropdown'
+                                                ? dropdownWidget(
+                                                    index, myProvider)
+                                                : model.fieldType == 'list'
+                                                    ? listWidget(
+                                                        index, myProvider)
+                                                    : model.fieldType ==
+                                                                'userlist' ||
+                                                            model.fieldType ==
+                                                                'DFOFR'
+                                                        ? userAndDofValuesListWidget(
+                                                            index, myProvider)
+                                                        : CustomTextField(
+                                                            controller: model
+                                                                .controller,
+                                                            onTap: () {
+                                                              if (model
+                                                                      .fieldType ==
+                                                                  'date') {
+                                                                myProvider
+                                                                    .datePicker(
+                                                                        selectedDate:
+                                                                            model
+                                                                                .selectedDate)
+                                                                    .then(
+                                                                        (value) {
+                                                                  if (value !=
+                                                                      null) {
+                                                                    var day,
+                                                                        month,
+                                                                        year;
+                                                                    day = value.day <
+                                                                            10
+                                                                        ? '0${value.day}'
+                                                                        : value
+                                                                            .day;
+                                                                    month = value.month <
+                                                                            10
+                                                                        ? '0${value.month}'
+                                                                        : value
+                                                                            .month;
+                                                                    year = value
+                                                                        .year;
+                                                                    model.selectedDate =
+                                                                        value;
+                                                                    model.controller
+                                                                            .text =
+                                                                        "${value.year}-$month-$day";
+                                                                    setState(
+                                                                        () {});
+                                                                  }
+                                                                });
+                                                              } else if (model
+                                                                      .fieldType ==
+                                                                  'time') {
+                                                                myProvider
+                                                                    .chooseTime(
+                                                                        context:
+                                                                            context,
+                                                                        selectedTime:
+                                                                            model
+                                                                                .selectedTime)
+                                                                    .then(
+                                                                        (val) {
+                                                                  if (val !=
+                                                                      null) {
+                                                                    TimeOfDay
+                                                                        periodTime =
+                                                                        val;
+                                                                    model.controller
+                                                                            .text =
+                                                                        "${periodTime.hourOfPeriod.toString().padLeft(2, '0')}:${periodTime.minute.toString().padLeft(2, '0')} ${periodTime.period.name.toString().toUpperCase()}";
+                                                                    model.selectedTime =
+                                                                        periodTime;
+                                                                    setState(
+                                                                        () {});
+                                                                  }
+                                                                });
+                                                              }
+                                                            },
+                                                            hintText: myProvider
+                                                                        .isReadOnly(
+                                                                            model.fieldType) ==
+                                                                    false
+                                                                ? 'Enter ${model.fieldName}'
+                                                                : "Select ${model.fieldName}",
+                                                            isReadOnly: myProvider
+                                                                .isReadOnly(model
+                                                                    .fieldType),
+                                                            suffixWidget: model
+                                                                            .fieldType ==
+                                                                        'date' ||
+                                                                    model.fieldType ==
+                                                                        'time'
+                                                                ? Container(
+                                                                    height: 20,
+                                                                    width: 20,
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .center,
+                                                                    child: Image
+                                                                        .asset(
+                                                                      AppImages
+                                                                          .dateIcon,
+                                                                      height:
+                                                                          15,
+                                                                    ),
+                                                                  )
+                                                                : Container(
+                                                                    height: 0,
+                                                                    width: 0,
+                                                                  ),
+                                                            validator: (val) {
+                                                              if (model
+                                                                      .isRequired
+                                                                      .toString() ==
+                                                                  '1') {
+                                                                if (val
+                                                                    .isEmpty) {
+                                                                  return "${model.fieldName} Field should not be empty";
+                                                                }
+                                                              }
+                                                            },
                                                           ),
-                                                        )
-                                                      :  Container(height: 0,width: 0,),
-                                                ),
-                        ],
-                      );
-                    }),
-                ScreenSize.height(17),
-                CustomBtn(
-                    title: 'Save',
-                    onTap: () {
-                      // myProvider.convertDataInJson();
-                      myProvider.sendRackDetailsFunction(groupId: widget.groupId,
-                       sheetId: widget.sheetId, sheetDataId: widget.sheetDataId);
-                      // AppRoutes.pushCupertinoNavigation(
-                      //     const NoFileRacksScreen());
-                    })
-              ],
+                          ],
+                        );
+                      }),
+                  ScreenSize.height(17),
+                  CustomBtn(
+                      title: 'Save',
+                      onTap: () {
+                        // Utils.errorSnackBar('sdfsd');
+                        // myProvider.convertDataInJson();
+                        // if (formKey.currentState!.validate()) {
+                          myProvider.sendRackDetailsFunction(
+                              groupId: widget.groupId,
+                              sheetId: widget.sheetId,
+                              sheetDataId: widget.sheetDataId);
+                        // }
+                      })
+                ],
+              ),
             ),
           ),
         );
@@ -247,17 +278,23 @@ class _AddRecordScreenState extends State<AddRecordScreen>
   }
 
   autoIdWidget(int index, AddRecordProvider provider) {
-    var model =provider.allData[index];
+    var model = provider.allData[index];
     model.controller.text = model.valuePrefix;
     return CustomTextField(
       controller: model.controller,
       hintText: 'Enter ${model.fieldName}',
       isReadOnly: true,
+      validator: (val) {
+        if (model.isRequired.toString() == '1') {
+          if (val.isEmpty) {
+            return "${model.fieldName} Field should not be empty";
+          }
+        }
+      },
     );
   }
 
-
-userAndDofValuesListWidget(int index, AddRecordProvider provider){
+  userAndDofValuesListWidget(int index, AddRecordProvider provider) {
     var model = provider.allData[index];
     return DropdownButtonHideUnderline(
       child: DropdownButton2<String>(
@@ -325,12 +362,10 @@ userAndDofValuesListWidget(int index, AddRecordProvider provider){
         ),
       ),
     );
-  
-}
+  }
 
-
-listWidget(int index, AddRecordProvider provider){
-   List<String> list = [];
+  listWidget(int index, AddRecordProvider provider) {
+    List<String> list = [];
     var model = provider.allData[index];
     if (model.listColsValues != null &&
         model.listColsValues.toString().isNotEmpty) {
@@ -402,8 +437,7 @@ listWidget(int index, AddRecordProvider provider){
         ),
       ),
     );
-  
-}
+  }
 
   dropdownWidget(int index, AddRecordProvider provider) {
     List<String> list = [];
@@ -485,9 +519,11 @@ listWidget(int index, AddRecordProvider provider){
     var model = provider.allData[index];
     if (model.dropdownValues != null &&
         model.dropdownValues.toString().isNotEmpty) {
-      list = model.dropdownValues.toString().split(',')
-    .map((value) => value.trim())
-    .toList();
+      list = model.dropdownValues
+          .toString()
+          .split(',')
+          .map((value) => value.trim())
+          .toList();
     }
     return DropdownButtonHideUnderline(
       child: DropdownButton2<String>(
@@ -507,9 +543,7 @@ listWidget(int index, AddRecordProvider provider){
                 final isSelected = model.list.contains(item);
                 return InkWell(
                   onTap: () {
-                    isSelected
-                        ? model.list.remove(item)
-                        : model.list.add(item);
+                    isSelected ? model.list.remove(item) : model.list.add(item);
                     setState(() {});
                     menuSetState(() {});
                   },
@@ -628,9 +662,7 @@ listWidget(int index, AddRecordProvider provider){
               });
             },
             child: customText(
-              title: model.image != null
-                  ? "Change Signature"
-                  : 'Add Signature',
+              title: model.image != null ? "Change Signature" : 'Add Signature',
               fontSize: 14,
               color: AppColor.appColor,
               fontFamily: FontFamily.interMedium,
@@ -709,57 +741,6 @@ listWidget(int index, AddRecordProvider provider){
             decoration: TextDecoration.underline,
           ),
         ),
-        // Row(
-        //   children: [
-        //     // customContainerWidget(Icon(
-        //     //   model[index].type == 'video'
-        //     //       ? Icons.video_file
-        //     //       : model[index].type == 'image'
-        //     //           ? Icons.image
-        //     //           : Icons.folder,
-        //     //   color: AppColor.appColor,
-        //     // )),
-        //     ScreenSize.width(10),
-        //     InkWell(
-        //       onTap: () {
-        //         if (model[index].type == 'video') {
-        //           provider.addVideoBottomSheet(
-        //               index: index,
-        //               fileRackDetailsModel: widget.fileRackDetailsModel);
-        //         } else if (model[index].type == 'image') {
-        //           provider.addImageBottomSheet(
-        //               index: index,
-        //               fileRackDetailsModel: widget.fileRackDetailsModel);
-        //         } else if (model[index].type == 'document') {
-        //           provider.pickFiles().then((val) {
-        //             if (val != null) {
-        //               provider
-        //                   .uploadMediaApiFunction(
-        //                       filename: val, fileType: 'document')
-        //                   .then((val) {
-        //                 if (val != null) {
-        //                   model[index].list = val['data'];
-        //                   setState(() {});
-        //                 }
-        //               });
-        //             }
-        //           });
-        //         }
-        //       },
-        //       child: customText(
-        //         title: model[index].type == 'video'
-        //             ? 'Add Video'
-        //             : model[index].type == 'image'
-        //                 ? "Add Image"
-        //                 : 'Add Document',
-        //         fontSize: 14,
-        //         color: AppColor.appColor,
-        //         fontFamily: FontFamily.interMedium,
-        //         decoration: TextDecoration.underline,
-        //       ),
-        //     )
-        //   ],
-        // ),
         model.list.isEmpty
             ? Container()
             : Container(

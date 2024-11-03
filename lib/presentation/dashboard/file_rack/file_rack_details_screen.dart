@@ -19,6 +19,7 @@ import 'package:kodago/uitls/extension.dart';
 import 'package:kodago/uitls/time_format.dart';
 import 'package:kodago/widget/appbar.dart';
 import 'package:kodago/widget/fle_rack_image_widget.dart';
+import 'package:kodago/widget/no_data_found.dart';
 import 'package:kodago/widget/popmenuButton.dart';
 import 'package:provider/provider.dart';
 import '../../../uitls/mixins.dart';
@@ -123,10 +124,10 @@ class _FileRackDetailsScreenState extends State<FileRackDetailsScreen>
             ]),
             body: myProvider.fileRackDetailsModel != null &&
                     myProvider.fileRackDetailsModel!.data != null &&
-                    myProvider.fileRackDetailsModel!.data!.sheetData != null &&
-                    myProvider.fileRackDetailsModel!.data!.sheetData!.dbdata !=
-                        null
-                ? ListView.separated(
+                    myProvider.fileRackDetailsModel!.data!.sheetData != null
+                ?myProvider.fileRackDetailsModel!.data!.sheetData!.dbdata!.isEmpty?
+                        noDataFound('No file Rack'):
+                 ListView.separated(
                     separatorBuilder: (context, sp) {
                       return ScreenSize.height(20);
                     },
@@ -185,69 +186,6 @@ class _FileRackDetailsScreenState extends State<FileRackDetailsScreen>
                               )
                             : Container();
               }),
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(horizontal: 11),
-          //   child: customText(
-          //     title: 'Scheme Name',
-          //     fontSize: 12.5,
-          //     fontWeight: FontWeight.w400,
-          //     fontFamily: FontFamily.interRegular,
-          //   ),
-          // ),
-          // ScreenSize.height(4),
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(horizontal: 11),
-          //   child: customText(
-          //     title:
-          //         'Work for Retrofitting of Bungi Rajgarh Water Supply Project to provide FHTC including 10 years O&M under JJM District Churu.',
-          //     fontSize: 12,
-          //     fontWeight: FontWeight.w400,
-          //     color: AppColor.grey6AColor,
-          //     fontFamily: FontFamily.interRegular,
-          //   ),
-          // ),
-          // ScreenSize.height(12),
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(horizontal: 11),
-          //   child: customText(
-          //     title: 'Type of Progress Report',
-          //     fontSize: 12.5,
-          //     fontWeight: FontWeight.w400,
-          //     fontFamily: FontFamily.interRegular,
-          //   ),
-          // ),
-          // ScreenSize.height(4),
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(horizontal: 11),
-          //   child: customText(
-          //     title: 'Daily',
-          //     fontSize: 12,
-          //     fontWeight: FontWeight.w400,
-          //     color: AppColor.grey6AColor,
-          //     fontFamily: FontFamily.interRegular,
-          //   ),
-          // ),
-          // ScreenSize.height(12),
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(horizontal: 11),
-          //   child: customText(
-          //     title: 'Date of Inspection',
-          //     fontSize: 12.5,
-          //     fontWeight: FontWeight.w400,
-          //     fontFamily: FontFamily.interRegular,
-          //   ),
-          // ),
-          // ScreenSize.height(4),
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(horizontal: 11),
-          //   child: customText(
-          //     title: '12-06-2024',
-          //     fontSize: 12,
-          //     fontWeight: FontWeight.w400,
-          //     color: AppColor.grey6AColor,
-          //     fontFamily: FontFamily.interRegular,
-          //   ),
-          // ),
           ScreenSize.height(14),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 11),
@@ -387,7 +325,11 @@ class _FileRackDetailsScreenState extends State<FileRackDetailsScreen>
           } else if (value == 2) {
             assignMembersBottomSheet();
           } else if (value == 3) {
-            deleteFileRackDialogBox(deleteTap: () {});
+            deleteFileRackDialogBox(deleteTap: () {
+              print('dsfdbg${widget.sheetDataId}');
+              Navigator.pop(context);
+              // Provider.of<FileRackDetailsProvider>(context,listen: false).deleteFileRackApiFunction(groupId: widget.groupId, sheetId: widget.sheetId, sheetDataId: widget.sheetDataId);
+            });
           }
         });
   }

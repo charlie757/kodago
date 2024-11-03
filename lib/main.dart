@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:kodago/helper/app_color.dart';
 import 'package:kodago/services/provider/common/common_provider.dart';
 import 'package:kodago/services/provider/file_rack/add_record_provider.dart';
+import 'package:kodago/services/provider/file_rack/create_file_rack_provider.dart';
 import 'package:kodago/services/provider/group/contact_provider.dart';
 import 'package:kodago/services/provider/group/topic_provider.dart';
 import 'package:kodago/services/provider/auth_provider/forgot_password_provider.dart';
@@ -69,6 +70,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => CommonProvider()),
         ChangeNotifierProvider(create: (_) => AddRecordProvider()),
         ChangeNotifierProvider(create: (_) => ViewFeedsProvider()),
+        ChangeNotifierProvider(create: (_) => CreateFileRackProvider()),
         ChangeNotifierProvider(
           create: (_) => NewGroupProvider(),
         ),

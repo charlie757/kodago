@@ -37,4 +37,21 @@ FileRackDetailsModel? fileRackDetailsModel;
     } else {}
     notifyListeners();
   }
+
+  // deleteFileRackApiFunction({required String groupId,required String sheetId, required String sheetDataId})async{
+  //   showLoader(navigatorKey.currentContext!);
+  //   var body = {
+  //     'Authkey': Constants.authkey,
+  //     'Userid': SessionManager.userId,
+  //     'Token': SessionManager.token,
+  //     'sheet_id': sheetId,
+  //     "group_id": groupId,
+  //   };
+  //   final response = await ApiService.multiPartApiMethod(
+  //       url: ApiUrl.deleteFileRackUrl, body: body);
+  //       Navigator.pop(navigatorKey.currentContext!);
+  //    if(response!=null&&response['status']==1){
+  //     fileRackDetailsApiFunction(groupId: groupId, sheetId: sheetId, sheetDataId: sheetDataId,isLoader: false);
+  //   }
+  // }
 }

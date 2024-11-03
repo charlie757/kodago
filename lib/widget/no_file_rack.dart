@@ -6,10 +6,12 @@ import 'package:kodago/helper/custom_btn.dart';
 import 'package:kodago/helper/custom_text.dart';
 import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
-import 'package:kodago/presentation/dashboard/file_rack/create_form_screen.dart';
+import 'package:kodago/presentation/dashboard/file_rack/create_file_rack_screen.dart';
 
 class NoFileRack extends StatelessWidget {
-  const NoFileRack({super.key});
+  final String groupName;
+  final String groupId;
+  const NoFileRack({super.key, required this.groupName,required this.groupId});
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +44,8 @@ class NoFileRack extends StatelessWidget {
             CustomBtn(
                 title: 'Create form',
                 onTap: () {
-                  AppRoutes.pushCupertinoNavigation(const CreateFormScreen());
+                  AppRoutes.pushCupertinoNavigation( CreateFileRackScreen(name: groupName,
+                  groupId:groupId ,sheetId: '',route: 'add',));
                 }),
             ScreenSize.height(45),
             Column(

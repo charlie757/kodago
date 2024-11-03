@@ -53,17 +53,31 @@ class AppImages {
   static String keyboardRightIcon = 'assets/icons/keyboard_arrow_right.png';
   static String emptyFileRackIcon = 'assets/icons/empty_file_rack_icon.png';
   static String keyboardDownIcon = 'assets/icons/keyboard_down_icon.png';
-  static String locationIcon = 'assets/icons/location_icon.png';
   static String filterIcon = 'assets/icons/filter_icon.png';
   static String deletelogoutIcon = 'assets/icons/delete_logout_icon.png';
   static String dateIcon = 'assets/icons/date_icon.png';
   static String lockIcon = 'assets/icons/lock_icon.png';
   static String phoneIcon = 'assets/icons/smartphone.png';
-  static String userIcon = 'assets/icons/user.png';
+  static String userIcon = 'assets/icons/us5er.png';
   static String newContactIcon = 'assets/icons/new_contact_icon.png';
   static String newGroupIcon = 'assets/icons/new_group_icon.png';
   static String shareInviteIcon = 'assets/icons/shareInvite.png';
   static String topicMenuIcon = 'assets/icons/topic_menu.png';
   static String videoIcon = 'assets/icons/video_icon.png';
   static String folderIcon = 'assets/icons/folder_icon.png';
+
+  /// file rack icon
+  static String locationFileRackIcon = 'assets/filerackicon/location_icon.svg';
+  static String textFileRackIcon = 'assets/filerackicon/text_icon.svg';
+  static String autoIdFileRackIcon = 'assets/filerackicon/autoid_icon.svg';
+  static String dateFileRackIcon = 'assets/filerackicon/date_icon.svg';
+  static String dateFromOtherFileRackIcon = 'assets/filerackicon/date_other_rack_icon.svg';
+  static String documentFileRackIcon = 'assets/filerackicon/document_icon.svg';
+  static String dropdownFileRackIcon = 'assets/filerackicon/dropdown_icon.svg';
+  static String imageFileRackIcon = 'assets/filerackicon/image_icon.svg';
+  static String numberFileRackIcon = 'assets/filerackicon/number_icon.svg';
+  static String signatureFileRackIcon = 'assets/filerackicon/signature_icon.svg';
+  static String timeFileRackIcon = 'assets/filerackicon/time_icon.svg';
+  static String userListFileRackIcon = 'assets/filerackicon/userlist_icon.svg';
+  static String videoFileRackIcon = 'assets/filerackicon/video_icon.svg';
 }

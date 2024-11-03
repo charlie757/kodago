@@ -111,7 +111,7 @@ class ApiService {
       if (dataAll['status'] == 1) {
         return json.decode(response.body);
       } else if (dataAll['status'] == 2) {
-        Utils.errorSnackBar(dataAll['message'], navigatorKey.currentContext);
+        Utils.errorSnackBar(dataAll['message'], );
         print(Constants.is401Error);
         if (Constants.is401Error == false) {
           Future.delayed(const Duration(seconds: 1), () {
@@ -122,7 +122,7 @@ class ApiService {
       } else {
         isErrorMessageShow
             ? Utils.errorSnackBar(
-                dataAll['message'], navigatorKey.currentContext)
+                dataAll['message'], )
             : null;
         return json.decode(response.body);
       }
@@ -130,13 +130,13 @@ class ApiService {
       var dataAll = json.decode(response.body);
       // SessionManager.unauthorizedUser(navigatorKey.currentState!.context);
       isErrorMessageShow
-          ? Utils.errorSnackBar(dataAll['message'], navigatorKey.currentContext)
+          ? Utils.errorSnackBar(dataAll['message'], )
           : null;
       return null;
     } else {
       var dataAll = json.decode(response.body);
       isErrorMessageShow
-          ? Utils.errorSnackBar(dataAll['message'], navigatorKey.currentContext)
+          ? Utils.errorSnackBar(dataAll['message'], )
           : null;
       return null;
     }

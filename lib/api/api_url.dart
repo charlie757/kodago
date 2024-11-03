@@ -49,6 +49,7 @@ class ApiUrl {
 
   /// file rack
   static String createFileRackUrl = '${baseUrl}sheets/createSheet';
+  static String updateFileRackUrl = '${baseUrl}sheets/updateSheet';
   static String fileRackListUrl = '${baseUrl}sheets/index';
   static String deleteFileRackUrl = '${baseUrl}sheets/deleteSheet';
   static String fileRackDetailsUrl = '${baseUrl}sheets/viewData_v1';

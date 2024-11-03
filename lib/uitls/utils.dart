@@ -32,7 +32,7 @@ class Utils {
   ) {
     // ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        behavior: SnackBarBehavior.floating,
+        // behavior: SnackBarBehavior.floating,
         duration: const Duration(seconds: 2),
         shape: OutlineInputBorder(
             borderSide: BorderSide(color: Colors.green.withOpacity(.9)),
@@ -67,7 +67,7 @@ class Utils {
             borderRadius: BorderRadius.circular(3)),
         //  margin: EdgeInsets.only(left: 20,right: 20,bottom: bottom),
         backgroundColor: AppColor.redColor.withOpacity(.8),
-        content: Text(
+        content: const Text(
           'No Internet',
           style: TextStyle(color: AppColor.whiteColor),
         )));
@@ -75,11 +75,10 @@ class Utils {
 
   static errorSnackBar(
     String title,
-    context,
   ) {
-    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        behavior: SnackBarBehavior.floating,
+    ScaffoldMessenger.of(navigatorKey.currentContext!).hideCurrentSnackBar();
+    ScaffoldMessenger.of(navigatorKey.currentContext!).showSnackBar(SnackBar(
+        // behavior: SnackBarBehavior.floating,
         duration: const Duration(seconds: 2),
         shape: OutlineInputBorder(
             borderSide: BorderSide(color: AppColor.redColor.withOpacity(.8)),
@@ -88,7 +87,7 @@ class Utils {
         backgroundColor: AppColor.redColor.withOpacity(.8),
         content: Text(
           title,
-          style: TextStyle(color: AppColor.whiteColor),
+          style:const TextStyle(color: AppColor.whiteColor),
         )));
   }
 

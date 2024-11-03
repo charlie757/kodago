@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:kodago/config/app_routes.dart';
 import 'package:kodago/helper/app_color.dart';
@@ -6,7 +7,7 @@ import 'package:kodago/helper/custom_text.dart';
 import 'package:kodago/helper/font_family.dart';
 import 'package:kodago/helper/screen_size.dart';
 import 'package:kodago/presentation/dashboard/file_rack/assign_members_screen.dart';
-import 'package:kodago/presentation/dashboard/file_rack/create_form_screen.dart';
+import 'package:kodago/presentation/dashboard/file_rack/create_file_rack_screen.dart';
 import 'package:kodago/presentation/dashboard/file_rack/file_rack_details_screen.dart';
 import 'package:kodago/presentation/shimmer/gropup_shimmer.dart';
 import 'package:kodago/services/provider/file_rack/file_rack_provider.dart';
@@ -60,7 +61,13 @@ class _FileRackListScreenState extends State<FileRackListScreen>
                       GestureDetector(
                         onTap: () {
                           AppRoutes.pushCupertinoNavigation(
-                              const CreateFormScreen());
+                                  CreateFileRackScreen(
+                                      name: widget.groupName,
+                                      groupId: widget.groupId,
+                                      sheetId: '',route: 'add',))
+                              .then((val) {
+                            callInitFunction();
+                          });
                         },
                         child: Container(
                           margin: const EdgeInsets.only(right: 20),
@@ -90,7 +97,10 @@ class _FileRackListScreenState extends State<FileRackListScreen>
               : myProvider.model != null && myProvider.model!.data != null
                   ? myProvider.model!.data!.sheets == null ||
                           myProvider.model!.data!.sheets!.isEmpty
-                      ? const NoFileRack()
+                      ? NoFileRack(
+                          groupName: widget.groupName,
+                          groupId: widget.groupId,
+                        )
                       : ListView.separated(
                           separatorBuilder: (context, sp) {
                             return ScreenSize.height(20);
@@ -173,6 +183,15 @@ class _FileRackListScreenState extends State<FileRackListScreen>
         ],
         onSelected: (value) {
           if (value == 0) {
+            AppRoutes.pushCupertinoNavigation(CreateFileRackScreen(
+                    name: widget.groupName,
+                    groupId: widget.groupId,
+                    sheetId:
+                        provider.model!.data!.sheets![index].id.toString(),
+                        route: 'edit',sheetName: provider.model!.data!.sheets![index].name,))
+                .then((val) {
+              callInitFunction();
+            });
             // AppRoutes.pushCupertinoNavigation( AddRecordScreen());
           } else if (value == 1) {
             AppRoutes.pushCupertinoNavigation(const AssignMembersScreen());
